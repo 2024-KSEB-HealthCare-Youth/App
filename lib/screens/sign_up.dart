@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // 추가: 날짜 계산을 위해 필요
 import '../utils/rest_api.dart';
 
 class SignUp extends StatefulWidget {
@@ -9,23 +10,54 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   String _selectedGender = '';
   final _formKey = GlobalKey<FormState>();
-  final Map<String, String> _formData = {
-    'name': '',
-    'nickname': '',
-    'gender': '',
-    'birth': '',
-    'email': '',
-    'phone': '',
-    'password': ''
-  };
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _nicknameController = TextEditingController();
+  final TextEditingController _birthMonthController = TextEditingController();
+  final TextEditingController _birthDayController = TextEditingController();
+  final TextEditingController _birthYearController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   void _signUp() async {
     if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      _formData['gender'] = _selectedGender;
+      String birth =
+          '${_birthMonthController.text.padLeft(2, '0')}/${_birthDayController.text.padLeft(2, '0')}/${_birthYearController.text}';
+
+      // 생년월일을 이용해 나이를 계산
+      String age;
+      try {
+        DateTime birthDate = DateFormat('MM/dd/yyyy').parse(birth);
+        int calculatedAge = DateTime.now().year - birthDate.year;
+        if (DateTime.now().isBefore(DateTime(
+            birthDate.year + calculatedAge, birthDate.month, birthDate.day))) {
+          calculatedAge--;
+        }
+        age = calculatedAge.toString();
+      } catch (e) {
+        print('Birth date parsing failed: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content:
+                  Text('Invalid birth date format. Please use MM/DD/YYYY.')),
+        );
+        return;
+      }
+
+      Map<String, String> formData = {
+        'name': _nameController.text,
+        'nickname': _nicknameController.text,
+        'gender': _selectedGender,
+        'birth': birth,
+        'email': _emailController.text,
+        'phone': _phoneController.text,
+        'password': _passwordController.text,
+        'age': age,
+      };
 
       try {
-        await RestAPI.signUp(_formData);
+        await RestAPI.signUp(formData);
         Navigator.pushNamed(context, '/login');
       } catch (e) {
         print('Sign up failed: $e');
@@ -34,6 +66,19 @@ class _SignUpState extends State<SignUp> {
         );
       }
     }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _nicknameController.dispose();
+    _birthMonthController.dispose();
+    _birthDayController.dispose();
+    _birthYearController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -67,11 +112,11 @@ class _SignUpState extends State<SignUp> {
               const SizedBox(height: 25),
               _buildTextFormField(
                   labelText: 'Enter Your Username',
-                  onSaved: (value) => _formData['name'] = value!),
+                  controller: _nameController),
               const SizedBox(height: 25),
               _buildTextFormField(
                   labelText: 'Enter Your Nickname',
-                  onSaved: (value) => _formData['nickname'] = value!),
+                  controller: _nicknameController),
               const SizedBox(height: 25),
               Text(
                 'Choose Your Gender',
@@ -98,17 +143,16 @@ class _SignUpState extends State<SignUp> {
               _buildBirthDateFields(),
               const SizedBox(height: 25),
               _buildTextFormField(
-                  labelText: 'Enter Your Email',
-                  onSaved: (value) => _formData['email'] = value!),
+                  labelText: 'Enter Your Email', controller: _emailController),
               const SizedBox(height: 25),
               _buildTextFormField(
                   labelText: 'Enter Your Phone Number',
-                  onSaved: (value) => _formData['phone'] = value!),
+                  controller: _phoneController),
               const SizedBox(height: 25),
               _buildTextFormField(
                   labelText: 'Enter Your Password',
-                  obscureText: true,
-                  onSaved: (value) => _formData['password'] = value!),
+                  controller: _passwordController,
+                  obscureText: true),
               const SizedBox(height: 25),
               _buildSignUpButton(context),
               const SizedBox(height: 25),
@@ -123,13 +167,13 @@ class _SignUpState extends State<SignUp> {
   Widget _buildTextFormField(
       {required String labelText,
       bool obscureText = false,
-      required FormFieldSetter<String> onSaved}) {
+      required TextEditingController controller}) {
     return TextFormField(
+      controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
         labelText: labelText,
       ),
-      onSaved: onSaved,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'This field is required';
@@ -182,21 +226,25 @@ class _SignUpState extends State<SignUp> {
     return Row(
       children: [
         Flexible(
-            child: _buildTextFormField(
-                labelText: 'MM',
-                onSaved: (value) =>
-                    _formData['birth'] = '${_formData['birth']}/${value}')),
+          child: _buildTextFormField(
+            labelText: 'MM',
+            controller: _birthMonthController,
+          ),
+        ),
         const SizedBox(width: 10),
         Flexible(
-            child: _buildTextFormField(
-                labelText: 'DD',
-                onSaved: (value) =>
-                    _formData['birth'] = '${_formData['birth']}/${value}')),
+          child: _buildTextFormField(
+            labelText: 'DD',
+            controller: _birthDayController,
+          ),
+        ),
         const SizedBox(width: 10),
         Flexible(
-            child: _buildTextFormField(
-                labelText: 'YYYY',
-                onSaved: (value) => _formData['birth'] = '${value}')),
+          child: _buildTextFormField(
+            labelText: 'YYYY',
+            controller: _birthYearController,
+          ),
+        ),
       ],
     );
   }

@@ -60,8 +60,7 @@ class MyPage extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 36,
-                          backgroundImage:
-                              AssetImage(userData.profileImagePath),
+                          backgroundImage: AssetImage(userData.profileImage),
                         ),
                         SizedBox(width: 16),
                         Expanded(
@@ -77,13 +76,14 @@ class MyPage extends StatelessWidget {
                               ProfileDetail(
                                   label: 'Gender', value: userData.gender),
                               SizedBox(height: 8),
-                              ProfileDetail(label: 'Age', value: userData.age),
+                              ProfileDetail(
+                                  label: 'Age', value: userData.age.toString()),
                               SizedBox(height: 8),
                               ProfileDetail(
                                   label: 'Email', value: userData.email),
                               SizedBox(height: 8),
                               ProfileDetail(
-                                  label: 'Phone', value: userData.phone),
+                                  label: 'Phone', value: userData.phoneNumber),
                             ],
                           ),
                         ),
