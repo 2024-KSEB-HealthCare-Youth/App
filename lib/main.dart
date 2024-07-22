@@ -1,15 +1,14 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'models/splash_screen.dart';
-import 'models/login.dart';
-import 'models/sign_up.dart';
-import 'models/main_page.dart';
-import 'models/camera_screen.dart';
-import 'models/loading_page.dart';
-import 'models/diagnosis_page.dart';
-import 'models/recommendation.dart';
-import 'models/my_page.dart';
-import 'shared/user_data.dart';
+import 'screens/splash_screen.dart';
+import 'screens/login.dart';
+import 'screens/sign_up.dart';
+import 'screens/main_page.dart';
+import 'screens/camera_screen.dart';
+import 'screens/loading_page.dart';
+import 'screens/diagnosis_page.dart';
+import 'screens/recommendation.dart';
+import 'screens/my_page.dart';
+import 'package:camera/camera.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,8 +25,6 @@ class FigmaToCodeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserData userData = UserData(); // Default values will be used here.
-
     return MaterialApp(
       theme: ThemeData.light().copyWith(
         scaffoldBackgroundColor: Colors.white,
@@ -71,19 +68,8 @@ class FigmaToCodeApp extends StatelessWidget {
         '/camera_screen': (context) => CameraScreen(camera: camera),
         '/loading_page': (context) => LoadingPage(),
         '/diagnosis_page': (context) => DiagnosisPage(camera: camera),
-        '/recommendation_page': (context) => Recommendation(
-              userName : userData.name,
-              skinType: userData.skintype,
-            ),
-        '/my_page': (context) => MyPage(
-              profileImagePath: userData.profileImagePath,
-              name: userData.name,
-              nickName: userData.nickName,
-              gender: userData.gender,
-              age: userData.age,
-              email: userData.email,
-              phone: userData.phone,
-            ),
+        '/recommendation_page': (context) => Recommendation(),
+        '/my_page': (context) => MyPage(),
       },
     );
   }
