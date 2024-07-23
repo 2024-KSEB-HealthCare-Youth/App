@@ -51,12 +51,14 @@ class _SignUpState extends State<SignUp> {
         loginId: _loginIdController.text,
         password: _passwordController.text,
         name: _nameController.text,
+        nickName: 'unKnown', // Default value for nickName
         gender: _selectedGender,
         age: age,
         phoneNumber: _phoneController.text,
         email: _emailController.text,
         profileImage:
             'default_profile_image.png', // Default value for profile image
+        isAdmin: 'unKnown', // Default value for isAdmin
       );
 
       // Print JSON data to debug
