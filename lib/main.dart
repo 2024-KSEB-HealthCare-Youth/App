@@ -13,15 +13,19 @@ import 'package:camera/camera.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final cameras = await availableCameras();
-  if (cameras.isEmpty) {
-    // Handle case where no cameras are available
+  try {
+    final cameras = await availableCameras();
+    if (cameras.isEmpty) {
+      // Handle case where no cameras are available
+      runApp(ErrorApp());
+      return;
+    }
+    final firstCamera = cameras.first;
+    runApp(FigmaToCodeApp(camera: firstCamera));
+  } catch (e) {
+    // Handle any errors during camera initialization
     runApp(ErrorApp());
-    return;
   }
-  final firstCamera = cameras.first;
-
-  runApp(FigmaToCodeApp(camera: firstCamera));
 }
 
 class ErrorApp extends StatelessWidget {
@@ -45,40 +49,7 @@ class FigmaToCodeApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.light().copyWith(
-        scaffoldBackgroundColor: Colors.white,
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black.withOpacity(0.4)),
-          ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
-          ),
-          labelStyle: const TextStyle(color: Color(0xFF695B5B)),
-          hintStyle: TextStyle(color: Colors.black.withOpacity(0.7)),
-        ),
-        textTheme: const TextTheme(
-          titleLarge: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: Colors.black,
-          ),
-          bodyLarge: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 16,
-            color: Colors.black,
-          ),
-          bodyMedium: TextStyle(
-            fontFamily: 'Poppins',
-            fontSize: 16,
-            color: Colors.black,
-          ),
-        ),
-      ),
+      theme: _buildThemeData(),
       home: SplashScreen(),
       routes: {
         '/login': (context) => LogIn(),
@@ -90,6 +61,43 @@ class FigmaToCodeApp extends StatelessWidget {
         '/recommendation_page': (context) => Recommendation(),
         '/my_page': (context) => MyPage(),
       },
+    );
+  }
+
+  ThemeData _buildThemeData() {
+    return ThemeData.light().copyWith(
+      scaffoldBackgroundColor: Colors.white,
+      inputDecorationTheme: InputDecorationTheme(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.black.withOpacity(0.4)),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.blue),
+        ),
+        labelStyle: const TextStyle(color: Color(0xFF695B5B)),
+        hintStyle: TextStyle(color: Colors.black.withOpacity(0.7)),
+      ),
+      textTheme: const TextTheme(
+        titleLarge: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 24,
+          fontWeight: FontWeight.w700,
+          color: Colors.black,
+        ),
+        bodyLarge: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 16,
+          color: Colors.black,
+        ),
+        bodyMedium: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 16,
+          color: Colors.black,
+        ),
+      ),
     );
   }
 }

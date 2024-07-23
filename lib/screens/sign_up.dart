@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/user_data.dart';
 import '../utils/rest_api.dart';
+import 'dart:convert';
 
 class SignUp extends StatefulWidget {
   @override
@@ -62,12 +63,31 @@ class _SignUpState extends State<SignUp> {
       print('User data: ${userData.toJson()}');
 
       try {
-        await RestAPI.signUp(userData);
-        Navigator.pushNamed(context, '/login');
+        var response = await RestAPI.signUp(userData);
+        print('Sign up response: $response');
+
+        if (response.statusCode == 200) {
+          var responseBody = jsonDecode(response.body);
+          if (responseBody['status']['code'] == 200) {
+            Navigator.pushNamed(context, '/login');
+          } else {
+            print('Sign up failed: ${responseBody['status']['message']}');
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content: Text(
+                      'Sign up failed: ${responseBody['status']['message']}')),
+            );
+          }
+        } else {
+          print('Sign up failed with status code: ${response.statusCode}');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Sign up failed. Please try again.')),
+          );
+        }
       } catch (e) {
         print('Sign up failed: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Sign up failed. Please try again.')),
+          SnackBar(content: Text('Sign up failed. Please try again.')),
         );
       }
     }
@@ -199,8 +219,8 @@ class _SignUpState extends State<SignUp> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildGenderButton(gender: 'Male'),
-        _buildGenderButton(gender: 'Female'),
+        _buildGenderButton(gender: 'MALE'),
+        _buildGenderButton(gender: 'FEMALE'),
       ],
     );
   }
@@ -300,7 +320,7 @@ class _SignUpState extends State<SignUp> {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, '/user_detail');
+            Navigator.pushNamed(context, '/login');
           },
           child: const Text(
             'Login',

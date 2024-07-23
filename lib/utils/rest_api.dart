@@ -6,7 +6,7 @@ import '../models/result_data.dart';
 
 class RestAPI {
   static const String baseUrl =
-      'http://10.0.2.2:8080'; // Use 10.0.2.2 for Android emulator
+      'http://52.79.103.61:8080'; // Use 10.0.2.2 for Android emulator
   static const Map<String, String> headers = {
     'Content-Type': 'application/json'
   };
@@ -14,8 +14,8 @@ class RestAPI {
   /// Signs up a new user.
   ///
   /// Takes a [UserData] object as input and sends it to the server to create
-  /// a new user account. Throws an [Exception] if the sign up fails.
-  static Future<void> signUp(UserData userData) async {
+  /// a new user account. Returns the HTTP response from the server.
+  static Future<http.Response> signUp(UserData userData) async {
     final requestBody = jsonEncode(userData.toJson());
     print('Request body: $requestBody');
 
@@ -28,9 +28,7 @@ class RestAPI {
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
 
-      if (response.statusCode != 200) {
-        throw Exception('Failed to sign up: ${response.reasonPhrase}');
-      }
+      return response;
     } catch (e) {
       print('Sign up failed: $e');
       throw Exception('Sign up failed: $e');
