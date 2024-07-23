@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'display_picture.dart';
 
 class CameraScreen extends StatefulWidget {
   final CameraDescription camera;
@@ -49,8 +50,14 @@ class _CameraScreenState extends State<CameraScreen> {
           try {
             await _initializeControllerFuture;
             final image = await _controller.takePicture();
-            // 여기서 이미지를 처리할 수 있습니다.
-            print('사진 촬영: ${image.path}');
+            // 촬영된 사진을 DisplayPictureScreen으로 전달하여 표시합니다.
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    DisplayPictureScreen(imagePath: image.path),
+              ),
+            );
           } catch (e) {
             print(e);
           }
