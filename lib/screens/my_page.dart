@@ -130,7 +130,9 @@ class MyPage extends StatelessWidget {
                             alignment: Alignment.centerRight,
                             child: CustomButton(
                               text: '수정',
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushNamed(context, 'edit_account');
+                              },
                             ),
                           ),
                           const SizedBox(height: 32),
