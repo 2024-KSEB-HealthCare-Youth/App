@@ -66,18 +66,15 @@ class _SignUpState extends State<SignUp> {
         var response = await RestAPI.signUp(userData);
         print('Sign up response: $response');
 
-        if (response.statusCode == 200) {
-          var responseBody = jsonDecode(response.body);
-          if (responseBody['status']['code'] == 200) {
-            Navigator.pushNamed(context, '/login');
-          } else {
-            print('Sign up failed: ${responseBody['status']['message']}');
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text(
-                      'Sign up failed: ${responseBody['status']['message']}')),
-            );
-          }
+        if (response.statusCode == 201) {
+          print('Sign up successful');
+          Navigator.pushNamed(context, '/login');
+        } else if (response.statusCode == 400) {
+          final responseBody = jsonDecode(response.body);
+          print('Sign up failed: ${responseBody['error']}');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Sign up failed: ${responseBody['error']}')),
+          );
         } else {
           print('Sign up failed with status code: ${response.statusCode}');
           ScaffoldMessenger.of(context).showSnackBar(
@@ -320,7 +317,7 @@ class _SignUpState extends State<SignUp> {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, '/login');
+            Navigator.pushNamed(context, '/main_page');
           },
           child: const Text(
             'Login',

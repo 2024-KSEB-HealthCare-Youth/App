@@ -8,6 +8,10 @@ import 'screens/loading_page.dart';
 import 'screens/diagnosis_page.dart';
 import 'screens/recommendation.dart';
 import 'screens/my_page.dart';
+import 'screens/menu.dart';
+import 'screens/past_log.dart';
+import 'screens/edit_account.dart';
+import 'screens/community.dart';
 import 'package:camera/camera.dart';
 
 void main() async {
@@ -16,14 +20,12 @@ void main() async {
   try {
     final cameras = await availableCameras();
     if (cameras.isEmpty) {
-      // Handle case where no cameras are available
       runApp(ErrorApp());
       return;
     }
     final firstCamera = cameras.first;
     runApp(FigmaToCodeApp(camera: firstCamera));
   } catch (e) {
-    // Handle any errors during camera initialization
     runApp(ErrorApp());
   }
 }
@@ -34,7 +36,7 @@ class ErrorApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         body: Center(
-          child: Text('No cameras available'),
+          child: ErrorPage(message: 'No cameras available'),
         ),
       ),
     );
@@ -51,16 +53,7 @@ class FigmaToCodeApp extends StatelessWidget {
     return MaterialApp(
       theme: _buildThemeData(),
       home: SplashScreen(),
-      routes: {
-        '/login': (context) => LogIn(),
-        '/sign_up': (context) => SignUp(),
-        '/main_page': (context) => MainPage(),
-        '/camera_screen': (context) => CameraScreen(camera: camera),
-        '/loading_page': (context) => LoadingPage(),
-        '/diagnosis_page': (context) => DiagnosisPage(camera: camera),
-        '/recommendation_page': (context) => Recommendation(),
-        '/my_page': (context) => MyPage(),
-      },
+      routes: _buildRoutes(context),
     );
   }
 
@@ -96,6 +89,57 @@ class FigmaToCodeApp extends StatelessWidget {
           fontFamily: 'Poppins',
           fontSize: 16,
           color: Colors.black,
+        ),
+      ),
+    );
+  }
+
+  Map<String, WidgetBuilder> _buildRoutes(BuildContext context) {
+    return {
+      Routes.login: (context) => LogIn(),
+      Routes.signUp: (context) => SignUp(),
+      Routes.mainPage: (context) => MainPage(),
+      Routes.cameraScreen: (context) => CameraScreen(camera: camera),
+      Routes.loadingPage: (context) => LoadingPage(),
+      Routes.diagnosisPage: (context) => DiagnosisPage(camera: camera),
+      Routes.recommendationPage: (context) => Recommendation(),
+      Routes.myPage: (context) => MyPage(),
+      Routes.menu: (context) => Menu(),
+      Routes.pastLog: (context) => PastResultsScreen(),
+      Routes.editAccount: (context) => EditAccountPage(),
+      Routes.CommentsScreen: (context) => CommentsScreen(),
+    };
+  }
+}
+
+class Routes {
+  static const String login = '/login';
+  static const String signUp = '/sign_up';
+  static const String mainPage = '/main_page';
+  static const String cameraScreen = '/camera_screen';
+  static const String loadingPage = '/loading_page';
+  static const String diagnosisPage = '/diagnosis_page';
+  static const String recommendationPage = '/recommendation_page';
+  static const String myPage = '/my_page';
+  static const String menu = '/menu';
+  static const String pastLog = '/past_log';
+  static const String editAccount = '/edit_account';
+  static const String CommentsScreen = '/community';
+}
+
+class ErrorPage extends StatelessWidget {
+  final String message;
+
+  const ErrorPage({Key? key, required this.message}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        message,
+        style: TextStyle(
+          fontSize: 18,
+          color: Colors.red,
         ),
       ),
     );

@@ -11,7 +11,9 @@ class MainPage extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.menu, color: Colors.black),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, '/menu');
+          },
         ),
         title: GestureDetector(
           onTap: () {
