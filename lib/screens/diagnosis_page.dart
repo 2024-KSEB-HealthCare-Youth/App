@@ -16,7 +16,7 @@ class DiagnosisPage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -25,7 +25,7 @@ class DiagnosisPage extends StatelessWidget {
           onTap: () {
             Navigator.pushNamed(context, '/main_page');
           },
-          child: Text(
+          child: const Text(
             'Youth',
             style: TextStyle(
               color: Colors.black,
@@ -37,10 +37,10 @@ class DiagnosisPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: Container(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            Spacer(),
+            const Spacer(),
             buildTextButton(
                 context, '1. 사진 촬영하러가기', CameraScreen(camera: camera)),
             const SizedBox(height: 24),
@@ -51,7 +51,7 @@ class DiagnosisPage extends StatelessWidget {
                 'https://example.com/advanced-diagnosis'),
             const SizedBox(height: 24),
             buildResultButton(context),
-            Spacer(),
+            const Spacer(),
           ],
         ),
       ),
@@ -71,13 +71,13 @@ class DiagnosisPage extends StatelessWidget {
       child: Container(
         height: 60,
         decoration: BoxDecoration(
-          color: Color(0xFFD9D9D9),
+          color: const Color(0xFFD9D9D9),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Center(
           child: Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               color: Colors.black,
             ),
@@ -103,12 +103,12 @@ class DiagnosisPage extends StatelessWidget {
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                title: Text('결과'),
+                title: const Text('결과'),
                 content: Text('서버 응답: ${response.body}'),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: Text('확인'),
+                    child: const Text('확인'),
                   ),
                 ],
               ),
@@ -118,12 +118,12 @@ class DiagnosisPage extends StatelessWidget {
             showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                title: Text('오류'),
+                title: const Text('오류'),
                 content: Text('서버 오류: ${response.statusCode}'),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: Text('확인'),
+                    child: const Text('확인'),
                   ),
                 ],
               ),
@@ -134,12 +134,12 @@ class DiagnosisPage extends StatelessWidget {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Text('오류'),
+              title: const Text('오류'),
               content: Text('요청 중 오류가 발생했습니다: $e'),
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Text('확인'),
+                  child: const Text('확인'),
                 ),
               ],
             ),
@@ -149,13 +149,13 @@ class DiagnosisPage extends StatelessWidget {
       child: Container(
         height: 60,
         decoration: BoxDecoration(
-          color: Color(0xFFD9D9D9),
+          color: const Color(0xFFD9D9D9),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Center(
           child: Text(
             text,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
               color: Colors.black,
             ),
@@ -174,10 +174,10 @@ class DiagnosisPage extends StatelessWidget {
         height: 60,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Color(0xFFE26169),
+          color: const Color(0xFFE26169),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Center(
+        child: const Center(
           child: Text(
             '결과 확인하러가기',
             style: TextStyle(

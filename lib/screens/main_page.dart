@@ -10,14 +10,14 @@ class MainPage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.menu, color: Colors.black),
+          icon: const Icon(Icons.menu, color: Colors.black),
           onPressed: () {},
         ),
         title: GestureDetector(
           onTap: () {
             Navigator.pushNamed(context, '/main_page');
           },
-          child: Text(
+          child: const Text(
             'Youth',
             style: TextStyle(
               color: Colors.black,
@@ -29,7 +29,7 @@ class MainPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: ListView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         children: [
           buildPlaceholderBox(),
           const SizedBox(height: 16),
@@ -45,7 +45,7 @@ class MainPage extends StatelessWidget {
     return Container(
       height: 150,
       decoration: BoxDecoration(
-        color: Color(0xFFD9D9D9),
+        color: const Color(0xFFD9D9D9),
         borderRadius: BorderRadius.circular(20),
       ),
     );
@@ -59,13 +59,13 @@ class MainPage extends StatelessWidget {
       child: Container(
         height: 150,
         decoration: BoxDecoration(
-          color: Color(0xFFE26169),
+          color: const Color(0xFFE26169),
           borderRadius: BorderRadius.circular(20),
         ),
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: const [
               Text(
                 '진단하러가기',
                 style: TextStyle(

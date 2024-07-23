@@ -10,7 +10,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // Navigate to Login page after 3 seconds
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () {
       Navigator.pushReplacementNamed(context, '/login');
     });
   }
@@ -21,11 +21,11 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: Color(0xFFFCF9F1),
+        color: const Color(0xFFFCF9F1),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: const [
               Text(
                 'Youth',
                 textAlign: TextAlign.center,
@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
               SizedBox(height: 10), // Adds space between the texts
               Text(
-                'find your skin type &manage it',
+                'find your skin type & manage it',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Pacifico',

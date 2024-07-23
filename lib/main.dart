@@ -12,10 +12,29 @@ import 'package:camera/camera.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   final cameras = await availableCameras();
+  if (cameras.isEmpty) {
+    // Handle case where no cameras are available
+    runApp(ErrorApp());
+    return;
+  }
   final firstCamera = cameras.first;
 
   runApp(FigmaToCodeApp(camera: firstCamera));
+}
+
+class ErrorApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Text('No cameras available'),
+        ),
+      ),
+    );
+  }
 }
 
 class FigmaToCodeApp extends StatelessWidget {
@@ -35,13 +54,13 @@ class FigmaToCodeApp extends StatelessWidget {
           enabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.black.withOpacity(0.4)),
           ),
-          focusedBorder: OutlineInputBorder(
+          focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(color: Colors.blue),
           ),
-          labelStyle: TextStyle(color: Color(0xFF695B5B)),
+          labelStyle: const TextStyle(color: Color(0xFF695B5B)),
           hintStyle: TextStyle(color: Colors.black.withOpacity(0.7)),
         ),
-        textTheme: TextTheme(
+        textTheme: const TextTheme(
           titleLarge: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 24,

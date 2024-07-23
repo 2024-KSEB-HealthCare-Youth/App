@@ -4,7 +4,11 @@ class ProfileDetail extends StatelessWidget {
   final String label;
   final String value;
 
-  const ProfileDetail({super.key, required this.label, required this.value});
+  const ProfileDetail({
+    required this.label,
+    required this.value,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,17 +18,17 @@ class ProfileDetail extends StatelessWidget {
           opacity: 0.6,
           child: Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               color: Color(0xFF757575),
               fontSize: 14,
               fontFamily: 'Nobile',
             ),
           ),
         ),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Text(
           value,
-          style: TextStyle(
+          style: const TextStyle(
             color: Color(0xFF191C3D),
             fontSize: 18,
             fontFamily: 'Abhaya Libre',
