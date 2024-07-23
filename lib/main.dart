@@ -107,7 +107,7 @@ class FigmaToCodeApp extends StatelessWidget {
       Routes.menu: (context) => Menu(),
       Routes.pastLog: (context) => PastResultsScreen(),
       Routes.editAccount: (context) => EditAccountPage(),
-      Routes.CommentsScreen: (context) => CommentsScreen(),
+      Routes.commentsScreen: (context) => commentsScreen(),
     };
   }
 }
@@ -124,7 +124,7 @@ class Routes {
   static const String menu = '/menu';
   static const String pastLog = '/past_log';
   static const String editAccount = '/edit_account';
-  static const String CommentsScreen = '/community';
+  static const String commentsScreen = '/community';
 }
 
 class ErrorPage extends StatelessWidget {
