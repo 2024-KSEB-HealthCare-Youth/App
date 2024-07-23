@@ -1,14 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_data.dart';
+import '../models/result_data.dart';
 import '../utils/rest_api.dart';
+import '../widgets/custom_button.dart';
+import '../widgets/profile_detail.dart';
 
 class Recommendation extends StatelessWidget {
   const Recommendation({super.key});
 
   Future<UserData> _fetchUserData() async {
-    final data = await RestAPI.fetchUserData(
-        'userId'); // Replace 'userId' with actual user ID
-    return UserData.fromJson(data);
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('userId');
+    if (userId == null) {
+      throw Exception('No user ID found');
+    }
+    return await RestAPI.fetchUserData(userId);
+  }
+
+  Future<ResultData> _fetchResultData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userId = prefs.getString('userId');
+    if (userId == null) {
+      throw Exception('No user ID found');
+    }
+    return await RestAPI.fetchResultData(userId);
   }
 
   @override
@@ -18,7 +34,7 @@ class Recommendation extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -27,7 +43,7 @@ class Recommendation extends StatelessWidget {
           onTap: () {
             Navigator.pushNamed(context, '/main_page');
           },
-          child: Text(
+          child: const Text(
             'Youth',
             style: TextStyle(
               color: Colors.black,
@@ -40,35 +56,64 @@ class Recommendation extends StatelessWidget {
       ),
       body: FutureBuilder<UserData>(
         future: _fetchUserData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData) {
-            return Center(child: Text('No data found'));
+        builder: (context, userSnapshot) {
+          if (userSnapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (userSnapshot.hasError) {
+            return Center(child: Text('Error: ${userSnapshot.error}'));
+          } else if (!userSnapshot.hasData) {
+            return const Center(child: Text('No data found'));
           } else {
-            final userData = snapshot.data!;
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      child: RichText(
-                        text: TextSpan(
-                          text: '${userData.name}’s skin type\n',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontFamily: 'Pacifico',
-                            fontWeight: FontWeight.w400,
+            final userData = userSnapshot.data!;
+            return FutureBuilder<ResultData>(
+              future: _fetchResultData(),
+              builder: (context, resultSnapshot) {
+                if (resultSnapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (resultSnapshot.hasError) {
+                  return Center(child: Text('Error: ${resultSnapshot.error}'));
+                } else if (!resultSnapshot.hasData) {
+                  return const Center(child: Text('No result data found'));
+                } else {
+                  final resultData = resultSnapshot.data!;
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            child: RichText(
+                              text: TextSpan(
+                                text: '${userData.name}’s skin type\n',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontFamily: 'Pacifico',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: resultData.skintype != null
+                                        ? 'is ${resultData.skintype}'
+                                        : 'is not available yet.',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontFamily: 'Pacifico',
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: 'is ${userData.skinType}',
+                          const SizedBox(height: 33),
+                          const SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              'Youth’s recommended cosmetics',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 20,
@@ -76,63 +121,50 @@ class Recommendation extends StatelessWidget {
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 33),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              buildProductCard(
+                                  context, 'assets/images/sample_product.png'),
+                              buildProductCard(
+                                  context, 'assets/images/sample_product.png'),
+                              buildProductCard(
+                                  context, 'assets/images/sample_product.png'),
+                            ],
+                          ),
+                          const SizedBox(height: 33),
+                          const SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              'Youth’s recommended supplements',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontFamily: 'Pacifico',
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 33),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              buildProductCard(
+                                  context, 'assets/images/sample_product.png'),
+                              buildProductCard(
+                                  context, 'assets/images/sample_product.png'),
+                              buildProductCard(
+                                  context, 'assets/images/sample_product.png'),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 33),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        'Youth’s recommended cosmetics',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontFamily: 'Pacifico',
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 33),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        buildProductCard(
-                            context, 'assets/images/sample_product.png'),
-                        buildProductCard(
-                            context, 'assets/images/sample_product.png'),
-                        buildProductCard(
-                            context, 'assets/images/sample_product.png'),
-                      ],
-                    ),
-                    const SizedBox(height: 33),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        'Youth’s recommended supplements',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontFamily: 'Pacifico',
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 33),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        buildProductCard(
-                            context, 'assets/images/sample_product.png'),
-                        buildProductCard(
-                            context, 'assets/images/sample_product.png'),
-                        buildProductCard(
-                            context, 'assets/images/sample_product.png'),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+                  );
+                }
+              },
             );
           }
         },
@@ -146,7 +178,7 @@ class Recommendation extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border.all(color: Color(0xFFDFDFDF)),
+        border: Border.all(color: const Color(0xFFDFDFDF)),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -169,7 +201,7 @@ class Recommendation extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Beautya Prestige la Mousse Micellaire',
                   style: TextStyle(
                     color: Color(0xFFA10550),
@@ -181,7 +213,7 @@ class Recommendation extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 8),
-                Text(
+                const Text(
                   '\$520.00',
                   style: TextStyle(
                     color: Color(0xFF0C0C0C),

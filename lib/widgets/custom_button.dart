@@ -1,30 +1,30 @@
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
-  final String label;
+  final String text;
   final VoidCallback onPressed;
-  final Color color;
 
-  const CustomButton({
-    super.key,
-    required this.label,
-    required this.onPressed,
-    required this.color,
-  });
+  const CustomButton({required this.text, required this.onPressed, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: color,
+        backgroundColor: const Color(0xFFE26169),
+        padding: const EdgeInsets.symmetric(vertical: 15),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
       ),
       child: Text(
-        label,
-        style: TextStyle(fontSize: 13, fontFamily: 'Poppins'),
+        text,
+        style: TextStyle(
+          color: Colors.white.withOpacity(0.9),
+          fontSize: 16,
+          fontFamily: 'Poppins',
+        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // 추가: 날짜 계산을 위해 필요
+import 'package:intl/intl.dart';
+import '../models/user_data.dart';
 import '../utils/rest_api.dart';
 
 class SignUp extends StatefulWidget {
@@ -11,22 +12,22 @@ class _SignUpState extends State<SignUp> {
   String _selectedGender = '';
   final _formKey = GlobalKey<FormState>();
 
+  final TextEditingController _loginIdController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _nicknameController = TextEditingController();
   final TextEditingController _birthMonthController = TextEditingController();
   final TextEditingController _birthDayController = TextEditingController();
   final TextEditingController _birthYearController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
 
   void _signUp() async {
     if (_formKey.currentState!.validate()) {
       String birth =
           '${_birthMonthController.text.padLeft(2, '0')}/${_birthDayController.text.padLeft(2, '0')}/${_birthYearController.text}';
 
-      // 생년월일을 이용해 나이를 계산
-      String age;
+      // Calculate age
+      int age;
       try {
         DateTime birthDate = DateFormat('MM/dd/yyyy').parse(birth);
         int calculatedAge = DateTime.now().year - birthDate.year;
@@ -34,7 +35,7 @@ class _SignUpState extends State<SignUp> {
             birthDate.year + calculatedAge, birthDate.month, birthDate.day))) {
           calculatedAge--;
         }
-        age = calculatedAge.toString();
+        age = calculatedAge;
       } catch (e) {
         print('Birth date parsing failed: $e');
         ScaffoldMessenger.of(context).showSnackBar(
@@ -45,19 +46,23 @@ class _SignUpState extends State<SignUp> {
         return;
       }
 
-      Map<String, String> formData = {
-        'name': _nameController.text,
-        'nickname': _nicknameController.text,
-        'gender': _selectedGender,
-        'birth': birth,
-        'email': _emailController.text,
-        'phone': _phoneController.text,
-        'password': _passwordController.text,
-        'age': age,
-      };
+      UserData userData = UserData(
+        loginId: _loginIdController.text,
+        password: _passwordController.text,
+        name: _nameController.text,
+        gender: _selectedGender,
+        age: age,
+        phoneNumber: _phoneController.text,
+        email: _emailController.text,
+        profileImage:
+            'default_profile_image.png', // Default value for profile image
+      );
+
+      // Print JSON data to debug
+      print('User data: ${userData.toJson()}');
 
       try {
-        await RestAPI.signUp(formData);
+        await RestAPI.signUp(userData);
         Navigator.pushNamed(context, '/login');
       } catch (e) {
         print('Sign up failed: $e');
@@ -70,14 +75,14 @@ class _SignUpState extends State<SignUp> {
 
   @override
   void dispose() {
+    _loginIdController.dispose();
+    _passwordController.dispose();
     _nameController.dispose();
-    _nicknameController.dispose();
     _birthMonthController.dispose();
     _birthDayController.dispose();
     _birthYearController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
@@ -111,12 +116,20 @@ class _SignUpState extends State<SignUp> {
               ),
               const SizedBox(height: 25),
               _buildTextFormField(
-                  labelText: 'Enter Your Username',
-                  controller: _nameController),
+                labelText: 'Enter Your Login ID',
+                controller: _loginIdController,
+              ),
               const SizedBox(height: 25),
               _buildTextFormField(
-                  labelText: 'Enter Your Nickname',
-                  controller: _nicknameController),
+                labelText: 'Enter Your Password',
+                controller: _passwordController,
+                obscureText: true,
+              ),
+              const SizedBox(height: 25),
+              _buildTextFormField(
+                labelText: 'Enter Your Username',
+                controller: _nameController,
+              ),
               const SizedBox(height: 25),
               Text(
                 'Choose Your Gender',
@@ -143,16 +156,14 @@ class _SignUpState extends State<SignUp> {
               _buildBirthDateFields(),
               const SizedBox(height: 25),
               _buildTextFormField(
-                  labelText: 'Enter Your Email', controller: _emailController),
+                labelText: 'Enter Your Email',
+                controller: _emailController,
+              ),
               const SizedBox(height: 25),
               _buildTextFormField(
-                  labelText: 'Enter Your Phone Number',
-                  controller: _phoneController),
-              const SizedBox(height: 25),
-              _buildTextFormField(
-                  labelText: 'Enter Your Password',
-                  controller: _passwordController,
-                  obscureText: true),
+                labelText: 'Enter Your Phone Number',
+                controller: _phoneController,
+              ),
               const SizedBox(height: 25),
               _buildSignUpButton(context),
               const SizedBox(height: 25),
@@ -164,10 +175,11 @@ class _SignUpState extends State<SignUp> {
     );
   }
 
-  Widget _buildTextFormField(
-      {required String labelText,
-      bool obscureText = false,
-      required TextEditingController controller}) {
+  Widget _buildTextFormField({
+    required String labelText,
+    bool obscureText = false,
+    required TextEditingController controller,
+  }) {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
@@ -253,7 +265,7 @@ class _SignUpState extends State<SignUp> {
     return ElevatedButton(
       onPressed: _signUp,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFF0D63D1),
+        backgroundColor: Color(0xFFE26169),
         padding: EdgeInsets.symmetric(vertical: 12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
@@ -288,7 +300,7 @@ class _SignUpState extends State<SignUp> {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, '/login');
+            Navigator.pushNamed(context, '/user_detail');
           },
           child: Text(
             'Login',

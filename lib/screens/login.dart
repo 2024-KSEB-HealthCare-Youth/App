@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../utils/rest_api.dart';
-import '../models/user_data.dart';
 
 class LogIn extends StatefulWidget {
   @override
@@ -10,7 +9,7 @@ class LogIn extends StatefulWidget {
 class _LogInState extends State<LogIn> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, String> _formData = {
-    'email': '',
+    'userId': '',
     'password': '',
   };
 
@@ -19,9 +18,8 @@ class _LogInState extends State<LogIn> {
       _formKey.currentState!.save();
 
       try {
-        final userData =
-            await RestAPI.login(_formData['email']!, _formData['password']!);
-        // Handle login success
+        await RestAPI.login(_formData['userId']!, _formData['password']!);
+        // 로그인 성공 처리
         Navigator.pushNamed(context, '/main_page');
       } catch (e) {
         print('Login failed: $e');
@@ -62,8 +60,8 @@ class _LogInState extends State<LogIn> {
               ),
               const SizedBox(height: 25),
               _buildTextFormField(
-                  labelText: 'Enter Your Email',
-                  onSaved: (value) => _formData['email'] = value!),
+                  labelText: 'Enter Your Id',
+                  onSaved: (value) => _formData['userId'] = value!),
               const SizedBox(height: 25),
               _buildTextFormField(
                   labelText: 'Enter Your Password',
@@ -80,10 +78,11 @@ class _LogInState extends State<LogIn> {
     );
   }
 
-  Widget _buildTextFormField(
-      {required String labelText,
-      bool obscureText = false,
-      required FormFieldSetter<String> onSaved}) {
+  Widget _buildTextFormField({
+    required String labelText,
+    bool obscureText = false,
+    required FormFieldSetter<String> onSaved,
+  }) {
     return TextFormField(
       obscureText: obscureText,
       decoration: InputDecoration(
@@ -103,7 +102,7 @@ class _LogInState extends State<LogIn> {
     return ElevatedButton(
       onPressed: _login,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFF0D63D1),
+        backgroundColor: Color(0xFFE26169),
         padding: EdgeInsets.symmetric(vertical: 12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
