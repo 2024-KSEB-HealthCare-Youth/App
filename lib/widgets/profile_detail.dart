@@ -4,8 +4,11 @@ class ProfileDetail extends StatelessWidget {
   final String label;
   final String value;
 
-  const ProfileDetail({required this.label, required this.value, Key? key})
-      : super(key: key);
+  const ProfileDetail({
+    required this.label,
+    required this.value,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

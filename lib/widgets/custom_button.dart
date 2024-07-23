@@ -4,8 +4,11 @@ class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
 
-  const CustomButton({required this.text, required this.onPressed, Key? key})
-      : super(key: key);
+  const CustomButton({
+    required this.text,
+    required this.onPressed,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +23,9 @@ class CustomButton extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: TextStyle(
-          color: Colors.white.withOpacity(0.9),
+        style: const TextStyle(
+          color: Color(
+              0xFFE5E5E5), // Changed to a fixed color value instead of using withOpacity
           fontSize: 16,
           fontFamily: 'Poppins',
         ),

@@ -7,19 +7,27 @@ import '../models/result_data.dart';
 class RestAPI {
   static const String baseUrl =
       'http://10.0.2.2:8080'; // Use 10.0.2.2 for Android emulator
+  static const Map<String, String> headers = {
+    'Content-Type': 'application/json'
+  };
 
+  /// Signs up a new user.
+  ///
+  /// Takes a [UserData] object as input and sends it to the server to create
+  /// a new user account. Throws an [Exception] if the sign up fails.
   static Future<void> signUp(UserData userData) async {
-    try {
-      final requestBody = jsonEncode(userData.toJson());
-      print('Request body: $requestBody');
+    final requestBody = jsonEncode(userData.toJson());
+    print('Request body: $requestBody');
 
+    try {
       final response = await http.post(
         Uri.parse('$baseUrl/members'),
-        headers: {'Content-Type': 'application/json'},
+        headers: headers,
         body: requestBody,
       );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
+
       if (response.statusCode != 200) {
         throw Exception('Failed to sign up: ${response.reasonPhrase}');
       }
@@ -29,20 +37,24 @@ class RestAPI {
     }
   }
 
-  // Other methods remain unchanged
+  /// Logs in a user.
+  ///
+  /// Takes [userId] and [password] as input, sends them to the server, and
+  /// stores the [userId] in shared preferences if the login is successful.
+  /// Throws an [Exception] if the login fails.
   static Future<void> login(String userId, String password) async {
+    final requestBody = jsonEncode({'userId': userId, 'password': password});
+    print('Request body: $requestBody');
+
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/login'), // 로그인 엔드포인트 수정
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'userId': userId, 'password': password}),
+        Uri.parse('$baseUrl/login'),
+        headers: headers,
+        body: requestBody,
       );
-      print('Request body: ${jsonEncode({
-            'userId': userId,
-            'password': password
-          })}');
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
+
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final prefs = await SharedPreferences.getInstance();
@@ -56,14 +68,20 @@ class RestAPI {
     }
   }
 
+  /// Fetches user data.
+  ///
+  /// Takes [userId] as input, sends a GET request to the server, and returns
+  /// a [UserData] object if successful. Throws an [Exception] if the request
+  /// fails.
   static Future<UserData> fetchUserData(String userId) async {
     try {
       final response = await http.get(
         Uri.parse('$baseUrl/members/$userId'),
-        headers: {'Content-Type': 'application/json'},
+        headers: headers,
       );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
+
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         return UserData.fromJson(responseData);
@@ -76,14 +94,20 @@ class RestAPI {
     }
   }
 
+  /// Fetches result data.
+  ///
+  /// Takes [userId] as input, sends a GET request to the server, and returns
+  /// a [ResultData] object if successful. Throws an [Exception] if the request
+  /// fails.
   static Future<ResultData> fetchResultData(String userId) async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/results/$userId'), // 결과 데이터 엔드포인트 수정
-        headers: {'Content-Type': 'application/json'},
+        Uri.parse('$baseUrl/results/$userId'),
+        headers: headers,
       );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
+
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
         return ResultData.fromJson(responseData);

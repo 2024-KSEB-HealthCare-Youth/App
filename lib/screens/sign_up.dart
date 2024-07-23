@@ -39,7 +39,7 @@ class _SignUpState extends State<SignUp> {
       } catch (e) {
         print('Birth date parsing failed: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
               content:
                   Text('Invalid birth date format. Please use MM/DD/YYYY.')),
         );
@@ -67,7 +67,7 @@ class _SignUpState extends State<SignUp> {
       } catch (e) {
         print('Sign up failed: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sign up failed. Please try again.')),
+          const SnackBar(content: Text('Sign up failed. Please try again.')),
         );
       }
     }
@@ -90,7 +90,7 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sign Up'),
+        title: const Text('Sign Up'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 61, horizontal: 40),
@@ -104,7 +104,7 @@ class _SignUpState extends State<SignUp> {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 10),
-              Text(
+              const Text(
                 'Manage Your Skin For Your Bright Future',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -131,7 +131,7 @@ class _SignUpState extends State<SignUp> {
                 controller: _nameController,
               ),
               const SizedBox(height: 25),
-              Text(
+              const Text(
                 'Choose Your Gender',
                 style: TextStyle(
                   color: Color(0xFF000B14),
@@ -143,7 +143,7 @@ class _SignUpState extends State<SignUp> {
               const SizedBox(height: 10),
               _buildGenderSelectionButtons(),
               const SizedBox(height: 25),
-              Text(
+              const Text(
                 'Birth',
                 style: TextStyle(
                   color: Color(0xFF000B14),
@@ -265,8 +265,8 @@ class _SignUpState extends State<SignUp> {
     return ElevatedButton(
       onPressed: _signUp,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Color(0xFFE26169),
-        padding: EdgeInsets.symmetric(vertical: 12),
+        backgroundColor: const Color(0xFFE26169),
+        padding: const EdgeInsets.symmetric(vertical: 12),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5),
         ),
@@ -302,7 +302,7 @@ class _SignUpState extends State<SignUp> {
           onTap: () {
             Navigator.pushNamed(context, '/user_detail');
           },
-          child: Text(
+          child: const Text(
             'Login',
             style: TextStyle(
               color: Color(0xFF2F89FC),

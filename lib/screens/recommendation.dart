@@ -3,8 +3,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_data.dart';
 import '../models/result_data.dart';
 import '../utils/rest_api.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/profile_detail.dart';
 
 class Recommendation extends StatelessWidget {
   const Recommendation({super.key});
@@ -200,8 +198,8 @@ class Recommendation extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
+              children: const [
+                Text(
                   'Beautya Prestige la Mousse Micellaire',
                   style: TextStyle(
                     color: Color(0xFFA10550),
@@ -212,8 +210,8 @@ class Recommendation extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                const SizedBox(height: 8),
-                const Text(
+                SizedBox(height: 8),
+                Text(
                   '\$520.00',
                   style: TextStyle(
                     color: Color(0xFF0C0C0C),
