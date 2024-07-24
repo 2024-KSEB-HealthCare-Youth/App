@@ -16,6 +16,8 @@ class RestAPI {
   };
   static final FlutterSecureStorage storage = FlutterSecureStorage();
 
+  //connect with springboot server
+
   // Save tokens to secure storage
   static Future<void> saveTokens(
       String accessToken, String refreshToken) async {
@@ -155,6 +157,8 @@ class RestAPI {
       throw Exception('Sign up failed: $e');
     }
   }
+
+// connect with flask server
 
 //upladImage to flask server
   static Future<void> uploadImage(String imagePath) async {

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/user_data.dart';
 import '../utils/rest_api.dart';
-import 'dart:convert';
 
 class SignUp extends StatefulWidget {
   @override

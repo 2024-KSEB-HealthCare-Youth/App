@@ -66,81 +66,17 @@ class Recommendation extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Container(
-                      width: double.infinity,
-                      child: RichText(
-                        text: TextSpan(
-                          text: '${userData.name}’s skin type\n',
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontFamily: 'Pacifico',
-                            fontWeight: FontWeight.w400,
-                          ),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: skinTypeDescription.isNotEmpty
-                                  ? 'is $skinTypeDescription'
-                                  : 'is not available yet.',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontFamily: 'Pacifico',
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    _buildSkinTypeDescription(
+                        userData.name, skinTypeDescription),
                     const SizedBox(height: 33),
-                    const SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        'Youth’s recommended cosmetics',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontFamily: 'Pacifico',
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
+                    _buildSectionTitle('Youth’s recommended cosmetics'),
                     const SizedBox(height: 33),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: List.generate(3, (index) {
-                        return buildProductCard(
-                          context,
-                          aiData.cosNames[index],
-                          aiData.cosPaths[index],
-                        );
-                      }),
-                    ),
+                    _buildProductRow(context, aiData.cosNames, aiData.cosPaths),
                     const SizedBox(height: 33),
-                    const SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        'Youth’s recommended supplements',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontFamily: 'Pacifico',
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
+                    _buildSectionTitle('Youth’s recommended supplements'),
                     const SizedBox(height: 33),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: List.generate(3, (index) {
-                        return buildProductCard(
-                          context,
-                          aiData.nutrNames[index],
-                          aiData.nutPaths[index],
-                        );
-                      }),
-                    ),
+                    _buildProductRow(
+                        context, aiData.nutrNames, aiData.nutPaths),
                   ],
                 ),
               ),
@@ -151,7 +87,63 @@ class Recommendation extends StatelessWidget {
     );
   }
 
-  Widget buildProductCard(BuildContext context, String name, String imagePath) {
+  Widget _buildSkinTypeDescription(String name, String skinTypeDescription) {
+    return Container(
+      width: double.infinity,
+      child: RichText(
+        text: TextSpan(
+          text: '$name’s skin type\n',
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontFamily: 'Pacifico',
+            fontWeight: FontWeight.w400,
+          ),
+          children: <TextSpan>[
+            TextSpan(
+              text: skinTypeDescription.isNotEmpty
+                  ? 'is $skinTypeDescription'
+                  : 'is not available yet.',
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 20,
+                fontFamily: 'Pacifico',
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return SizedBox(
+      width: double.infinity,
+      child: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.black,
+          fontSize: 20,
+          fontFamily: 'Pacifico',
+          fontWeight: FontWeight.w400,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProductRow(
+      BuildContext context, List<String> names, List<String> paths) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: List.generate(3, (index) {
+        return _buildProductCard(context, names[index], paths[index]);
+      }),
+    );
+  }
+
+  Widget _buildProductCard(
+      BuildContext context, String name, String imagePath) {
     return Container(
       width: MediaQuery.of(context).size.width / 3 - 22,
       clipBehavior: Clip.antiAlias,

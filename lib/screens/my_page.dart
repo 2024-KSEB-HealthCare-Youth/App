@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/models/ai_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/user_data.dart';
+import '../models/ai_data.dart';
 import '../models/result_data.dart';
 import '../utils/rest_api.dart';
 import '../widgets/custom_button.dart';
@@ -10,21 +11,21 @@ import '../widgets/profile_detail.dart';
 class MyPage extends StatelessWidget {
   const MyPage({super.key});
 
-  Future<UserData> _fetchUserData() async {
+  Future<Map<String, dynamic>> _fetchUserDataAndToken() async {
     final prefs = await SharedPreferences.getInstance();
+    final storage = FlutterSecureStorage();
     final userId = prefs.getString('userId');
-    if (userId == null) {
-      throw Exception('No user ID found');
+    final accessToken = await storage.read(key: 'access_token');
+
+    if (userId == null || accessToken == null) {
+      throw Exception('No user ID or access token found');
     }
-    return await RestAPI.fetchUserData(userId);
+
+    final userData = await RestAPI.fetchUserData(userId);
+    return {'userData': userData, 'accessToken': accessToken};
   }
 
-  Future<ResultData> _fetchResultData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('userId');
-    if (userId == null) {
-      throw Exception('No user ID found');
-    }
+  Future<ResultData> _fetchResultData(String userId, String accessToken) async {
     return await RestAPI.fetchResultData(userId);
   }
 
@@ -58,8 +59,8 @@ class MyPage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: FutureBuilder<UserData>(
-        future: _fetchUserData(),
+      body: FutureBuilder<Map<String, dynamic>>(
+        future: _fetchUserDataAndToken(),
         builder: (context, userSnapshot) {
           if (userSnapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -68,9 +69,11 @@ class MyPage extends StatelessWidget {
           } else if (!userSnapshot.hasData) {
             return const Center(child: Text('No data found'));
           } else {
-            final userData = userSnapshot.data!;
+            final userData = userSnapshot.data!['userData'] as UserData;
+            final accessToken = userSnapshot.data!['accessToken'] as String;
+
             return FutureBuilder<ResultData>(
-              future: _fetchResultData(),
+              future: _fetchResultData(userData.loginId, accessToken),
               builder: (context, resultSnapshot) {
                 if (resultSnapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -121,11 +124,11 @@ class MyPage extends StatelessWidget {
                                         label: 'Phone',
                                         value: userData.phoneNumber),
                                     const SizedBox(height: 8),
-                                    if (resultData.skintype != null)
+                                    if (aiData.simpleSkin != null)
                                       ProfileDetail(
                                           label: 'Skin Type',
                                           value:
-                                              resultData.skintype ?? 'Unknown'),
+                                              aiData.simpleSkin ?? 'Unknown'),
                                   ],
                                 ),
                               ),
