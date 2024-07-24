@@ -10,6 +10,7 @@ import '../models/token_response.dart';
 
 class RestAPI {
   static const String baseUrl = 'http://52.79.103.61:8080';
+  static const String flaskUrl = '';
   static const Map<String, String> headers = {
     'Content-Type': 'application/json'
   };
@@ -137,7 +138,7 @@ class RestAPI {
 
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/members'),
+        Uri.parse('$baseUrl/members/join'),
         headers: headers,
         body: requestBody,
       );
@@ -155,13 +156,9 @@ class RestAPI {
     }
   }
 
-  // Upload image method
+//upladImage to flask server
   static Future<void> uploadImage(String imagePath) async {
-    final tokens = await getTokens();
-    final accessToken = tokens['access_token'];
-
-    var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/upload'));
-    request.headers['authorization'] = 'Bearer $accessToken';
+    var request = http.MultipartRequest('POST', Uri.parse('$flaskUrl/upload'));
     request.files.add(await http.MultipartFile.fromPath('file', imagePath));
 
     try {
@@ -175,6 +172,18 @@ class RestAPI {
     } catch (e) {
       print('Image upload failed: $e');
       throw Exception('Image upload failed: $e');
+    }
+  }
+
+  // Fetch AI data
+  static Future<AiData> fetchAiData() async {
+    final response = await http.get(Uri.parse('$flaskUrl/ai-data'));
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      return AiData.fromJson(jsonResponse);
+    } else {
+      throw Exception('Failed to load AI data');
     }
   }
 }
