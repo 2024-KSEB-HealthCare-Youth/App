@@ -1,19 +1,21 @@
-class ResultData {
-  final String skintype;
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-  ResultData({
-    required this.skintype,
-  });
+part 'result_data.freezed.dart';
+part 'result_data.g.dart';
 
-  factory ResultData.fromJson(Map<String, dynamic> json) {
-    return ResultData(
-      skintype: json['skintype'] ?? '', // 기본값 제공 (필요한 경우)
-    );
-  }
+@freezed
+class ResultData with _$ResultData {
+  const factory ResultData({
+    String? skintype,
+    required int resultId,
+    required int memberId,
+    required String resultImage,
+    required String faceImage,
+    required String resultDetails,
+    required DateTime resultDate,
+  }) = _ResultData;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'skintype': skintype,
-    };
-  }
+  factory ResultData.fromJson(Map<String, dynamic> json) =>
+      _$ResultDataFromJson(json);
 }

@@ -1,45 +1,42 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/user_data.dart';
 import '../models/result_data.dart';
+import '../models/ai_data.dart';
+import '../models/token_response.dart';
 
 class RestAPI {
-  static const String baseUrl =
-      'http://52.79.103.61:8080'; // Use 10.0.2.2 for Android emulator
+  static const String baseUrl = 'http://52.79.103.61:8080';
+  static const String flaskUrl = '';
   static const Map<String, String> headers = {
     'Content-Type': 'application/json'
   };
+  static final FlutterSecureStorage storage = FlutterSecureStorage();
 
-  /// Signs up a new user.
-  ///
-  /// Takes a [UserData] object as input and sends it to the server to create
-  /// a new user account. Returns the HTTP response from the server.
-  static Future<http.Response> signUp(UserData userData) async {
-    final requestBody = jsonEncode(userData.toJson());
-    print('Request body: $requestBody');
-
-    try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/members'),
-        headers: headers,
-        body: requestBody,
-      );
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-
-      return response;
-    } catch (e) {
-      print('Sign up failed: $e');
-      throw Exception('Sign up failed: $e');
-    }
+  // Save tokens to secure storage
+  static Future<void> saveTokens(
+      String accessToken, String refreshToken) async {
+    await storage.write(key: 'access_token', value: accessToken);
+    await storage.write(key: 'refresh_token', value: refreshToken);
   }
 
-  /// Logs in a user.
-  ///
-  /// Takes [userId] and [password] as input, sends them to the server, and
-  /// stores the [userId] in shared preferences if the login is successful.
-  /// Throws an [Exception] if the login fails.
+  // Delete tokens from secure storage
+  static Future<void> deleteTokens() async {
+    await storage.delete(key: 'access_token');
+    await storage.delete(key: 'refresh_token');
+  }
+
+  // Retrieve tokens from secure storage
+  static Future<Map<String, String?>> getTokens() async {
+    final accessToken = await storage.read(key: 'access_token');
+    final refreshToken = await storage.read(key: 'refresh_token');
+    return {'access_token': accessToken, 'refresh_token': refreshToken};
+  }
+
+  // Login method
   static Future<void> login(String userId, String password) async {
     final requestBody = jsonEncode({'userId': userId, 'password': password});
     print('Request body: $requestBody');
@@ -55,6 +52,7 @@ class RestAPI {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
+        await saveTokens(data['accessToken'], data['refreshToken']);
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('userId', data['userId']);
       } else {
@@ -66,16 +64,31 @@ class RestAPI {
     }
   }
 
-  /// Fetches user data.
-  ///
-  /// Takes [userId] as input, sends a GET request to the server, and returns
-  /// a [UserData] object if successful. Throws an [Exception] if the request
-  /// fails.
+  // Refresh access token
+  static Future<TokenResponse> refreshAccessToken(String refreshToken) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/token'),
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': 'Bearer $refreshToken'
+      },
+    );
+    if (response.statusCode == 200) {
+      return TokenResponse.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to refresh token');
+    }
+  }
+
+  // Fetch user data
   static Future<UserData> fetchUserData(String userId) async {
+    final tokens = await getTokens();
+    final accessToken = tokens['access_token'];
+
     try {
       final response = await http.get(
         Uri.parse('$baseUrl/members/$userId'),
-        headers: headers,
+        headers: {...headers, 'authorization': 'Bearer $accessToken'},
       );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
@@ -92,16 +105,15 @@ class RestAPI {
     }
   }
 
-  /// Fetches result data.
-  ///
-  /// Takes [userId] as input, sends a GET request to the server, and returns
-  /// a [ResultData] object if successful. Throws an [Exception] if the request
-  /// fails.
+  // Fetch result data
   static Future<ResultData> fetchResultData(String userId) async {
+    final tokens = await getTokens();
+    final accessToken = tokens['access_token'];
+
     try {
       final response = await http.get(
         Uri.parse('$baseUrl/results/$userId'),
-        headers: headers,
+        headers: {...headers, 'authorization': 'Bearer $accessToken'},
       );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
@@ -116,6 +128,62 @@ class RestAPI {
     } catch (e) {
       print('Fetch result data failed: $e');
       throw Exception('Fetch result data failed: $e');
+    }
+  }
+
+  // Sign up method
+  static Future<void> signUp(UserData userData) async {
+    final requestBody = jsonEncode(userData.toJson());
+    print('Request body: $requestBody');
+
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/members/join'),
+        headers: headers,
+        body: requestBody,
+      );
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        print('Sign up successful.');
+      } else {
+        throw Exception('Failed to sign up: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Sign up failed: $e');
+      throw Exception('Sign up failed: $e');
+    }
+  }
+
+//upladImage to flask server
+  static Future<void> uploadImage(String imagePath) async {
+    var request = http.MultipartRequest('POST', Uri.parse('$flaskUrl/upload'));
+    request.files.add(await http.MultipartFile.fromPath('file', imagePath));
+
+    try {
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        print('Image uploaded successfully.');
+      } else {
+        print('Image upload failed.');
+        throw Exception('Failed to upload image: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Image upload failed: $e');
+      throw Exception('Image upload failed: $e');
+    }
+  }
+
+  // Fetch AI data
+  static Future<AiData> fetchAiData() async {
+    final response = await http.get(Uri.parse('$flaskUrl/ai-data'));
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      return AiData.fromJson(jsonResponse);
+    } else {
+      throw Exception('Failed to load AI data');
     }
   }
 }
