@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_data.dart';
-import '../models/result_data.dart';
+import '../models/ai_data.dart';
 import '../utils/rest_api.dart';
 
 class Recommendation extends StatelessWidget {
@@ -16,17 +16,11 @@ class Recommendation extends StatelessWidget {
     return await RestAPI.fetchUserData(userId);
   }
 
-  Future<ResultData> _fetchResultData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('userId');
-    if (userId == null) {
-      throw Exception('No user ID found');
-    }
-    return await RestAPI.fetchResultData(userId);
-  }
-
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    final AiData aiData = args['resultData'];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -63,106 +57,93 @@ class Recommendation extends StatelessWidget {
             return const Center(child: Text('No data found'));
           } else {
             final userData = userSnapshot.data!;
-            return FutureBuilder<ResultData>(
-              future: _fetchResultData(),
-              builder: (context, resultSnapshot) {
-                if (resultSnapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (resultSnapshot.hasError) {
-                  return Center(child: Text('Error: ${resultSnapshot.error}'));
-                } else if (!resultSnapshot.hasData) {
-                  return const Center(child: Text('No result data found'));
-                } else {
-                  final resultData = resultSnapshot.data!;
-                  return Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            child: RichText(
-                              text: TextSpan(
-                                text: '${userData.name}’s skin type\n',
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontFamily: 'Pacifico',
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                    text: resultData.skintype != null
-                                        ? 'is ${resultData.skintype}'
-                                        : 'is not available yet.',
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontFamily: 'Pacifico',
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+            final skinTypeDescription =
+                '${aiData.simpleSkin}, ${aiData.expertSkin.join(', ')}';
+
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      child: RichText(
+                        text: TextSpan(
+                          text: '${userData.name}’s skin type\n',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 20,
+                            fontFamily: 'Pacifico',
+                            fontWeight: FontWeight.w400,
                           ),
-                          const SizedBox(height: 33),
-                          const SizedBox(
-                            width: double.infinity,
-                            child: Text(
-                              'Youth’s recommended cosmetics',
-                              style: TextStyle(
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: skinTypeDescription.isNotEmpty
+                                  ? 'is $skinTypeDescription'
+                                  : 'is not available yet.',
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: 20,
                                 fontFamily: 'Pacifico',
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 33),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              buildProductCard(
-                                  context, 'assets/images/sample_product.png'),
-                              buildProductCard(
-                                  context, 'assets/images/sample_product.png'),
-                              buildProductCard(
-                                  context, 'assets/images/sample_product.png'),
-                            ],
-                          ),
-                          const SizedBox(height: 33),
-                          const SizedBox(
-                            width: double.infinity,
-                            child: Text(
-                              'Youth’s recommended supplements',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontFamily: 'Pacifico',
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 33),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              buildProductCard(
-                                  context, 'assets/images/sample_product.png'),
-                              buildProductCard(
-                                  context, 'assets/images/sample_product.png'),
-                              buildProductCard(
-                                  context, 'assets/images/sample_product.png'),
-                            ],
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  );
-                }
-              },
+                    const SizedBox(height: 33),
+                    const SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        'Youth’s recommended cosmetics',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontFamily: 'Pacifico',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 33),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List.generate(3, (index) {
+                        return buildProductCard(
+                          context,
+                          aiData.cosNames[index],
+                          aiData.cosPaths[index],
+                        );
+                      }),
+                    ),
+                    const SizedBox(height: 33),
+                    const SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        'Youth’s recommended supplements',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontFamily: 'Pacifico',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 33),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List.generate(3, (index) {
+                        return buildProductCard(
+                          context,
+                          aiData.nutrNames[index],
+                          aiData.nutPaths[index],
+                        );
+                      }),
+                    ),
+                  ],
+                ),
+              ),
             );
           }
         },
@@ -170,7 +151,7 @@ class Recommendation extends StatelessWidget {
     );
   }
 
-  Widget buildProductCard(BuildContext context, String imagePath) {
+  Widget buildProductCard(BuildContext context, String name, String imagePath) {
     return Container(
       width: MediaQuery.of(context).size.width / 3 - 22,
       clipBehavior: Clip.antiAlias,
@@ -187,7 +168,7 @@ class Recommendation extends StatelessWidget {
             height: 110.80,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(imagePath),
+                image: NetworkImage(imagePath),
                 fit: BoxFit.cover,
               ),
             ),
@@ -198,10 +179,10 @@ class Recommendation extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 Text(
-                  'Beautya Prestige la Mousse Micellaire',
-                  style: TextStyle(
+                  name,
+                  style: const TextStyle(
                     color: Color(0xFFA10550),
                     fontSize: 14,
                     fontFamily: 'Open Sans',
@@ -210,8 +191,8 @@ class Recommendation extends StatelessWidget {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: 8),
-                Text(
+                const SizedBox(height: 8),
+                const Text(
                   '\$520.00',
                   style: TextStyle(
                     color: Color(0xFF0C0C0C),

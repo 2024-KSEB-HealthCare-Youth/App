@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_data.dart';
 import '../models/result_data.dart';
+import '../models/ai_data.dart';
 
 class RestAPI {
   static const String baseUrl =
@@ -116,6 +118,29 @@ class RestAPI {
     } catch (e) {
       print('Fetch result data failed: $e');
       throw Exception('Fetch result data failed: $e');
+    }
+  }
+
+  /// Uploads an image to the server.
+  ///
+  /// Takes [imagePath] as input, sends it to the server, and returns the result
+  /// from the server.
+  static Future<AiData> uploadImage(String imagePath) async {
+    var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/upload'));
+    request.files.add(await http.MultipartFile.fromPath('picture', imagePath));
+
+    try {
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        var responseBody = await response.stream.bytesToString();
+        var aiDataJson = jsonDecode(responseBody);
+        return AiData.fromJson(aiDataJson);
+      } else {
+        throw Exception('Failed to upload image: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Image upload failed: $e');
+      throw Exception('Image upload failed: $e');
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/models/ai_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_data.dart';
 import '../models/result_data.dart';
@@ -29,6 +30,9 @@ class MyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    final AiData aiData = args['resultData'];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -120,7 +124,8 @@ class MyPage extends StatelessWidget {
                                     if (resultData.skintype != null)
                                       ProfileDetail(
                                           label: 'Skin Type',
-                                          value: resultData.skintype!),
+                                          value:
+                                              resultData.skintype ?? 'Unknown'),
                                   ],
                                 ),
                               ),
@@ -155,17 +160,25 @@ class MyPage extends StatelessWidget {
                                 color: const Color(0xFFD9D9D9),
                                 shape: StarBorder.polygon(sides: 6),
                               ),
+                              child: aiData.resultPath.isNotEmpty
+                                  ? Image.network(aiData.resultPath)
+                                  : const Icon(Icons.image_not_supported),
                             ),
                           ),
                           const SizedBox(height: 16),
                           Container(
+                            padding: const EdgeInsets.all(16.0),
                             width: double.infinity,
-                            height: 111,
                             decoration: ShapeDecoration(
                               color: const Color(0x7FE8E8E8),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
+                            ),
+                            child: Text(
+                              'Simple Skin: ${aiData.simpleSkin}\n'
+                              'Expert Skin: ${aiData.expertSkin.join(', ')}', //이 부분이 script 부분
+                              style: const TextStyle(fontSize: 16),
                             ),
                           ),
                           const SizedBox(height: 32),

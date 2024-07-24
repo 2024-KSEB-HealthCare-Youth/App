@@ -1,43 +1,21 @@
-class ResultData {
-  final String? skintype;
-  final int resultId;
-  final int memberId;
-  final String resultImage;
-  final String faceImage;
-  final String resultDetails;
-  final DateTime resultDate;
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-  ResultData({
-    this.skintype,
-    required this.resultId,
-    required this.memberId,
-    required this.resultImage,
-    required this.faceImage,
-    required this.resultDetails,
-    required this.resultDate,
-  });
+part 'result_data.freezed.dart';
+part 'result_data.g.dart';
 
-  factory ResultData.fromJson(Map<String, dynamic> json) {
-    return ResultData(
-      skintype: json['skintype'],
-      resultId: json['resultId'],
-      memberId: json['memberId'],
-      resultImage: json['resultImage'],
-      faceImage: json['faceImage'],
-      resultDetails: json['resultDetails'],
-      resultDate: json['resultDate'],
-    );
-  }
+@freezed
+class ResultData with _$ResultData {
+  const factory ResultData({
+    String? skintype,
+    required int resultId,
+    required int memberId,
+    required String resultImage,
+    required String faceImage,
+    required String resultDetails,
+    required DateTime resultDate,
+  }) = _ResultData;
 
-  Map<String, dynamic> toJson() {
-    return {
-      'skintype': skintype,
-      'resultId': resultId,
-      'memberId': memberId,
-      'resultImage': resultImage,
-      'faceImage': faceImage,
-      'resultDetails': resultDetails,
-      'resultDate': resultDate,
-    };
-  }
+  factory ResultData.fromJson(Map<String, dynamic> json) =>
+      _$ResultDataFromJson(json);
 }
