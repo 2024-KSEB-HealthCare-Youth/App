@@ -65,28 +65,13 @@ class _SignUpState extends State<SignUp> {
       print('User data: ${userData.toJson()}');
 
       try {
-        var response = await RestAPI.signUp(userData);
-        print('Sign up response: $response');
-
-        if (response.statusCode == 201) {
-          print('Sign up successful');
-          Navigator.pushNamed(context, '/login');
-        } else if (response.statusCode == 400) {
-          final responseBody = jsonDecode(response.body);
-          print('Sign up failed: ${responseBody['error']}');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Sign up failed: ${responseBody['error']}')),
-          );
-        } else {
-          print('Sign up failed with status code: ${response.statusCode}');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Sign up failed. Please try again.')),
-          );
-        }
+        await RestAPI.signUp(userData);
+        print('Sign up successful');
+        Navigator.pushNamed(context, '/login');
       } catch (e) {
         print('Sign up failed: $e');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sign up failed. Please try again.')),
+          SnackBar(content: Text('Sign up failed: $e')),
         );
       }
     }
@@ -120,7 +105,7 @@ class _SignUpState extends State<SignUp> {
               const SizedBox(height: 20),
               Text(
                 'Create an account',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
               const SizedBox(height: 10),
               const Text(

@@ -19,7 +19,6 @@ class _LogInState extends State<LogIn> {
 
       try {
         await RestAPI.login(_formData['userId']!, _formData['password']!);
-        // 로그인 성공 처리
         Navigator.pushNamed(context, '/main_page');
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(

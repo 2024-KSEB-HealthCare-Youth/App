@@ -5,7 +5,6 @@ import 'screens/sign_up.dart';
 import 'screens/main_page.dart';
 import 'screens/camera_screen.dart';
 import 'screens/loading_page.dart';
-import 'screens/diagnosis_page.dart';
 import 'screens/recommendation.dart';
 import 'screens/my_page.dart';
 import 'screens/menu.dart';
@@ -99,9 +98,8 @@ class FigmaToCodeApp extends StatelessWidget {
       Routes.login: (context) => LogIn(),
       Routes.signUp: (context) => SignUp(),
       Routes.mainPage: (context) => MainPage(),
-      Routes.cameraScreen: (context) => CameraScreen(camera: camera),
-      Routes.loadingPage: (context) => LoadingPage(),
-      Routes.diagnosisPage: (context) => DiagnosisPage(camera: camera),
+      Routes.takePictureScreen: (context) => takePictureScreen(camera: camera),
+      Routes.loadingPage: (context) => LoadingScreen(imagePath: ""),
       Routes.recommendationPage: (context) => Recommendation(),
       Routes.myPage: (context) => MyPage(),
       Routes.menu: (context) => Menu(),
@@ -116,9 +114,8 @@ class Routes {
   static const String login = '/login';
   static const String signUp = '/sign_up';
   static const String mainPage = '/main_page';
-  static const String cameraScreen = '/camera_screen';
+  static const String takePictureScreen = '/camera_screen';
   static const String loadingPage = '/loading_page';
-  static const String diagnosisPage = '/diagnosis_page';
   static const String recommendationPage = '/recommendation_page';
   static const String myPage = '/my_page';
   static const String menu = '/menu';
