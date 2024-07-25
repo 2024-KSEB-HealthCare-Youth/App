@@ -15,12 +15,17 @@ class CommentsScreen extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text(
-          'Youth',
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Pacifico',
+        title: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/main_page');
+          },
+          child: const Text(
+            'Youth',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 30,
+              fontFamily: 'Pacifico',
+            ),
           ),
         ),
         centerTitle: true,

@@ -11,10 +11,14 @@ class DisplayPictureScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('사진 보기')),
+      appBar: AppBar(
+        title: const Text('Picture', style: TextStyle(fontFamily: 'Pacifico')),
+      ),
       body: Column(
         children: [
-          Image.file(File(imagePath)),
+          Expanded(
+            child: Image.file(File(imagePath)),
+          ),
           Row(
             children: [
               Expanded(
@@ -22,7 +26,7 @@ class DisplayPictureScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('사진 다시찍기'),
+                  child: const Text('retake', style: TextStyle(fontFamily: 'Pacifico')),
                 ),
               ),
               Expanded(
@@ -33,8 +37,7 @@ class DisplayPictureScreen extends StatelessWidget {
                       await RestAPI.uploadImage(imagePath);
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) =>
-                              LoadingScreen(imagePath: imagePath),
+                          builder: (context) => LoadingScreen(imagePath: imagePath),
                         ),
                       );
                     } catch (e) {
@@ -44,7 +47,7 @@ class DisplayPictureScreen extends StatelessWidget {
                       );
                     }
                   },
-                  child: const Text('결과 확인하러가기'),
+                  child: const Text('proceed', style: TextStyle(fontFamily: 'Pacifico')),
                 ),
               ),
             ],

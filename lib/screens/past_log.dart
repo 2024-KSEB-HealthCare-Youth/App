@@ -121,7 +121,7 @@ class _PastResultsScreenState extends State<PastResultsScreen> {
             },
       child: const Text(
         '확인하기',
-        style: TextStyle(fontSize: 16, color: Colors.white),
+        style: TextStyle(fontSize: 16, color: Colors.white,fontFamily: 'Pacifico'),
       ),
     );
   }

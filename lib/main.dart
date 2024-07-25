@@ -25,12 +25,14 @@ void main() async {
       return;
     }
     final firstCamera = cameras.first;
-    runApp(MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => CommentService()),
-      ],
-      child: FigmaToCodeApp(camera: firstCamera),
-    ));
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => CommentService()),
+        ],
+        child: FigmaToCodeApp(camera: firstCamera),
+      ),
+    );
   } catch (e) {
     runApp(ErrorApp());
   }
@@ -59,7 +61,7 @@ class FigmaToCodeApp extends StatelessWidget {
     return MaterialApp(
       theme: _buildThemeData(),
       home: SplashScreen(),
-      routes: _buildRoutes(context),
+      onGenerateRoute: _generateRoute,
     );
   }
 
@@ -100,20 +102,35 @@ class FigmaToCodeApp extends StatelessWidget {
     );
   }
 
-  Map<String, WidgetBuilder> _buildRoutes(BuildContext context) {
-    return {
-      Routes.login: (context) => LogIn(),
-      Routes.signUp: (context) => SignUp(),
-      Routes.mainPage: (context) => MainPage(),
-      Routes.takePictureScreen: (context) => takePictureScreen(camera: camera),
-      Routes.loadingPage: (context) => LoadingScreen(imagePath: ""),
-      Routes.recommendationPage: (context) => Recommendation(),
-      Routes.myPage: (context) => MyPage(),
-      Routes.menu: (context) => Menu(),
-      Routes.pastLog: (context) => PastResultsScreen(),
-      Routes.editAccount: (context) => EditAccountPage(),
-      Routes.CommentsScreen: (context) => CommentsScreen(),
-    };
+  Route<dynamic>? _generateRoute(RouteSettings settings) {
+    switch (settings.name) {
+      case Routes.login:
+        return MaterialPageRoute(builder: (context) => LogIn());
+      case Routes.signUp:
+        return MaterialPageRoute(builder: (context) => SignUp());
+      case Routes.mainPage:
+        return MaterialPageRoute(builder: (context) => MainPage());
+      case Routes.takePictureScreen:
+        return MaterialPageRoute(builder: (context) => TakePictureScreen(camera: camera));
+      case Routes.loadingPage:
+        final args = settings.arguments as Map<String, dynamic>;
+        final imagePath = args['imagePath'];
+        return MaterialPageRoute(builder: (context) => LoadingScreen(imagePath: imagePath));
+      case Routes.recommendationPage:
+        return MaterialPageRoute(builder: (context) => Recommendation());
+      case Routes.myPage:
+        return MaterialPageRoute(builder: (context) => MyPage());
+      case Routes.menu:
+        return MaterialPageRoute(builder: (context) => Menu());
+      case Routes.pastLog:
+        return MaterialPageRoute(builder: (context) => PastResultsScreen());
+      case Routes.editAccount:
+        return MaterialPageRoute(builder: (context) => EditAccountPage());
+      case Routes.CommentsScreen:
+        return MaterialPageRoute(builder: (context) => CommentsScreen());
+      default:
+        return null;
+    }
   }
 }
 
@@ -128,7 +145,7 @@ class Routes {
   static const String menu = '/menu';
   static const String pastLog = '/past_log';
   static const String editAccount = '/edit_account';
-  static const String CommentsScreen = '/community';
+  static const String CommentsScreen = '/CommentsScreen';
 }
 
 class ErrorPage extends StatelessWidget {

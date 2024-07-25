@@ -79,7 +79,7 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sign Up'),
+        title: const Text('Sign Up',style: TextStyle(fontFamily: 'Pacifico'),),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 61, horizontal: 40),
