@@ -1,4 +1,9 @@
+// widgets/menu.dart
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../services/user_service.dart';
+import '../models/past_data.dart';
 
 class Menu extends StatelessWidget {
   @override
@@ -28,8 +33,25 @@ class Menu extends StatelessWidget {
           _buildMenuItem(
             key: Key('과거 진단 결과 조회'),
             title: '과거 진단 결과 조회',
-            onTap: () {
-              Navigator.pushNamed(context, '/past_log');
+            onTap: () async {
+              final userService = UserService();
+              final prefs = await SharedPreferences.getInstance();
+              final userId = prefs.getString('userId');
+              if (userId != null) {
+                try {
+                  final pastData = await userService.fetchPastData(userId);
+                  Navigator.pushNamed(
+                    context,
+                    '/past_log',
+                    arguments: pastData,
+                  );
+                } catch (e) {
+                  // Handle error
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Failed to load past data')),
+                  );
+                }
+              }
             },
           ),
           _buildMenuItem(

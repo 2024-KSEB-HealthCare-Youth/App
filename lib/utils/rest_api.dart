@@ -1,18 +1,17 @@
-// rest_api.dart
-
-import '../models/user_data.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../models/user_data.dart';
 import '../models/result_data.dart';
 import '../models/ai_data.dart';
 import '../models/token_response.dart';
+import '../models/past_data.dart';
 
 class RestAPI {
   static const String baseUrl = 'http://52.79.103.61:8080';
-  static const String flaskUrl = '';
+  static const String flaskUrl = 'http://your-flask-server-ip:5000';
   static const Map<String, String> headers = {
     'Content-Type': 'application/json'
   };
@@ -186,9 +185,52 @@ class RestAPI {
     }
   }
 
-  // connect with flask server
+  // Fetch past data
+  static Future<PastData> fetchPastData(String userId) async {
+    final tokens = await getTokens();
+    final accessToken = tokens['access_token'];
 
-  //upladImage to flask server
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/$userId/pastdata'),
+        headers: {...headers, 'authorization': 'Bearer $accessToken'},
+      );
+
+      if (response.statusCode == 200) {
+        return PastData.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception('Failed to load past data: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Fetch past data failed: $e');
+      throw Exception('Fetch past data failed: $e');
+    }
+  }
+
+  // Fecth past log by result id & result date
+  static Future<ResultData> fetchPast_Result(
+      String resultId, DateTime resultDate) async {
+    final tokens = await getTokens();
+    final accessToken = tokens['access_token'];
+
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/'),
+        headers: {...headers, 'authorization': 'Bearer $accessToken'},
+      );
+      if (response.statusCode == 200) {
+        return ResultData.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(
+            'Failed to load Past_Result data:${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Fetch past data failed: $e');
+      throw Exception('Fetch past data failed: $e');
+    }
+  }
+
+  // Upload image to Flask server
   static Future<void> uploadImage(String imagePath) async {
     var request = http.MultipartRequest('POST', Uri.parse('$flaskUrl/upload'));
     request.files.add(await http.MultipartFile.fromPath('file', imagePath));
@@ -207,7 +249,7 @@ class RestAPI {
     }
   }
 
-  // Fetch AI data
+  // Fetch AI data from Flask server
   static Future<AiData> fetchAiData() async {
     final response = await http.get(Uri.parse('$flaskUrl/ai-data'));
 

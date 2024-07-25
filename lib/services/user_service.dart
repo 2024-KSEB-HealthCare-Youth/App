@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/user_data.dart';
 import '../models/result_data.dart';
+import '../models/past_data.dart'; // PastData 모델 추가
 import '../utils/rest_api.dart';
 
 class UserService {
@@ -40,5 +41,9 @@ class UserService {
 
   Future<void> updateUserData(UserData userData) async {
     await RestAPI.updateUserData(userData);
+  }
+
+  Future<PastData> fetchPastData(String userId) async {
+    return await RestAPI.fetchPastData(userId);
   }
 }

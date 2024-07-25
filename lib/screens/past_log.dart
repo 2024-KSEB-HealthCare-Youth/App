@@ -1,5 +1,8 @@
+// screens/past_results_screen.dart
+
 import 'package:flutter/material.dart';
-import '../models/result_data.dart';
+import '../models/past_data.dart';
+import 'result_detail_screen.dart';
 
 class PastResultsScreen extends StatefulWidget {
   const PastResultsScreen({Key? key}) : super(key: key);
@@ -10,32 +13,13 @@ class PastResultsScreen extends StatefulWidget {
 
 class _PastResultsScreenState extends State<PastResultsScreen> {
   int? _selectedIndex;
-  final List<ResultData> _results = [
-    ResultData(
-      resultId: 1,
-      memberId: 101,
-      resultImage: 'result1.png',
-      faceImage: 'face1.png',
-      resultDetails: 'Detailed result 1',
-      resultDate: DateTime.parse('2023-07-01'),
-    ),
-    ResultData(
-      resultId: 2,
-      memberId: 102,
-      resultImage: 'result2.png',
-      faceImage: 'face2.png',
-      resultDetails: 'Detailed result 2',
-      resultDate: DateTime.parse('2023-08-01'),
-    ),
-    ResultData(
-      resultId: 3,
-      memberId: 103,
-      resultImage: 'result3.png',
-      faceImage: 'face3.png',
-      resultDetails: 'Detailed result 3',
-      resultDate: DateTime.parse('2023-09-01'),
-    ),
-  ];
+  late PastData _pastData;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _pastData = ModalRoute.of(context)!.settings.arguments as PastData;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +31,7 @@ class _PastResultsScreenState extends State<PastResultsScreen> {
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: _results.length,
+                itemCount: _pastData.resultDate.length,
                 itemBuilder: (context, index) {
                   return _buildDateItem(context, index);
                 },
@@ -103,7 +87,8 @@ class _PastResultsScreenState extends State<PastResultsScreen> {
               },
             ),
             const SizedBox(width: 8),
-            Text(_results[index].resultDate.toLocal().toString().split(' ')[0]),
+            Text(
+                _pastData.resultDate[index].toLocal().toString().split(' ')[0]),
           ],
         ),
       ),
@@ -119,52 +104,22 @@ class _PastResultsScreenState extends State<PastResultsScreen> {
       onPressed: _selectedIndex == null
           ? null
           : () {
-              final selectedResult = _results[_selectedIndex!];
+              final selectedResultId = _pastData.resultId[_selectedIndex!];
+              final selectedResultDate = _pastData.resultDate[_selectedIndex!];
+              // ResultDetailScreen으로 resultId와 resultDate를 전달합니다.
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) =>
-                      ResultDetailScreen(resultData: selectedResult),
+                  builder: (context) => ResultDetailScreen(
+                    resultId: selectedResultId,
+                    resultDate: selectedResultDate,
+                  ),
                 ),
               );
             },
       child: const Text(
         '확인하기',
         style: TextStyle(fontSize: 16, color: Colors.white),
-      ),
-    );
-  }
-}
-
-class ResultDetailScreen extends StatelessWidget {
-  final ResultData resultData;
-
-  const ResultDetailScreen({Key? key, required this.resultData})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Result Detail'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-                'Date: ${resultData.resultDate.toLocal().toString().split(' ')[0]}'),
-            SizedBox(height: 16),
-            Text('Result Details: ${resultData.resultDetails}'),
-            SizedBox(height: 16),
-            Image.asset(resultData
-                .resultImage), // Use your image asset or network image
-            SizedBox(height: 16),
-            Image.asset(
-                resultData.faceImage), // Use your image asset or network image
-          ],
-        ),
       ),
     );
   }
