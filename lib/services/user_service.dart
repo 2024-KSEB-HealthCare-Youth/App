@@ -39,8 +39,8 @@ class UserService {
     await RestAPI.login(userId, password);
   }
 
-  Future<void> updateUserData(UserData userData) async {
-    await RestAPI.updateUserData(userData);
+  Future<void> updateUserData(UserData userData, String userId) async {
+    await RestAPI.updateUserData(userData, userId);
   }
 
   Future<PastData> fetchPastData(String userId) async {

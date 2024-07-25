@@ -23,6 +23,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
 
   File? _profileImage;
   UserData? _userData;
+  late String _userId;
 
   @override
   void initState() {
@@ -41,6 +42,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final userId = args['userId'] as String;
     final accessToken = args['accessToken'] as String;
+    _userId = userId;
 
     try {
       UserData userData = await UserService().fetchUserData();
@@ -84,7 +86,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
       );
 
       // Update user data on the server
-      await UserService().updateUserData(updatedUserData);
+      await UserService().updateUserData(updatedUserData, _userId);
 
       print('User data and profile image updated successfully.');
     } catch (e) {
@@ -214,7 +216,10 @@ class _EditAccountPageState extends State<EditAccountPage> {
                       onPressed: _saveAccountInfo,
                       child: const Text(
                         'save',
-                        style: TextStyle(color: Colors.white, fontSize: 16,fontFamily: 'Pacifico'),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontFamily: 'Pacifico'),
                       ),
                     ),
                   ),

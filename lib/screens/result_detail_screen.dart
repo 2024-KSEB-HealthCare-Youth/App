@@ -30,8 +30,7 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
   Future<ResultData> _fetchResultData() async {
     // 서버에서 resultId와 resultDate를 이용해 ResultData를 가져오는 로직을 구현합니다.
     try {
-      final resultData =
-          await RestAPI.fetchPast_Result(widget.resultId, widget.resultDate);
+      final resultData = await RestAPI.fetchPast_Result(widget.resultId);
       return resultData;
     } catch (e) {
       throw Exception('Failed to load result data: $e');

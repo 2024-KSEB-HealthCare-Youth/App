@@ -51,7 +51,7 @@ class _SignUpState extends State<SignUp> {
         phoneNumber: _phoneController.text,
         email: _emailController.text,
         profileImage: 'default_profile_image.png',
-        isAdmin: 'unKnown',
+        isAdmin: UserRole.USER, // Default role set to USER
       );
 
       // Print JSON data to debug
@@ -79,7 +79,10 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sign Up',style: TextStyle(fontFamily: 'Pacifico'),),
+        title: const Text(
+          'Sign Up',
+          style: TextStyle(fontFamily: 'Pacifico'),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 61, horizontal: 40),
