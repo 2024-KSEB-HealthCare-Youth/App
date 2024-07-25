@@ -12,6 +12,8 @@ import 'screens/past_log.dart';
 import 'screens/edit_account.dart';
 import 'screens/commentsScreen.dart';
 import 'package:camera/camera.dart';
+import 'package:provider/provider.dart';
+import 'services/comment_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +25,12 @@ void main() async {
       return;
     }
     final firstCamera = cameras.first;
-    runApp(FigmaToCodeApp(camera: firstCamera));
+    runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CommentService()),
+      ],
+      child: FigmaToCodeApp(camera: firstCamera),
+    ));
   } catch (e) {
     runApp(ErrorApp());
   }

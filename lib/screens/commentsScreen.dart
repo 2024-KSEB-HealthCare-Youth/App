@@ -1,5 +1,3 @@
-// screens/comments_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/comment_service.dart';
@@ -9,63 +7,60 @@ class CommentsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => CommentService(),
-      child: Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          title: const Text(
-            'Youth',
-            style: TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Pacifico',
-            ),
-          ),
-          centerTitle: true,
-          backgroundColor: Colors.white,
-          elevation: 0,
-          foregroundColor: Colors.black,
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              _buildCommentInputField(context),
-              const SizedBox(height: 20),
-              Expanded(
-                child: Consumer<CommentService>(
-                  builder: (context, commentService, _) {
-                    return ListView.builder(
-                      key: const Key('posts_list'),
-                      itemCount: commentService.posts.length,
-                      itemBuilder: (context, index) {
-                        final post = commentService.posts[index];
-                        final isLiked = commentService.isPostLiked(post['id']);
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => PostDetailScreen(
-                                post: post,
-                                postIndex: index,
-                              ),
-                            ));
-                          },
-                          child: _buildPostItem(
-                              context, post, isLiked, commentService, index),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-            ],
+        title: const Text(
+          'Youth',
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Pacifico',
           ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        foregroundColor: Colors.black,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            _buildCommentInputField(context),
+            const SizedBox(height: 20),
+            Expanded(
+              child: Consumer<CommentService>(
+                builder: (context, commentService, _) {
+                  return ListView.builder(
+                    key: const Key('posts_list'),
+                    itemCount: commentService.posts.length,
+                    itemBuilder: (context, index) {
+                      final post = commentService.posts[index];
+                      final isLiked = commentService.isPostLiked(post['id']);
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => PostDetailScreen(
+                              post: post,
+                              postIndex: index,
+                            ),
+                          ));
+                        },
+                        child: _buildPostItem(
+                            context, post, isLiked, commentService, index),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

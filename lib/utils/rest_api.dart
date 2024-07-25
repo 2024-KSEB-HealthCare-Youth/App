@@ -230,15 +230,17 @@ class RestAPI {
     }
   }
 
-  // Upload image to Flask server
-  static Future<void> uploadImage(String imagePath) async {
+  static Future<Map<String, dynamic>> uploadImage(String imagePath) async {
     var request = http.MultipartRequest('POST', Uri.parse('$flaskUrl/upload'));
     request.files.add(await http.MultipartFile.fromPath('file', imagePath));
 
     try {
       var response = await request.send();
       if (response.statusCode == 200) {
+        var responseBody = await response.stream.bytesToString();
+        var decodedResponse = jsonDecode(responseBody) as Map<String, dynamic>;
         print('Image uploaded successfully.');
+        return decodedResponse;
       } else {
         print('Image upload failed.');
         throw Exception('Failed to upload image: ${response.reasonPhrase}');

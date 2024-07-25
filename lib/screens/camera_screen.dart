@@ -2,16 +2,16 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'display_picture.dart';
 
-class TakePictureScreen extends StatefulWidget {
+class takePictureScreen extends StatefulWidget {
   final CameraDescription camera;
 
-  const TakePictureScreen({super.key, required this.camera});
+  const takePictureScreen({super.key, required this.camera});
 
   @override
-  TakePictureScreenState createState() => TakePictureScreenState();
+  takePictureScreenState createState() => takePictureScreenState();
 }
 
-class TakePictureScreenState extends State<TakePictureScreen> {
+class takePictureScreenState extends State<takePictureScreen> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
 
@@ -37,24 +37,37 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       appBar: AppBar(title: const Text('Youth')),
       body: Column(
         children: [
-          FutureBuilder<void>(
-            future: _initializeControllerFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.done) {
-                return CameraPreview(_controller);
-              } else {
-                return const Center(child: CircularProgressIndicator());
-              }
-            },
-          ),
-          const Text('keep your face inside the circle'),
           Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.pink, width: 4),
-              ),
+            child: Stack(
+              children: [
+                FutureBuilder<void>(
+                  future: _initializeControllerFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      return CameraPreview(_controller);
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
+                ),
+                Center(
+                  child: Container(
+                    width: 300, // Adjust width as needed
+                    height: 400, // Adjust height as needed
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(
+                          200), // Adjust for ellipse shape
+                      border: Border.all(color: Colors.pink, width: 4),
+                    ),
+                  ),
+                ),
+              ],
             ),
+          ),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text('keep your face inside the circle'),
           ),
           Row(
             children: [
