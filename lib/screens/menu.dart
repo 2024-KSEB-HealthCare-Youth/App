@@ -27,7 +27,7 @@ class Menu extends StatelessWidget {
             key: Key('게시판'),
             title: '게시판',
             onTap: () {
-              Navigator.pushNamed(context, '/community');
+              Navigator.pushNamed(context, '/CommentsScreen');
             },
           ),
           _buildMenuItem(

@@ -36,7 +36,7 @@ class _LogInState extends State<LogIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Log In'),
+        title: const Text('Log In', style: TextStyle(fontFamily: 'Pacifico')),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 61, horizontal: 40),
@@ -52,7 +52,7 @@ class _LogInState extends State<LogIn> {
               const SizedBox(height: 10),
               const Text(
                 'Log in to continue',
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.left,
                 style: TextStyle(
                   color: Color(0xFF343434),
                   fontSize: 12,
