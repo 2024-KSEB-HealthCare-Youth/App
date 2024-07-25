@@ -41,35 +41,41 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       body: Column(
         children: [
           Expanded(
-            child: Stack(
-              children: [
-                FutureBuilder<void>(
-                  future: _initializeControllerFuture,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      return CameraPreview(_controller);
-                    } else {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                  },
-                ),
-                Center(
-                  child: Container(
-                    width: 300, // Adjust width as needed
-                    height: 400, // Adjust height as needed
-                    decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.circular(200), // Adjust for ellipse shape
-                      border: Border.all(color: Colors.pink, width: 4),
+            child: FutureBuilder<void>(
+              future: _initializeControllerFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return Center(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        AspectRatio(
+                          aspectRatio: _controller.value.aspectRatio,
+                          child: CameraPreview(_controller),
+                        ),
+                        Container(
+                          width: 300, // Adjust width as needed
+                          height: 400, // Adjust height as needed
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(
+                                200), // Adjust for ellipse shape
+                            border: Border.all(color: Colors.pink, width: 4),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ),
-              ],
+                  );
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
             ),
           ),
           const Padding(
             padding: EdgeInsets.all(8.0),
-            child: Text('keep your face inside the circle', style: TextStyle(fontFamily: 'Pacifico')),
+            child: Text('keep your face inside the circle',
+                style: TextStyle(fontFamily: 'Pacifico')),
           ),
           SizedBox(
             width: double.infinity,
@@ -81,14 +87,16 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                   if (!mounted) return;
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => DisplayPictureScreen(imagePath: image.path),
+                      builder: (context) =>
+                          DisplayPictureScreen(imagePath: image.path),
                     ),
                   );
                 } catch (e) {
                   print(e);
                 }
               },
-              child: const Text('take picture', style: TextStyle(fontFamily: 'Pacifico')),
+              child: const Text('take picture',
+                  style: TextStyle(fontFamily: 'Pacifico')),
             ),
           ),
         ],

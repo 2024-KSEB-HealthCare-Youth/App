@@ -158,7 +158,7 @@ class RestAPI {
   }
 
   // Update user data
-  static Future<void> updateUserData(UserData userData) async {
+  static Future<void> updateUserData(UserData userData, String userId) async {
     final tokens = await getTokens();
     final accessToken = tokens['access_token'];
 
@@ -167,7 +167,7 @@ class RestAPI {
 
     try {
       final response = await http.put(
-        Uri.parse('$baseUrl/members/update'),
+        Uri.parse('$baseUrl/members/$userId'),
         headers: {...headers, 'authorization': 'Bearer $accessToken'},
         body: requestBody,
       );
@@ -192,7 +192,7 @@ class RestAPI {
 
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/$userId/pastdata'),
+        Uri.parse('$baseUrl/results/lists'),
         headers: {...headers, 'authorization': 'Bearer $accessToken'},
       );
 
@@ -208,14 +208,13 @@ class RestAPI {
   }
 
   // Fecth past log by result id & result date
-  static Future<ResultData> fetchPast_Result(
-      String resultId, DateTime resultDate) async {
+  static Future<ResultData> fetchPast_Result(String resultId) async {
     final tokens = await getTokens();
     final accessToken = tokens['access_token'];
 
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/'),
+        Uri.parse('$baseUrl/results/$resultId'),
         headers: {...headers, 'authorization': 'Bearer $accessToken'},
       );
       if (response.statusCode == 200) {

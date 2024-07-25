@@ -17,7 +17,7 @@ _$UserDataImpl _$$UserDataImplFromJson(Map<String, dynamic> json) =>
       phoneNumber: json['phoneNumber'] as String,
       email: json['email'] as String?,
       profileImage: json['profileImage'] as String?,
-      isAdmin: json['isAdmin'] as String?,
+      isAdmin: $enumDecode(_$UserRoleEnumMap, json['isAdmin']),
     );
 
 Map<String, dynamic> _$$UserDataImplToJson(_$UserDataImpl instance) =>
@@ -31,5 +31,10 @@ Map<String, dynamic> _$$UserDataImplToJson(_$UserDataImpl instance) =>
       'phoneNumber': instance.phoneNumber,
       'email': instance.email,
       'profileImage': instance.profileImage,
-      'isAdmin': instance.isAdmin,
+      'isAdmin': _$UserRoleEnumMap[instance.isAdmin]!,
     };
+
+const _$UserRoleEnumMap = {
+  UserRole.USER: 'USER',
+  UserRole.ADMIN: 'ADMIN',
+};

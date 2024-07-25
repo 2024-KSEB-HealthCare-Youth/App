@@ -29,7 +29,7 @@ mixin _$UserData {
   String get phoneNumber => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   String? get profileImage => throw _privateConstructorUsedError;
-  String? get isAdmin => throw _privateConstructorUsedError;
+  UserRole get isAdmin => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -52,7 +52,7 @@ abstract class $UserDataCopyWith<$Res> {
       String phoneNumber,
       String? email,
       String? profileImage,
-      String? isAdmin});
+      UserRole isAdmin});
 }
 
 /// @nodoc
@@ -77,7 +77,7 @@ class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
     Object? phoneNumber = null,
     Object? email = freezed,
     Object? profileImage = freezed,
-    Object? isAdmin = freezed,
+    Object? isAdmin = null,
   }) {
     return _then(_value.copyWith(
       loginId: null == loginId
@@ -116,10 +116,10 @@ class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
               as String?,
-      isAdmin: freezed == isAdmin
+      isAdmin: null == isAdmin
           ? _value.isAdmin
           : isAdmin // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as UserRole,
     ) as $Val);
   }
 }
@@ -142,7 +142,7 @@ abstract class _$$UserDataImplCopyWith<$Res>
       String phoneNumber,
       String? email,
       String? profileImage,
-      String? isAdmin});
+      UserRole isAdmin});
 }
 
 /// @nodoc
@@ -165,7 +165,7 @@ class __$$UserDataImplCopyWithImpl<$Res>
     Object? phoneNumber = null,
     Object? email = freezed,
     Object? profileImage = freezed,
-    Object? isAdmin = freezed,
+    Object? isAdmin = null,
   }) {
     return _then(_$UserDataImpl(
       loginId: null == loginId
@@ -204,10 +204,10 @@ class __$$UserDataImplCopyWithImpl<$Res>
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
               as String?,
-      isAdmin: freezed == isAdmin
+      isAdmin: null == isAdmin
           ? _value.isAdmin
           : isAdmin // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as UserRole,
     ));
   }
 }
@@ -225,7 +225,7 @@ class _$UserDataImpl implements _UserData {
       required this.phoneNumber,
       this.email,
       this.profileImage,
-      this.isAdmin});
+      required this.isAdmin});
 
   factory _$UserDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserDataImplFromJson(json);
@@ -249,7 +249,7 @@ class _$UserDataImpl implements _UserData {
   @override
   final String? profileImage;
   @override
-  final String? isAdmin;
+  final UserRole isAdmin;
 
   @override
   String toString() {
@@ -307,7 +307,7 @@ abstract class _UserData implements UserData {
       required final String phoneNumber,
       final String? email,
       final String? profileImage,
-      final String? isAdmin}) = _$UserDataImpl;
+      required final UserRole isAdmin}) = _$UserDataImpl;
 
   factory _UserData.fromJson(Map<String, dynamic> json) =
       _$UserDataImpl.fromJson;
@@ -331,7 +331,7 @@ abstract class _UserData implements UserData {
   @override
   String? get profileImage;
   @override
-  String? get isAdmin;
+  UserRole get isAdmin;
   @override
   @JsonKey(ignore: true)
   _$$UserDataImplCopyWith<_$UserDataImpl> get copyWith =>
