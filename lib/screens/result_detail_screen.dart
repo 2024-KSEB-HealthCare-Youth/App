@@ -1,8 +1,8 @@
 // screens/result_detail_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:myapp/utils/rest_api.dart';
 import '../models/result_data.dart';
-import '../services/user_service.dart';
 import '../utils/rest_api.dart';
 
 class ResultDetailScreen extends StatefulWidget {
@@ -43,34 +43,80 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Result Detail'),
+        title: const Text('Youth',
+            style: TextStyle(fontFamily: 'Pacifico', fontSize: 30)),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: FutureBuilder<ResultData>(
         future: _resultData,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData) {
-            return Center(child: Text('No result data found'));
+            return const Center(child: Text('No result data found'));
           } else {
             final resultData = snapshot.data!;
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: NetworkImage(resultData.faceImage),
+                  ),
+                  const SizedBox(height: 16),
                   Text(
-                      'Date: ${widget.resultDate.toLocal().toString().split(' ')[0]}'),
-                  SizedBox(height: 16),
-                  Text('Result Details: ${resultData.resultDetails}'),
-                  SizedBox(height: 16),
-                  Image.asset(resultData
-                      .resultImage), // Use your image asset or network image
-                  SizedBox(height: 16),
-                  Image.asset(resultData
-                      .faceImage), // Use your image asset or network image
+                    widget.resultDate.toLocal().toString().split(' ')[0],
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Diagnostic Results',
+                    style: TextStyle(
+                      color: Color(0xFFE26169),
+                      fontSize: 20,
+                      fontFamily: 'Nobile',
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    width: 183,
+                    height: 183,
+                    decoration: ShapeDecoration(
+                      color: const Color(0xFFD9D9D9),
+                      shape: StarBorder.polygon(sides: 6),
+                    ),
+                    child: resultData.resultImage.isNotEmpty
+                        ? Image.network(resultData.resultImage)
+                        : const Icon(Icons.image_not_supported),
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    width: double.infinity,
+                    decoration: ShapeDecoration(
+                      color: const Color(0x7FE8E8E8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: Text(
+                      resultData.resultDetails,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ),
                 ],
               ),
             );

@@ -88,7 +88,9 @@ class _PastResultsScreenState extends State<PastResultsScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-                _pastData.resultDate[index].toLocal().toString().split(' ')[0]),
+              '${_pastData.resultDate[index].toLocal().toString().split(' ')[0]} (${_pastData.resultDate[index].toLocal().toString().split(' ')[1].substring(0, 5)})',
+              style: TextStyle(fontSize: 16),
+            ),
           ],
         ),
       ),
