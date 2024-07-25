@@ -7,10 +7,11 @@ import '../models/user_data.dart';
 import '../models/result_data.dart';
 import '../models/ai_data.dart';
 import '../models/token_response.dart';
+import '../models/past_data.dart';
 
 class RestAPI {
   static const String baseUrl = 'http://52.79.103.61:8080';
-  static const String flaskUrl = '';
+  static const String flaskUrl = 'http://your-flask-server-ip:5000';
   static const Map<String, String> headers = {
     'Content-Type': 'application/json'
   };
@@ -156,15 +157,90 @@ class RestAPI {
     }
   }
 
-//upladImage to flask server
-  static Future<void> uploadImage(String imagePath) async {
+  // Update user data
+  static Future<void> updateUserData(UserData userData) async {
+    final tokens = await getTokens();
+    final accessToken = tokens['access_token'];
+
+    final requestBody = jsonEncode(userData.toJson());
+    print('Request body: $requestBody');
+
+    try {
+      final response = await http.put(
+        Uri.parse('$baseUrl/members/update'),
+        headers: {...headers, 'authorization': 'Bearer $accessToken'},
+        body: requestBody,
+      );
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        print('User data updated successfully.');
+      } else {
+        throw Exception('Failed to update user data: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Update user data failed: $e');
+      throw Exception('Update user data failed: $e');
+    }
+  }
+
+  // Fetch past data
+  static Future<PastData> fetchPastData(String userId) async {
+    final tokens = await getTokens();
+    final accessToken = tokens['access_token'];
+
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/$userId/pastdata'),
+        headers: {...headers, 'authorization': 'Bearer $accessToken'},
+      );
+
+      if (response.statusCode == 200) {
+        return PastData.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception('Failed to load past data: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Fetch past data failed: $e');
+      throw Exception('Fetch past data failed: $e');
+    }
+  }
+
+  // Fecth past log by result id & result date
+  static Future<ResultData> fetchPast_Result(
+      String resultId, DateTime resultDate) async {
+    final tokens = await getTokens();
+    final accessToken = tokens['access_token'];
+
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/'),
+        headers: {...headers, 'authorization': 'Bearer $accessToken'},
+      );
+      if (response.statusCode == 200) {
+        return ResultData.fromJson(jsonDecode(response.body));
+      } else {
+        throw Exception(
+            'Failed to load Past_Result data:${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Fetch past data failed: $e');
+      throw Exception('Fetch past data failed: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>> uploadImage(String imagePath) async {
     var request = http.MultipartRequest('POST', Uri.parse('$flaskUrl/upload'));
     request.files.add(await http.MultipartFile.fromPath('file', imagePath));
 
     try {
       var response = await request.send();
       if (response.statusCode == 200) {
+        var responseBody = await response.stream.bytesToString();
+        var decodedResponse = jsonDecode(responseBody) as Map<String, dynamic>;
         print('Image uploaded successfully.');
+        return decodedResponse;
       } else {
         print('Image upload failed.');
         throw Exception('Failed to upload image: ${response.reasonPhrase}');
@@ -175,7 +251,7 @@ class RestAPI {
     }
   }
 
-  // Fetch AI data
+  // Fetch AI data from Flask server
   static Future<AiData> fetchAiData() async {
     final response = await http.get(Uri.parse('$flaskUrl/ai-data'));
 

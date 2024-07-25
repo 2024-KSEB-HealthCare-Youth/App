@@ -1,6 +1,10 @@
+// screens/edit_account_screen.dart
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import '../models/user_data.dart';
+import '../services/user_service.dart';
 
 class EditAccountPage extends StatefulWidget {
   const EditAccountPage({Key? key}) : super(key: key);
@@ -10,18 +14,49 @@ class EditAccountPage extends StatefulWidget {
 }
 
 class _EditAccountPageState extends State<EditAccountPage> {
-  final TextEditingController _firstNameController =
-      TextEditingController(text: 'Nadya');
-  final TextEditingController _lastNameController =
-      TextEditingController(text: 'Septy');
-  final TextEditingController _emailController =
-      TextEditingController(text: 'nadyasepty@gmail.com');
-  final TextEditingController _genderController =
-      TextEditingController(text: 'Female');
-  final TextEditingController _phoneController =
-      TextEditingController(text: '(+62) 85746085026');
+  late TextEditingController _nameController;
+  late TextEditingController _nickNameController;
+  late TextEditingController _emailController;
+  late TextEditingController _phoneController;
+  late TextEditingController _ageController;
+  late TextEditingController _genderController;
 
   File? _profileImage;
+  UserData? _userData;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController();
+    _nickNameController = TextEditingController();
+    _emailController = TextEditingController();
+    _phoneController = TextEditingController();
+    _ageController = TextEditingController();
+    _genderController = TextEditingController();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final userId = args['userId'] as String;
+    final accessToken = args['accessToken'] as String;
+
+    try {
+      UserData userData = await UserService().fetchUserData();
+      setState(() {
+        _userData = userData;
+        _nameController.text = userData.name;
+        _nickNameController.text = userData.nickName ?? '';
+        _emailController.text = userData.email ?? '';
+        _phoneController.text = userData.phoneNumber;
+        _ageController.text = userData.age.toString();
+        _genderController.text = userData.gender;
+      });
+    } catch (e) {
+      print('Failed to load user data: $e');
+    }
+  }
 
   Future<void> _pickImage() async {
     final pickedFile =
@@ -31,6 +66,29 @@ class _EditAccountPageState extends State<EditAccountPage> {
       setState(() {
         _profileImage = File(pickedFile.path);
       });
+    }
+  }
+
+  Future<void> _saveAccountInfo() async {
+    if (_userData == null) {
+      return;
+    }
+
+    try {
+      UserData updatedUserData = _userData!.copyWith(
+        name: _nameController.text,
+        nickName: _nickNameController.text,
+        phoneNumber: _phoneController.text,
+        email: _emailController.text,
+        profileImage: _profileImage?.path ?? _userData!.profileImage,
+      );
+
+      // Update user data on the server
+      await UserService().updateUserData(updatedUserData);
+
+      print('User data and profile image updated successfully.');
+    } catch (e) {
+      print('Failed to save account info: $e');
     }
   }
 
@@ -57,127 +115,130 @@ class _EditAccountPageState extends State<EditAccountPage> {
         ),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 20),
-            Center(
-              child: Stack(
+      body: _userData == null
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: _profileImage != null
-                        ? FileImage(_profileImage!)
-                        : const NetworkImage(
-                                'https://your-image-url.com/image.jpg')
-                            as ImageProvider,
+                  const SizedBox(height: 20),
+                  Center(
+                    child: Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundImage: _profileImage != null
+                              ? FileImage(_profileImage!)
+                              : _userData!.profileImage != null
+                                  ? NetworkImage(_userData!.profileImage!)
+                                  : const AssetImage(
+                                          'assets/images/sample_product.png')
+                                      as ImageProvider,
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: GestureDetector(
+                            onTap: _pickImage,
+                            child: Container(
+                              width: 30,
+                              height: 30,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.pink,
+                              ),
+                              child: const Icon(
+                                Icons.camera_alt,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: GestureDetector(
-                      onTap: _pickImage,
-                      child: Container(
-                        width: 30,
-                        height: 30,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.pink,
+                  const SizedBox(height: 20),
+                  const Text(
+                    'User Information',
+                    style: TextStyle(
+                      color: Color(0xFFE57373),
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  CustomTextFormField(
+                    controller: _nameController,
+                    labelText: 'Name',
+                  ),
+                  const SizedBox(height: 10),
+                  CustomTextFormField(
+                    controller: _nickNameController,
+                    labelText: 'Nickname',
+                  ),
+                  const SizedBox(height: 10),
+                  CustomTextFormField(
+                    controller: _emailController,
+                    labelText: 'Email',
+                  ),
+                  const SizedBox(height: 10),
+                  CustomTextFormField(
+                    controller: _phoneController,
+                    labelText: 'Phone',
+                  ),
+                  const SizedBox(height: 10),
+                  CustomTextFormField(
+                    controller: _ageController,
+                    labelText: 'Age',
+                    enabled: false, // 나이 수정 불가
+                  ),
+                  const SizedBox(height: 10),
+                  CustomTextFormField(
+                    controller: _genderController,
+                    labelText: 'Gender',
+                    enabled: false, // 성별 수정 불가
+                  ),
+                  const SizedBox(height: 30),
+                  Center(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.pink,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
                         ),
-                        child: const Icon(
-                          Icons.camera_alt,
-                          color: Colors.white,
-                          size: 20,
-                        ),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 100, vertical: 15),
+                      ),
+                      onPressed: _saveAccountInfo,
+                      child: const Text(
+                        '저장하기',
+                        style: TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 20),
-            const Text(
-              'User Information',
-              style: TextStyle(
-                color: Color(0xFFE57373),
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildTextFormField(
-                    controller: _firstNameController,
-                    labelText: 'First Name',
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _buildTextFormField(
-                    controller: _lastNameController,
-                    labelText: 'Last Name',
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            _buildTextFormField(
-              controller: _emailController,
-              labelText: 'Email',
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildTextFormField(
-                    controller: _genderController,
-                    labelText: 'Gender',
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _buildTextFormField(
-                    controller: _phoneController,
-                    labelText: 'Phone',
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 30),
-            Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.pink,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 100, vertical: 15),
-                ),
-                onPressed: () {
-                  // Handle save button press
-                  _saveAccountInfo();
-                },
-                child: const Text(
-                  '저장하기',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
+}
 
-  Widget _buildTextFormField({
-    required TextEditingController controller,
-    required String labelText,
-  }) {
+class CustomTextFormField extends StatelessWidget {
+  final TextEditingController controller;
+  final String labelText;
+  final bool enabled;
+
+  const CustomTextFormField({
+    Key? key,
+    required this.controller,
+    required this.labelText,
+    this.enabled = true,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       style: const TextStyle(
@@ -192,15 +253,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
           fontFamily: 'Arial',
         ),
       ),
+      enabled: enabled,
     );
-  }
-
-  void _saveAccountInfo() {
-    // Implement save functionality here
-    print('First Name: ${_firstNameController.text}');
-    print('Last Name: ${_lastNameController.text}');
-    print('Email: ${_emailController.text}');
-    print('Gender: ${_genderController.text}');
-    print('Phone: ${_phoneController.text}');
   }
 }

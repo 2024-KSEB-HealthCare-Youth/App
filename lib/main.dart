@@ -10,8 +10,10 @@ import 'screens/my_page.dart';
 import 'screens/menu.dart';
 import 'screens/past_log.dart';
 import 'screens/edit_account.dart';
-import 'screens/community.dart';
+import 'screens/commentsScreen.dart';
 import 'package:camera/camera.dart';
+import 'package:provider/provider.dart';
+import 'services/comment_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +25,12 @@ void main() async {
       return;
     }
     final firstCamera = cameras.first;
-    runApp(FigmaToCodeApp(camera: firstCamera));
+    runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => CommentService()),
+      ],
+      child: FigmaToCodeApp(camera: firstCamera),
+    ));
   } catch (e) {
     runApp(ErrorApp());
   }
@@ -105,7 +112,7 @@ class FigmaToCodeApp extends StatelessWidget {
       Routes.menu: (context) => Menu(),
       Routes.pastLog: (context) => PastResultsScreen(),
       Routes.editAccount: (context) => EditAccountPage(),
-      Routes.commentsScreen: (context) => commentsScreen(),
+      Routes.CommentsScreen: (context) => CommentsScreen(),
     };
   }
 }
@@ -121,7 +128,7 @@ class Routes {
   static const String menu = '/menu';
   static const String pastLog = '/past_log';
   static const String editAccount = '/edit_account';
-  static const String commentsScreen = '/community';
+  static const String CommentsScreen = '/community';
 }
 
 class ErrorPage extends StatelessWidget {

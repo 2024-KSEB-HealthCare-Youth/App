@@ -1,5 +1,7 @@
+// screens/log_in_screen.dart
+
 import 'package:flutter/material.dart';
-import '../utils/rest_api.dart';
+import '../services/user_service.dart';
 
 class LogIn extends StatefulWidget {
   @override
@@ -18,7 +20,7 @@ class _LogInState extends State<LogIn> {
       _formKey.currentState!.save();
 
       try {
-        await RestAPI.login(_formData['userId']!, _formData['password']!);
+        await UserService().login(_formData['userId']!, _formData['password']!);
         Navigator.pushNamed(context, '/main_page');
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(

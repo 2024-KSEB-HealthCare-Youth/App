@@ -56,7 +56,7 @@ class MainPage extends StatelessWidget {
   Widget buildDiagnosisButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/diagnosis_page');
+        Navigator.pushNamed(context, '/camera_screen');
       },
       child: Container(
         height: 150,

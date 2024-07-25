@@ -1,8 +1,8 @@
+// screens/sign_up_screen.dart
+
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../models/user_data.dart';
-import '../utils/rest_api.dart';
-import 'dart:convert';
+import '../services/auth_service.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -12,10 +12,12 @@ class SignUp extends StatefulWidget {
 class _SignUpState extends State<SignUp> {
   String _selectedGender = '';
   final _formKey = GlobalKey<FormState>();
+  final AuthService _authService = AuthService();
 
   final TextEditingController _loginIdController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _nickNameController = TextEditingController();
   final TextEditingController _birthMonthController = TextEditingController();
   final TextEditingController _birthDayController = TextEditingController();
   final TextEditingController _birthYearController = TextEditingController();
@@ -27,18 +29,10 @@ class _SignUpState extends State<SignUp> {
       String birth =
           '${_birthMonthController.text.padLeft(2, '0')}/${_birthDayController.text.padLeft(2, '0')}/${_birthYearController.text}';
 
-      // Calculate age
       int age;
       try {
-        DateTime birthDate = DateFormat('MM/dd/yyyy').parse(birth);
-        int calculatedAge = DateTime.now().year - birthDate.year;
-        if (DateTime.now().isBefore(DateTime(
-            birthDate.year + calculatedAge, birthDate.month, birthDate.day))) {
-          calculatedAge--;
-        }
-        age = calculatedAge;
+        age = _authService.calculateAge(birth);
       } catch (e) {
-        print('Birth date parsing failed: $e');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
               content:
@@ -51,29 +45,19 @@ class _SignUpState extends State<SignUp> {
         loginId: _loginIdController.text,
         password: _passwordController.text,
         name: _nameController.text,
-        nickName: 'unKnown', // Default value for nickName
+        nickName: _nickNameController.text,
         gender: _selectedGender,
         age: age,
         phoneNumber: _phoneController.text,
         email: _emailController.text,
-        profileImage:
-            'default_profile_image.png', // Default value for profile image
-        isAdmin: 'unKnown', // Default value for isAdmin
+        profileImage: 'default_profile_image.png',
+        isAdmin: 'unKnown',
       );
 
       // Print JSON data to debug
       print('User data: ${userData.toJson()}');
 
-      try {
-        await RestAPI.signUp(userData);
-        print('Sign up successful');
-        Navigator.pushNamed(context, '/login');
-      } catch (e) {
-        print('Sign up failed: $e');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Sign up failed: $e')),
-        );
-      }
+      await _authService.signUp(context, userData);
     }
   }
 
@@ -82,6 +66,7 @@ class _SignUpState extends State<SignUp> {
     _loginIdController.dispose();
     _passwordController.dispose();
     _nameController.dispose();
+    _nickNameController.dispose();
     _birthMonthController.dispose();
     _birthDayController.dispose();
     _birthYearController.dispose();
@@ -133,6 +118,11 @@ class _SignUpState extends State<SignUp> {
               _buildTextFormField(
                 labelText: 'Enter Your Username',
                 controller: _nameController,
+              ),
+              const SizedBox(height: 25),
+              _buildTextFormField(
+                labelText: 'Enter Your nickName',
+                controller: _nickNameController,
               ),
               const SizedBox(height: 25),
               const Text(
