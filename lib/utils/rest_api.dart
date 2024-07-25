@@ -1,9 +1,11 @@
+// rest_api.dart
+
+import '../models/user_data.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../models/user_data.dart';
 import '../models/result_data.dart';
 import '../models/ai_data.dart';
 import '../models/token_response.dart';
@@ -15,8 +17,6 @@ class RestAPI {
     'Content-Type': 'application/json'
   };
   static final FlutterSecureStorage storage = FlutterSecureStorage();
-
-  //connect with springboot server
 
   // Save tokens to secure storage
   static Future<void> saveTokens(
@@ -158,9 +158,37 @@ class RestAPI {
     }
   }
 
-// connect with flask server
+  // Update user data
+  static Future<void> updateUserData(UserData userData) async {
+    final tokens = await getTokens();
+    final accessToken = tokens['access_token'];
 
-//upladImage to flask server
+    final requestBody = jsonEncode(userData.toJson());
+    print('Request body: $requestBody');
+
+    try {
+      final response = await http.put(
+        Uri.parse('$baseUrl/members/update'),
+        headers: {...headers, 'authorization': 'Bearer $accessToken'},
+        body: requestBody,
+      );
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        print('User data updated successfully.');
+      } else {
+        throw Exception('Failed to update user data: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Update user data failed: $e');
+      throw Exception('Update user data failed: $e');
+    }
+  }
+
+  // connect with flask server
+
+  //upladImage to flask server
   static Future<void> uploadImage(String imagePath) async {
     var request = http.MultipartRequest('POST', Uri.parse('$flaskUrl/upload'));
     request.files.add(await http.MultipartFile.fromPath('file', imagePath));

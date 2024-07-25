@@ -1,33 +1,16 @@
+// screens/my_page_screen.dart
+
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:myapp/main.dart';
 import '../models/user_data.dart';
 import '../models/ai_data.dart';
 import '../models/result_data.dart';
-import '../utils/rest_api.dart';
+import '../services/user_service.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/profile_detail.dart';
 
 class MyPage extends StatelessWidget {
   const MyPage({super.key});
-
-  Future<Map<String, dynamic>> _fetchUserDataAndToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    final storage = FlutterSecureStorage();
-    final userId = prefs.getString('userId');
-    final accessToken = await storage.read(key: 'access_token');
-
-    if (userId == null || accessToken == null) {
-      throw Exception('No user ID or access token found');
-    }
-
-    final userData = await RestAPI.fetchUserData(userId);
-    return {'userData': userData, 'accessToken': accessToken};
-  }
-
-  Future<ResultData> _fetchResultData(String userId, String accessToken) async {
-    return await RestAPI.fetchResultData(userId);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +43,7 @@ class MyPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: FutureBuilder<Map<String, dynamic>>(
-        future: _fetchUserDataAndToken(),
+        future: UserService().fetchUserDataAndToken(),
         builder: (context, userSnapshot) {
           if (userSnapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -73,7 +56,7 @@ class MyPage extends StatelessWidget {
             final accessToken = userSnapshot.data!['accessToken'] as String;
 
             return FutureBuilder<ResultData>(
-              future: _fetchResultData(userData.loginId, accessToken),
+              future: UserService().fetchResultData(userData.loginId),
               builder: (context, resultSnapshot) {
                 if (resultSnapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
@@ -139,7 +122,14 @@ class MyPage extends StatelessWidget {
                             child: CustomButton(
                               text: '수정',
                               onPressed: () {
-                                Navigator.pushNamed(context, 'edit_account');
+                                Navigator.pushNamed(
+                                  context,
+                                  Routes.editAccount,
+                                  arguments: {
+                                    'userId': userData.loginId,
+                                    'accessToken': accessToken,
+                                  },
+                                );
                               },
                             ),
                           ),
@@ -180,7 +170,7 @@ class MyPage extends StatelessWidget {
                             ),
                             child: Text(
                               'Simple Skin: ${aiData.simpleSkin}\n'
-                              'Expert Skin: ${aiData.expertSkin.join(', ')}', //이 부분이 script 부분
+                              'Expert Skin: ${aiData.expertSkin.join(', ')}',
                               style: const TextStyle(fontSize: 16),
                             ),
                           ),

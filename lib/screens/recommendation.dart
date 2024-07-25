@@ -1,19 +1,16 @@
+// screens/recommendation_screen.dart
+
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user_data.dart';
 import '../models/ai_data.dart';
-import '../utils/rest_api.dart';
+import '../services/user_service.dart';
 
 class Recommendation extends StatelessWidget {
   const Recommendation({super.key});
 
   Future<UserData> _fetchUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final userId = prefs.getString('userId');
-    if (userId == null) {
-      throw Exception('No user ID found');
-    }
-    return await RestAPI.fetchUserData(userId);
+    final userService = UserService();
+    return await userService.fetchUserData();
   }
 
   @override
