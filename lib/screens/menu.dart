@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/user_service.dart';
-import '../models/past_data.dart';
 
 class Menu extends StatelessWidget {
   @override

@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/utils/rest_api.dart';
 import '../models/result_data.dart';
-import '../utils/rest_api.dart';
 
 class ResultDetailScreen extends StatefulWidget {
   final String resultId;
