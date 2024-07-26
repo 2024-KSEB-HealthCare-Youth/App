@@ -38,8 +38,8 @@ class RestAPI {
   }
 
   // Login method
-  static Future<void> login(String userId, String password) async {
-    final requestBody = jsonEncode({'userId': userId, 'password': password});
+  static Future<void> login(String loginId, String password) async {
+    final requestBody = jsonEncode({'loginId': loginId, 'password': password});
     print('Request body: $requestBody');
 
     try {
@@ -55,7 +55,7 @@ class RestAPI {
         final data = jsonDecode(response.body);
         await saveTokens(data['accessToken'], data['refreshToken']);
         final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('userId', data['userId']);
+        await prefs.setString('loginId', data['loginId']);
       } else {
         throw Exception('Failed to log in: ${response.reasonPhrase}');
       }
