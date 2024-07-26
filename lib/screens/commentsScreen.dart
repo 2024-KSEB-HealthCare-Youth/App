@@ -1,66 +1,166 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../services/comment_service.dart';
+import '../services/post_service.dart';
+import 'post_detail_screen.dart';
+import '../widgets/common_widgets.dart';
 
-class CommentsScreen extends StatelessWidget {
+class CommentsScreen extends StatefulWidget {
   const CommentsScreen({Key? key}) : super(key: key);
+
+  @override
+  _CommentsScreenState createState() => _CommentsScreenState();
+}
+
+class _CommentsScreenState extends State<CommentsScreen> {
+  final List<Map<String, dynamic>> _posts = PostService.getInitialPosts();
+  final Set<int> _likedPosts = Set(); // Tracks liked posts
+  final TextEditingController _postController = TextEditingController();
+
+  void _showPostDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('새 글 작성하기'),
+          content: TextField(
+            controller: _postController,
+            maxLines: 5,
+            decoration: const InputDecoration(
+              hintText: '내용을 입력하세요',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('취소'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (_postController.text.isNotEmpty) {
+                  setState(() {
+                    _posts.insert(0, {
+                      'name': 'New User',
+                      'date': 'Today',
+                      'comment': _postController.text,
+                      'likes': 0,
+                      'comments': [],
+                    });
+                  });
+                  _postController.clear();
+                  Navigator.of(context).pop();
+                }
+              },
+              child: const Text('작성'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _toggleLikePost(int index) {
+    setState(() {
+      if (_likedPosts.contains(index)) {
+        _posts[index]['likes']--;
+        _likedPosts.remove(index);
+      } else {
+        _posts[index]['likes']++;
+        _likedPosts.add(index);
+      }
+    });
+  }
+
+  void _updatePost(int index, Map<String, dynamic> updatedPost) {
+    setState(() {
+      _posts[index] = updatedPost;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        title: GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, '/main_page');
-          },
-          child: const Text(
-            'Youth',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 30,
-              fontFamily: 'Pacifico',
-            ),
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        foregroundColor: Colors.black,
-      ),
+      appBar: buildAppBar(context, 'Youth'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            _buildCommentInputField(context),
+            buildCreatePostSection(_showPostDialog),
             const SizedBox(height: 20),
             Expanded(
-              child: Consumer<CommentService>(
-                builder: (context, commentService, _) {
-                  return ListView.builder(
-                    key: const Key('posts_list'),
-                    itemCount: commentService.posts.length,
-                    itemBuilder: (context, index) {
-                      final post = commentService.posts[index];
-                      final isLiked = commentService.isPostLiked(post['id']);
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => PostDetailScreen(
-                              post: post,
-                              postIndex: index,
-                            ),
-                          ));
-                        },
-                        child: _buildPostItem(
-                            context, post, isLiked, commentService, index),
-                      );
+              child: ListView.builder(
+                itemCount: _posts.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => PostDetailScreen(
+                          post: _posts[index],
+                          postIndex: index,
+                          onPostUpdated: (updatedPost) {
+                            _updatePost(index, updatedPost);
+                          },
+                        ),
+                      ));
                     },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const CircleAvatar(
+                            backgroundImage:
+                                NetworkImage('https://via.placeholder.com/150'),
+                            radius: 20,
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  _posts[index]['name'],
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                Text(
+                                  _posts[index]['date'],
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                const SizedBox(height: 5),
+                                Text(
+                                  _posts[index]['comment'],
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Column(
+                            children: [
+                              IconButton(
+                                icon: Icon(
+                                  _likedPosts.contains(index)
+                                      ? Icons.thumb_up
+                                      : Icons.thumb_up_alt_outlined,
+                                  color: _likedPosts.contains(index)
+                                      ? Colors.blue
+                                      : Colors.grey,
+                                ),
+                                onPressed: () => _toggleLikePost(index),
+                              ),
+                              Text(_posts[index]['likes'].toString()),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   );
                 },
               ),
@@ -68,294 +168,6 @@ class CommentsScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildCommentInputField(BuildContext context) {
-    final commentService = Provider.of<CommentService>(context, listen: false);
-    final TextEditingController _commentController = TextEditingController();
-
-    return Row(
-      children: [
-        const CircleAvatar(
-          backgroundImage: NetworkImage('https://via.placeholder.com/150'),
-          radius: 30,
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: TextField(
-            controller: _commentController,
-            decoration: InputDecoration(
-              labelText: 'Leave a comment',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.0),
-                borderSide: const BorderSide(
-                  color: Colors.blue,
-                ),
-              ),
-            ),
-          ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.send),
-          onPressed: () {
-            if (_commentController.text.isNotEmpty) {
-              commentService.addComment(_commentController.text);
-              _commentController.clear();
-            }
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildPostItem(BuildContext context, Map<String, dynamic> post,
-      bool isLiked, CommentService commentService, int index) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const CircleAvatar(
-            backgroundImage: NetworkImage('https://via.placeholder.com/150'),
-            radius: 20,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  post['name'],
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  post['date'],
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Text(post['comment']),
-              ],
-            ),
-          ),
-          const SizedBox(width: 10),
-          Column(
-            children: [
-              IconButton(
-                icon: Icon(
-                  isLiked ? Icons.thumb_up : Icons.thumb_up_alt_outlined,
-                  color: isLiked ? Colors.blue : null,
-                ),
-                onPressed: () {
-                  commentService.toggleLike(post['id']);
-                },
-              ),
-              Text(post['likes'].toString()),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class PostDetailScreen extends StatefulWidget {
-  final Map<String, dynamic> post;
-  final int postIndex;
-
-  const PostDetailScreen(
-      {Key? key, required this.post, required this.postIndex})
-      : super(key: key);
-
-  @override
-  _PostDetailScreenState createState() => _PostDetailScreenState();
-}
-
-class _PostDetailScreenState extends State<PostDetailScreen> {
-  final TextEditingController _commentController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    final commentService = Provider.of<CommentService>(context, listen: false);
-
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        title: const Text(
-          'Youth',
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Pacifico',
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        foregroundColor: Colors.black,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            _buildPostDetails(),
-            const SizedBox(height: 20),
-            _buildCommentsList(),
-            _buildCommentInputField(context, commentService),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPostDetails() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const CircleAvatar(
-            backgroundImage: NetworkImage('https://via.placeholder.com/150'),
-            radius: 20,
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.post['name'],
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  widget.post['date'],
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Text(widget.post['comment']),
-              ],
-            ),
-          ),
-          const SizedBox(width: 10),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCommentsList() {
-    return Expanded(
-      child: ListView.builder(
-        key: const Key('comments_list'),
-        itemCount: widget.post['comments'].length,
-        itemBuilder: (context, index) {
-          final comment = widget.post['comments'][index];
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const CircleAvatar(
-                  backgroundImage:
-                      NetworkImage('https://via.placeholder.com/150'),
-                  radius: 20,
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        comment['name'],
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        comment['date'],
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                      const SizedBox(height: 5),
-                      Text(comment['comment']),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.thumb_up_alt_outlined),
-                      onPressed: () {
-                        setState(() {
-                          comment['likes']++;
-                        });
-                      },
-                    ),
-                    Text(comment['likes'].toString()),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildCommentInputField(
-      BuildContext context, CommentService commentService) {
-    return Row(
-      children: [
-        Expanded(
-          child: TextField(
-            controller: _commentController,
-            decoration: InputDecoration(
-              labelText: 'Leave a comment',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.0),
-                borderSide: const BorderSide(
-                  color: Colors.blue,
-                ),
-              ),
-            ),
-          ),
-        ),
-        IconButton(
-          icon: const Icon(Icons.send),
-          onPressed: () {
-            if (_commentController.text.isNotEmpty) {
-              final newComment = {
-                'name': 'New User',
-                'date': 'Today',
-                'comment': _commentController.text,
-                'likes': 0,
-              };
-              commentService.addCommentToPost(widget.postIndex, newComment);
-              _commentController.clear();
-            }
-          },
-        ),
-      ],
     );
   }
 }
