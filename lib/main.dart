@@ -111,11 +111,13 @@ class FigmaToCodeApp extends StatelessWidget {
       case Routes.mainPage:
         return MaterialPageRoute(builder: (context) => MainPage());
       case Routes.takePictureScreen:
-        return MaterialPageRoute(builder: (context) => TakePictureScreen(camera: camera));
+        return MaterialPageRoute(
+            builder: (context) => TakePictureScreen(camera: camera));
       case Routes.loadingPage:
         final args = settings.arguments as Map<String, dynamic>;
         final imagePath = args['imagePath'];
-        return MaterialPageRoute(builder: (context) => LoadingScreen(imagePath: imagePath));
+        return MaterialPageRoute(
+            builder: (context) => LoadingScreen(imagePath: imagePath));
       case Routes.recommendationPage:
         return MaterialPageRoute(builder: (context) => Recommendation());
       case Routes.myPage:

@@ -1,7 +1,8 @@
 // screens/result_detail_screen.dart
 
 import 'package:flutter/material.dart';
-import 'package:myapp/utils/rest_api.dart';
+import 'package:myapp/services/user_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/result_data.dart';
 
 class ResultDetailScreen extends StatefulWidget {
@@ -20,6 +21,7 @@ class ResultDetailScreen extends StatefulWidget {
 
 class _ResultDetailScreenState extends State<ResultDetailScreen> {
   late Future<ResultData> _resultData;
+  final UserService _userService = UserService();
 
   @override
   void initState() {
@@ -28,10 +30,13 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
   }
 
   Future<ResultData> _fetchResultData() async {
-    // 서버에서 resultId와 resultDate를 이용해 ResultData를 가져오는 로직을 구현합니다.
     try {
-      final resultData = await RestAPI.fetchPast_Result(widget.resultId);
-      return resultData;
+      final prefs = await SharedPreferences.getInstance();
+      final userId = prefs.getString('userId');
+      if (userId == null) {
+        throw Exception('No user ID found');
+      }
+      return await _userService.fetchResultData(userId);
     } catch (e) {
       throw Exception('Failed to load result data: $e');
     }
