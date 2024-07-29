@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../models/comment_data.dart';
 
 part 'post_data.freezed.dart';
 part 'post_data.g.dart';
@@ -16,6 +17,7 @@ class postData with _$postData {
     required int viewCount,
     required Category category,
     required String memberId,
+    required List<CommentData> comments,
   }) = _postData;
 
   factory postData.fromJson(Map<String, dynamic> json) =>

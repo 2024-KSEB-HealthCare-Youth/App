@@ -8,6 +8,7 @@ import '../models/result_data.dart';
 import '../models/ai_data.dart';
 import '../models/token_response.dart';
 import '../models/past_data.dart';
+import '../models/post_data.dart';
 
 class RestAPI {
   static const String baseUrl = 'http://52.79.103.61:8080';
@@ -49,13 +50,27 @@ class RestAPI {
         body: requestBody,
       );
       print('Response status: ${response.statusCode}');
+      print('Response headers: ${response.headers}');
       print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        await saveTokens(data['accessToken'], data['refreshToken']);
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('loginId', data['loginId']);
+        // Extract access token from the response headers
+        final accessToken = response.headers['access'];
+
+        // Extract refresh token from the Set-Cookie header
+        final setCookieHeader =
+            response.headers['set-cookie'] ?? response.headers['Set-Cookie'];
+        final refreshToken =
+            _extractTokenFromCookie(setCookieHeader, 'refresh');
+
+        if (accessToken != null && refreshToken != null) {
+          await saveTokens(accessToken, refreshToken);
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('loginId', loginId);
+          print('Login successful.');
+        } else {
+          throw Exception('Login failed: Tokens not found in response');
+        }
       } else {
         throw Exception('Failed to log in: ${response.reasonPhrase}');
       }
@@ -63,6 +78,20 @@ class RestAPI {
       print('Login failed: $e');
       throw Exception('Login failed: $e');
     }
+  }
+
+  // Helper method to extract token from Set-Cookie header
+  static String? _extractTokenFromCookie(
+      String? setCookieHeader, String tokenName) {
+    if (setCookieHeader == null) return null;
+
+    final cookies = setCookieHeader.split(';');
+    for (var cookie in cookies) {
+      if (cookie.trim().startsWith('$tokenName=')) {
+        return cookie.split('=')[1];
+      }
+    }
+    return null;
   }
 
   // Refresh access token
@@ -229,6 +258,59 @@ class RestAPI {
     }
   }
 
+  //fetch postdata
+  static Future<List<postData>> fetchPosts() async {
+    final tokens = await getTokens();
+    final accessToken = tokens['access_token'];
+
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/posts'),
+        headers: {...headers, 'authorization': 'Bearer $accessToken'},
+      );
+      if (response.statusCode == 200) {
+        List<dynamic> jsonData = jsonDecode(response.body);
+        List<postData> posts =
+            jsonData.map((json) => postData.fromJson(json)).toList();
+        return posts;
+      } else {
+        throw Exception('Failed to load posts: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Fetch posts failed: $e');
+      throw Exception('Fetch posts failed: $e');
+    }
+  }
+
+  // Save post data to the server
+  static Future<bool> savePost(Map<String, dynamic> post) async {
+    final tokens = await getTokens();
+    final accessToken = tokens['access_token'];
+
+    final requestBody = jsonEncode(post);
+    print('Request body: $requestBody');
+
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/posts'),
+        headers: {...headers, 'authorization': 'Bearer $accessToken'},
+        body: requestBody,
+      );
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 201) {
+        return true;
+      } else {
+        throw Exception('Failed to save post: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      print('Save post failed: $e');
+      throw Exception('Save post failed: $e');
+    }
+  }
+
+  //upload image to flask server
   static Future<Map<String, dynamic>> uploadImage(String imagePath) async {
     var request = http.MultipartRequest('POST', Uri.parse('$flaskUrl/upload'));
     request.files.add(await http.MultipartFile.fromPath('file', imagePath));
