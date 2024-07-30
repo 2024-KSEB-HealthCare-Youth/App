@@ -73,7 +73,7 @@ class Recommendation extends StatelessWidget {
                     _buildSectionTitle('Youth’s recommended supplements'),
                     const SizedBox(height: 33),
                     _buildProductRow(
-                        context, aiData.nutrNames, aiData.nutPaths),
+                        context, aiData.nutrNames, aiData.nutrPaths),
                   ],
                 ),
               ),

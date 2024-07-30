@@ -82,18 +82,16 @@ class RestAPI {
     }
   }
 
-  // Fetch user data
   static Future<UserData> fetchUserData(String memberId) async {
     try {
-      final response = await dio.get(
-        '/members/$memberId',
-      );
+      final response = await dio.get('/members/$memberId');
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.data}');
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> responseData = response.data;
-        return UserData.fromJson(responseData);
+        final user = UserData.fromJson(responseData['results'][0]);
+        return user;
       } else {
         throw Exception('Failed to fetch user data: ${response.statusMessage}');
       }
@@ -219,7 +217,7 @@ class RestAPI {
       if (response.statusCode == 200) {
         List<dynamic> jsonData = response.data;
         List<postData> posts =
-        jsonData.map((json) => postData.fromJson(json)).toList();
+            jsonData.map((json) => postData.fromJson(json)).toList();
         return posts;
       } else {
         throw Exception('Failed to load posts: ${response.statusMessage}');
@@ -237,7 +235,7 @@ class RestAPI {
 
     try {
       final response = await dio.post(
-        '/posts',
+        '/posts/post',
         data: requestBody,
       );
       print('Response status: ${response.statusCode}');

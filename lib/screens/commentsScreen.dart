@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Import the intl package
+import 'package:intl/intl.dart';
 import '../screens/CreatePostScreen.dart';
 import '../models/post_data.dart';
-import '../models/comment_data.dart';
 import '../models/user_data.dart';
 import '../utils/rest_api.dart';
 import '../screens/PostDetailScreen.dart';
 import '../services/user_service.dart';
-import '../widgets/common_widgets.dart'; // import the common_widgets
-import '../widgets/post_card.dart'; // PostCard 위젯을 import
+import '../widgets/common_widgets.dart';
+import '../widgets/post_card.dart';
 
 class CommentsScreen extends StatefulWidget {
   const CommentsScreen({Key? key}) : super(key: key);
@@ -19,7 +18,7 @@ class CommentsScreen extends StatefulWidget {
 
 class _CommentsScreenState extends State<CommentsScreen> {
   List<postData> _posts = [];
-  final Set<String> _likedPosts = Set(); // Tracks liked posts
+  final Set<String> _likedPosts = Set();
 
   @override
   void initState() {
@@ -35,7 +34,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
       });
     } catch (e) {
       print('Failed to fetch posts: $e');
-      // Handle error accordingly, e.g., show a message to the user
     }
   }
 
@@ -53,8 +51,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
     Navigator.of(context).push(MaterialPageRoute(
       builder: (context) => CreatePostScreen(onPostCreated: (newPost) {
         setState(() {
-          _posts.insert(
-              0, postData.fromJson(newPost)); // Insert the new post at the top
+          _posts.insert(0, postData.fromJson(newPost));
         });
       }),
     ));
