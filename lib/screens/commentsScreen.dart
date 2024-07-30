@@ -8,6 +8,7 @@ import '../utils/rest_api.dart';
 import '../screens/PostDetailScreen.dart';
 import '../services/user_service.dart';
 import '../widgets/common_widgets.dart'; // import the common_widgets
+import '../widgets/post_card.dart'; // PostCard 위젯을 import
 
 class CommentsScreen extends StatefulWidget {
   const CommentsScreen({Key? key}) : super(key: key);
@@ -113,7 +114,12 @@ class _CommentsScreenState extends State<CommentsScreen> {
               child: ListView.builder(
                 itemCount: _posts.length,
                 itemBuilder: (context, index) {
-                  return GestureDetector(
+                  return PostCard(
+                    post: _posts[index],
+                    isLiked: _likedPosts.contains(_posts[index].postId),
+                    onLikePressed: () {
+                      _toggleLikePost(_posts[index].postId);
+                    },
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => PostDetailScreen(
@@ -125,13 +131,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
                         ),
                       ));
                     },
-                    child: buildPostDetail(
-                      _posts[index],
-                      _likedPosts.contains(_posts[index].postId),
-                          () {
-                        _toggleLikePost(_posts[index].postId);
-                      },
-                    ),
                   );
                 },
               ),
