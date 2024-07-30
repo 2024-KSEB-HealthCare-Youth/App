@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/widgets/custom_button.dart';
 import '../utils/rest_api.dart';
+import '../models/user_data.dart';
+import '../services/user_service.dart';
+import '../widgets/common_widgets.dart'; // CustomButton이 정의된 파일 경로를 적절히 변경
 
 class CreatePostScreen extends StatefulWidget {
   final Function(Map<String, dynamic>) onPostCreated;
@@ -14,12 +18,31 @@ class CreatePostScreen extends StatefulWidget {
 class _CreatePostScreenState extends State<CreatePostScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
+  UserData? _currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCurrentUser();
+  }
+
+  Future<void> _fetchCurrentUser() async {
+    try {
+      final user = await UserService().fetchUserData();
+      setState(() {
+        _currentUser = user;
+      });
+    } catch (e) {
+      print('Failed to fetch user data: $e');
+      // Handle error accordingly
+    }
+  }
 
   void _submitPost() async {
     final title = _titleController.text;
     final content = _contentController.text;
 
-    if (title.isNotEmpty && content.isNotEmpty) {
+    if (title.isNotEmpty && content.isNotEmpty && _currentUser != null) {
       final newPost = {
         'postId': DateTime.now().toString(),
         'title': title,
@@ -28,7 +51,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         'commentCount': 0,
         'viewCount': 0,
         'category': 'FREE',
-        'memberId': 'tomy',
+        'memberId': _currentUser!.loginId,
         'comments': [],
       };
 
@@ -84,20 +107,22 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                const CircleAvatar(
-                  backgroundImage:
-                      NetworkImage('https://via.placeholder.com/150'),
-                  radius: 25,
-                ),
-                const SizedBox(width: 10),
-                const Text(
-                  'tomy',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
+            if (_currentUser != null)
+              Row(
+                children: [
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(_currentUser!.profileImage ??
+                        'https://via.placeholder.com/150'),
+                    radius: 25,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    _currentUser!.nickName ?? _currentUser!.loginId,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
             const SizedBox(height: 20),
             TextField(
               controller: _titleController,
@@ -138,20 +163,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             ),
             const SizedBox(height: 20),
             Center(
-              child: ElevatedButton(
+              child: CustomButton(
+                text: 'SUBMIT',
                 onPressed: _submitPost,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                child: const Text(
-                  'SUBMIT',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
               ),
             ),
           ],

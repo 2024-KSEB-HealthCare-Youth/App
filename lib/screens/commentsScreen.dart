@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Import the intl package
 import '../screens/CreatePostScreen.dart';
 import '../models/post_data.dart';
 import '../models/comment_data.dart';
+import '../models/user_data.dart';
 import '../utils/rest_api.dart';
 import '../screens/PostDetailScreen.dart';
+import '../services/user_service.dart';
+import '../widgets/common_widgets.dart'; // import the common_widgets
 
 class CommentsScreen extends StatefulWidget {
   const CommentsScreen({Key? key}) : super(key: key);
@@ -31,6 +35,16 @@ class _CommentsScreenState extends State<CommentsScreen> {
     } catch (e) {
       print('Failed to fetch posts: $e');
       // Handle error accordingly, e.g., show a message to the user
+    }
+  }
+
+  Future<UserData?> _fetchUserData() async {
+    try {
+      final user = await UserService().fetchUserData();
+      return user;
+    } catch (e) {
+      print('Failed to fetch user data: $e');
+      return null;
     }
   }
 
@@ -72,61 +86,27 @@ class _CommentsScreenState extends State<CommentsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        title: const Text(
-          'Youth',
-          style: TextStyle(
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Pacifico',
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        foregroundColor: Colors.black,
-      ),
+      appBar: buildAppBar(context, 'Youth'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey[300]!),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
-                children: [
-                  const CircleAvatar(
-                    backgroundImage:
-                        NetworkImage('https://via.placeholder.com/150'),
-                    radius: 25,
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: _navigateToCreatePost,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 12.0),
-                          child: const Text(
-                            '글 작성하기',
-                            style: TextStyle(color: Colors.black54),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+            FutureBuilder<UserData?>(
+              future: _fetchUserData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData) {
+                  return const Center(child: Text('Failed to load user data'));
+                } else {
+                  final user = snapshot.data!;
+                  return buildCreatePostSection(() {
+                    _navigateToCreatePost();
+                  }, user);
+                }
+              },
             ),
             const SizedBox(height: 20),
             Expanded(
@@ -145,78 +125,12 @@ class _CommentsScreenState extends State<CommentsScreen> {
                         ),
                       ));
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const CircleAvatar(
-                            backgroundImage:
-                                NetworkImage('https://via.placeholder.com/150'),
-                            radius: 20,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _posts[index].memberId,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  '25/06/2020', // Example date
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  _posts[index].title,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  _posts[index].content,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  '댓글 ${_posts[index].commentCount}개',
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Column(
-                            children: [
-                              IconButton(
-                                icon: Icon(
-                                  _likedPosts.contains(_posts[index].postId)
-                                      ? Icons.thumb_up
-                                      : Icons.thumb_up_alt_outlined,
-                                  color:
-                                      _likedPosts.contains(_posts[index].postId)
-                                          ? Colors.blue
-                                          : Colors.grey,
-                                ),
-                                onPressed: () =>
-                                    _toggleLikePost(_posts[index].postId),
-                              ),
-                              Text(_posts[index].likeCount.toString()),
-                            ],
-                          ),
-                        ],
-                      ),
+                    child: buildPostDetail(
+                      _posts[index],
+                      _likedPosts.contains(_posts[index].postId),
+                          () {
+                        _toggleLikePost(_posts[index].postId);
+                      },
                     ),
                   );
                 },

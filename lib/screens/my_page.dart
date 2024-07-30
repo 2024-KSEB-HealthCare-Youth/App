@@ -1,7 +1,4 @@
-// screens/my_page_screen.dart
-
 import 'package:flutter/material.dart';
-import 'package:myapp/main.dart';
 import '../models/user_data.dart';
 import '../models/ai_data.dart';
 import '../models/result_data.dart';
@@ -14,8 +11,19 @@ class MyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Map;
-    final AiData aiData = args['resultData'];
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
+    if (args == null || !args.containsKey('aiData')) {
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Error'),
+        ),
+        body: const Center(
+          child: Text('No data found.'),
+        ),
+      );
+    }
+
+    final AiData aiData = AiData.fromJson(args['aiData']);
 
     return Scaffold(
       appBar: AppBar(
@@ -80,8 +88,8 @@ class MyPage extends StatelessWidget {
                                 backgroundImage: userData.profileImage != null
                                     ? NetworkImage(userData.profileImage!)
                                     : const AssetImage(
-                                            'assets/images/default_profile.png')
-                                        as ImageProvider,
+                                    'assets/images/default_profile.png')
+                                as ImageProvider,
                               ),
                               const SizedBox(width: 16),
                               Expanded(
@@ -111,7 +119,7 @@ class MyPage extends StatelessWidget {
                                       ProfileDetail(
                                           label: 'Skin Type',
                                           value:
-                                              aiData.simpleSkin ?? 'Unknown'),
+                                          aiData.simpleSkin ?? 'Unknown'),
                                   ],
                                 ),
                               ),
@@ -124,7 +132,7 @@ class MyPage extends StatelessWidget {
                               onPressed: () {
                                 Navigator.pushNamed(
                                   context,
-                                  Routes.editAccount,
+                                  '/edit_account',
                                   arguments: {
                                     'userId': userData.loginId,
                                     'accessToken': accessToken,
@@ -170,13 +178,13 @@ class MyPage extends StatelessWidget {
                             ),
                             child: Text(
                               'Simple Skin: ${aiData.simpleSkin}\n'
-                              'Expert Skin: ${aiData.expertSkin.join(', ')}',
+                                  'Expert Skin: ${aiData.expertSkin.join(', ')}',
                               style: const TextStyle(fontSize: 16),
                             ),
                           ),
                           const SizedBox(height: 32),
                           CustomButton(
-                            text: '화장품 추천받으러가기',
+                            text: 'find my suitable cosmetics&nutrition',
                             onPressed: () {
                               Navigator.pushNamed(
                                   context, '/recommendation_page');

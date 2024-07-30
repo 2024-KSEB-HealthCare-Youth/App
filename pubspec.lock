@@ -117,10 +117,10 @@ packages:
     dependency: transitive
     description:
       name: camera_android
-      sha256: eacc70b6c81fa5e17921302fc17a1ae5983d94ce1d76c71e4869abdc615d35d2
+      sha256: "134b83167cc3c83199e8d75e5bcfde677fec843e7b2ca6b754a5b0b96d00d921"
       url: "https://pub.dev"
     source: hosted
-    version: "0.10.9+8"
+    version: "0.10.9+10"
   camera_avfoundation:
     dependency: transitive
     description:
@@ -193,14 +193,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.1"
+  cookie_jar:
+    dependency: "direct main"
+    description:
+      name: cookie_jar
+      sha256: d1cc6516a190ba667941f722b6365d202caff3dacb38de24268b8d6ff1ec8a1d
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   cross_file:
     dependency: transitive
     description:
       name: cross_file
-      sha256: "5388c401d0a12412f95c9ab01d358b03854da532f8f9189034d3187644e44da4"
+      sha256: "2f9d2cbccb76127ba28528cb3ae2c2326a122446a83de5a056aaa3880d3882c5"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.1+5"
+    version: "0.3.3+7"
   crypto:
     dependency: transitive
     description:
@@ -229,18 +237,18 @@ packages:
     dependency: "direct main"
     description:
       name: dio
-      sha256: e17f6b3097b8c51b72c74c9f071a605c47bcc8893839bd66732457a5ebe73714
+      sha256: "7d328c4d898a61efc3cd93655a0955858e29a0aa647f0f9e02d59b3bb275e2e8"
       url: "https://pub.dev"
     source: hosted
-    version: "5.5.0+1"
-  dio_web_adapter:
-    dependency: transitive
+    version: "4.0.6"
+  dio_cookie_manager:
+    dependency: "direct main"
     description:
-      name: dio_web_adapter
-      sha256: "36c5b2d79eb17cdae41e974b7a8284fec631651d2a6f39a8a2ff22327e90aeac"
+      name: dio_cookie_manager
+      sha256: ed7ee3ba6cdb54599c8984d5a4ce09675c553ead6c28608eb54e38eec5b4f954
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.1"
+    version: "2.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -322,10 +330,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_plugin_android_lifecycle
-      sha256: c6b0b4c05c458e1c01ad9bcc14041dd7b1f6783d487be4386f793f47a8a4d03e
+      sha256: "9d98bd47ef9d34e803d438f17fd32b116d31009f534a6fa5ce3a1167f189a6de"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.20"
+    version: "2.0.21"
   flutter_riverpod:
     dependency: "direct main"
     description:
@@ -484,10 +492,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: a26dc9a03fe042440c1e4be554fb0fceae2bf6d887d7467fc48c688fa4a81889
+      sha256: "3fe99e3a459b969f657565a853353bdea7e3d3cae34f7dd124836267d426ec87"
       url: "https://pub.dev"
     source: hosted
-    version: "0.8.12+7"
+    version: "0.8.12+10"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -684,10 +692,10 @@ packages:
     dependency: transitive
     description:
       name: path_provider_android
-      sha256: "30c5aa827a6ae95ce2853cdc5fe3971daaac00f6f081c419c013f7f57bff2f5e"
+      sha256: "490539678396d4c3c0b06efdaab75ae60675c3e0c66f72bc04c2e2c1e0e2abeb"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.7"
+    version: "2.2.9"
   path_provider_foundation:
     dependency: transitive
     description:
@@ -788,10 +796,10 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_android
-      sha256: "93d0ec9dd902d85f326068e6a899487d1f65ffcd5798721a95330b26c8131577"
+      sha256: "3d4571b3c5eb58ce52a419d86e655493d0bc3020672da79f72fa0c16ca3a8ec1"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.3"
+    version: "2.2.4"
   shared_preferences_foundation:
     dependency: transitive
     description:

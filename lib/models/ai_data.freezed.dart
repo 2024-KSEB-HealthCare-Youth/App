@@ -23,7 +23,7 @@ mixin _$AiData {
   List<String> get cosNames => throw _privateConstructorUsedError;
   List<String> get cosPaths => throw _privateConstructorUsedError;
   List<String> get nutrNames => throw _privateConstructorUsedError;
-  List<String> get nutPaths => throw _privateConstructorUsedError;
+  List<String> get nutrPaths => throw _privateConstructorUsedError;
   String get simpleSkin => throw _privateConstructorUsedError;
   List<SkinType> get expertSkin => throw _privateConstructorUsedError;
   String get resultPath => throw _privateConstructorUsedError;
@@ -42,7 +42,7 @@ abstract class $AiDataCopyWith<$Res> {
       {List<String> cosNames,
       List<String> cosPaths,
       List<String> nutrNames,
-      List<String> nutPaths,
+      List<String> nutrPaths,
       String simpleSkin,
       List<SkinType> expertSkin,
       String resultPath});
@@ -64,7 +64,7 @@ class _$AiDataCopyWithImpl<$Res, $Val extends AiData>
     Object? cosNames = null,
     Object? cosPaths = null,
     Object? nutrNames = null,
-    Object? nutPaths = null,
+    Object? nutrPaths = null,
     Object? simpleSkin = null,
     Object? expertSkin = null,
     Object? resultPath = null,
@@ -82,9 +82,9 @@ class _$AiDataCopyWithImpl<$Res, $Val extends AiData>
           ? _value.nutrNames
           : nutrNames // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      nutPaths: null == nutPaths
-          ? _value.nutPaths
-          : nutPaths // ignore: cast_nullable_to_non_nullable
+      nutrPaths: null == nutrPaths
+          ? _value.nutrPaths
+          : nutrPaths // ignore: cast_nullable_to_non_nullable
               as List<String>,
       simpleSkin: null == simpleSkin
           ? _value.simpleSkin
@@ -113,7 +113,7 @@ abstract class _$$AiDataImplCopyWith<$Res> implements $AiDataCopyWith<$Res> {
       {List<String> cosNames,
       List<String> cosPaths,
       List<String> nutrNames,
-      List<String> nutPaths,
+      List<String> nutrPaths,
       String simpleSkin,
       List<SkinType> expertSkin,
       String resultPath});
@@ -133,7 +133,7 @@ class __$$AiDataImplCopyWithImpl<$Res>
     Object? cosNames = null,
     Object? cosPaths = null,
     Object? nutrNames = null,
-    Object? nutPaths = null,
+    Object? nutrPaths = null,
     Object? simpleSkin = null,
     Object? expertSkin = null,
     Object? resultPath = null,
@@ -151,9 +151,9 @@ class __$$AiDataImplCopyWithImpl<$Res>
           ? _value._nutrNames
           : nutrNames // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      nutPaths: null == nutPaths
-          ? _value._nutPaths
-          : nutPaths // ignore: cast_nullable_to_non_nullable
+      nutrPaths: null == nutrPaths
+          ? _value._nutrPaths
+          : nutrPaths // ignore: cast_nullable_to_non_nullable
               as List<String>,
       simpleSkin: null == simpleSkin
           ? _value.simpleSkin
@@ -178,14 +178,14 @@ class _$AiDataImpl implements _AiData {
       {required final List<String> cosNames,
       required final List<String> cosPaths,
       required final List<String> nutrNames,
-      required final List<String> nutPaths,
+      required final List<String> nutrPaths,
       required this.simpleSkin,
       required final List<SkinType> expertSkin,
       required this.resultPath})
       : _cosNames = cosNames,
         _cosPaths = cosPaths,
         _nutrNames = nutrNames,
-        _nutPaths = nutPaths,
+        _nutrPaths = nutrPaths,
         _expertSkin = expertSkin;
 
   factory _$AiDataImpl.fromJson(Map<String, dynamic> json) =>
@@ -215,12 +215,12 @@ class _$AiDataImpl implements _AiData {
     return EqualUnmodifiableListView(_nutrNames);
   }
 
-  final List<String> _nutPaths;
+  final List<String> _nutrPaths;
   @override
-  List<String> get nutPaths {
-    if (_nutPaths is EqualUnmodifiableListView) return _nutPaths;
+  List<String> get nutrPaths {
+    if (_nutrPaths is EqualUnmodifiableListView) return _nutrPaths;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_nutPaths);
+    return EqualUnmodifiableListView(_nutrPaths);
   }
 
   @override
@@ -238,7 +238,7 @@ class _$AiDataImpl implements _AiData {
 
   @override
   String toString() {
-    return 'AiData(cosNames: $cosNames, cosPaths: $cosPaths, nutrNames: $nutrNames, nutPaths: $nutPaths, simpleSkin: $simpleSkin, expertSkin: $expertSkin, resultPath: $resultPath)';
+    return 'AiData(cosNames: $cosNames, cosPaths: $cosPaths, nutrNames: $nutrNames, nutrPaths: $nutrPaths, simpleSkin: $simpleSkin, expertSkin: $expertSkin, resultPath: $resultPath)';
   }
 
   @override
@@ -250,7 +250,8 @@ class _$AiDataImpl implements _AiData {
             const DeepCollectionEquality().equals(other._cosPaths, _cosPaths) &&
             const DeepCollectionEquality()
                 .equals(other._nutrNames, _nutrNames) &&
-            const DeepCollectionEquality().equals(other._nutPaths, _nutPaths) &&
+            const DeepCollectionEquality()
+                .equals(other._nutrPaths, _nutrPaths) &&
             (identical(other.simpleSkin, simpleSkin) ||
                 other.simpleSkin == simpleSkin) &&
             const DeepCollectionEquality()
@@ -266,7 +267,7 @@ class _$AiDataImpl implements _AiData {
       const DeepCollectionEquality().hash(_cosNames),
       const DeepCollectionEquality().hash(_cosPaths),
       const DeepCollectionEquality().hash(_nutrNames),
-      const DeepCollectionEquality().hash(_nutPaths),
+      const DeepCollectionEquality().hash(_nutrPaths),
       simpleSkin,
       const DeepCollectionEquality().hash(_expertSkin),
       resultPath);
@@ -290,7 +291,7 @@ abstract class _AiData implements AiData {
       {required final List<String> cosNames,
       required final List<String> cosPaths,
       required final List<String> nutrNames,
-      required final List<String> nutPaths,
+      required final List<String> nutrPaths,
       required final String simpleSkin,
       required final List<SkinType> expertSkin,
       required final String resultPath}) = _$AiDataImpl;
@@ -304,7 +305,7 @@ abstract class _AiData implements AiData {
   @override
   List<String> get nutrNames;
   @override
-  List<String> get nutPaths;
+  List<String> get nutrPaths;
   @override
   String get simpleSkin;
   @override

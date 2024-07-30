@@ -28,6 +28,9 @@ mixin _$postData {
   int get viewCount => throw _privateConstructorUsedError;
   Category get category => throw _privateConstructorUsedError;
   String get memberId => throw _privateConstructorUsedError;
+  String get profileImage => throw _privateConstructorUsedError;
+  DateTime get postDate => throw _privateConstructorUsedError;
+  String get nickName => throw _privateConstructorUsedError;
   List<CommentData> get comments => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -50,6 +53,9 @@ abstract class $postDataCopyWith<$Res> {
       int viewCount,
       Category category,
       String memberId,
+      String profileImage,
+      DateTime postDate,
+      String nickName,
       List<CommentData> comments});
 }
 
@@ -74,6 +80,9 @@ class _$postDataCopyWithImpl<$Res, $Val extends postData>
     Object? viewCount = null,
     Object? category = null,
     Object? memberId = null,
+    Object? profileImage = null,
+    Object? postDate = null,
+    Object? nickName = null,
     Object? comments = null,
   }) {
     return _then(_value.copyWith(
@@ -109,6 +118,18 @@ class _$postDataCopyWithImpl<$Res, $Val extends postData>
           ? _value.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
               as String,
+      profileImage: null == profileImage
+          ? _value.profileImage
+          : profileImage // ignore: cast_nullable_to_non_nullable
+              as String,
+      postDate: null == postDate
+          ? _value.postDate
+          : postDate // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      nickName: null == nickName
+          ? _value.nickName
+          : nickName // ignore: cast_nullable_to_non_nullable
+              as String,
       comments: null == comments
           ? _value.comments
           : comments // ignore: cast_nullable_to_non_nullable
@@ -134,6 +155,9 @@ abstract class _$$postDataImplCopyWith<$Res>
       int viewCount,
       Category category,
       String memberId,
+      String profileImage,
+      DateTime postDate,
+      String nickName,
       List<CommentData> comments});
 }
 
@@ -156,6 +180,9 @@ class __$$postDataImplCopyWithImpl<$Res>
     Object? viewCount = null,
     Object? category = null,
     Object? memberId = null,
+    Object? profileImage = null,
+    Object? postDate = null,
+    Object? nickName = null,
     Object? comments = null,
   }) {
     return _then(_$postDataImpl(
@@ -191,6 +218,18 @@ class __$$postDataImplCopyWithImpl<$Res>
           ? _value.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
               as String,
+      profileImage: null == profileImage
+          ? _value.profileImage
+          : profileImage // ignore: cast_nullable_to_non_nullable
+              as String,
+      postDate: null == postDate
+          ? _value.postDate
+          : postDate // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      nickName: null == nickName
+          ? _value.nickName
+          : nickName // ignore: cast_nullable_to_non_nullable
+              as String,
       comments: null == comments
           ? _value._comments
           : comments // ignore: cast_nullable_to_non_nullable
@@ -211,6 +250,9 @@ class _$postDataImpl implements _postData {
       required this.viewCount,
       required this.category,
       required this.memberId,
+      required this.profileImage,
+      required this.postDate,
+      required this.nickName,
       required final List<CommentData> comments})
       : _comments = comments;
 
@@ -233,6 +275,12 @@ class _$postDataImpl implements _postData {
   final Category category;
   @override
   final String memberId;
+  @override
+  final String profileImage;
+  @override
+  final DateTime postDate;
+  @override
+  final String nickName;
   final List<CommentData> _comments;
   @override
   List<CommentData> get comments {
@@ -243,7 +291,7 @@ class _$postDataImpl implements _postData {
 
   @override
   String toString() {
-    return 'postData(postId: $postId, title: $title, content: $content, likeCount: $likeCount, commentCount: $commentCount, viewCount: $viewCount, category: $category, memberId: $memberId, comments: $comments)';
+    return 'postData(postId: $postId, title: $title, content: $content, likeCount: $likeCount, commentCount: $commentCount, viewCount: $viewCount, category: $category, memberId: $memberId, profileImage: $profileImage, postDate: $postDate, nickName: $nickName, comments: $comments)';
   }
 
   @override
@@ -264,6 +312,12 @@ class _$postDataImpl implements _postData {
                 other.category == category) &&
             (identical(other.memberId, memberId) ||
                 other.memberId == memberId) &&
+            (identical(other.profileImage, profileImage) ||
+                other.profileImage == profileImage) &&
+            (identical(other.postDate, postDate) ||
+                other.postDate == postDate) &&
+            (identical(other.nickName, nickName) ||
+                other.nickName == nickName) &&
             const DeepCollectionEquality().equals(other._comments, _comments));
   }
 
@@ -279,6 +333,9 @@ class _$postDataImpl implements _postData {
       viewCount,
       category,
       memberId,
+      profileImage,
+      postDate,
+      nickName,
       const DeepCollectionEquality().hash(_comments));
 
   @JsonKey(ignore: true)
@@ -305,6 +362,9 @@ abstract class _postData implements postData {
       required final int viewCount,
       required final Category category,
       required final String memberId,
+      required final String profileImage,
+      required final DateTime postDate,
+      required final String nickName,
       required final List<CommentData> comments}) = _$postDataImpl;
 
   factory _postData.fromJson(Map<String, dynamic> json) =
@@ -326,6 +386,12 @@ abstract class _postData implements postData {
   Category get category;
   @override
   String get memberId;
+  @override
+  String get profileImage;
+  @override
+  DateTime get postDate;
+  @override
+  String get nickName;
   @override
   List<CommentData> get comments;
   @override

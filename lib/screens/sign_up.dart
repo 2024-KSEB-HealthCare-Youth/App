@@ -1,5 +1,3 @@
-// screens/sign_up_screen.dart
-
 import 'package:flutter/material.dart';
 import '../models/user_data.dart';
 import '../services/auth_service.dart';
@@ -26,6 +24,13 @@ class _SignUpState extends State<SignUp> {
 
   void _signUp() async {
     if (_formKey.currentState!.validate()) {
+      if (_selectedGender.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please select a gender')),
+        );
+        return;
+      }
+
       String birth =
           '${_birthMonthController.text.padLeft(2, '0')}/${_birthDayController.text.padLeft(2, '0')}/${_birthYearController.text}';
 
@@ -124,7 +129,7 @@ class _SignUpState extends State<SignUp> {
               ),
               const SizedBox(height: 25),
               _buildTextFormField(
-                labelText: 'Enter Your nickName',
+                labelText: 'Enter Your Nickname',
                 controller: _nickNameController,
               ),
               const SizedBox(height: 25),

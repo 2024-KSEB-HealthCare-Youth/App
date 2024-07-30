@@ -1,4 +1,8 @@
+// common_widgets.dart
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import '../models/post_data.dart';
+import '../models/user_data.dart';
 
 AppBar buildAppBar(BuildContext context, String title) {
   return AppBar(
@@ -23,7 +27,7 @@ AppBar buildAppBar(BuildContext context, String title) {
   );
 }
 
-Widget buildCreatePostSection(VoidCallback onTap) {
+Widget buildCreatePostSection(VoidCallback onTap, UserData user) {
   return Container(
     padding: const EdgeInsets.all(8.0),
     decoration: BoxDecoration(
@@ -33,11 +37,16 @@ Widget buildCreatePostSection(VoidCallback onTap) {
     ),
     child: Row(
       children: [
-        const CircleAvatar(
-          backgroundImage: NetworkImage('https://via.placeholder.com/150'),
+        CircleAvatar(
+          backgroundImage: NetworkImage(
+              user.profileImage ?? 'https://via.placeholder.com/150'),
           radius: 25,
         ),
         const SizedBox(width: 10),
+        Text(
+          user.nickName ?? user.loginId,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+        ),
         Expanded(
           child: Align(
             alignment: Alignment.centerRight,
@@ -68,14 +77,16 @@ Widget buildCreatePostSection(VoidCallback onTap) {
   );
 }
 
-Widget buildPostDetail(Map<String, dynamic> post) {
+Widget buildPostDetail(
+    postData post, bool isLiked, VoidCallback onLikePressed) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const CircleAvatar(
-          backgroundImage: NetworkImage('https://via.placeholder.com/150'),
+        CircleAvatar(
+          backgroundImage: NetworkImage(
+              post.profileImage ?? 'https://via.placeholder.com/150'),
           radius: 20,
         ),
         const SizedBox(width: 10),
@@ -84,14 +95,14 @@ Widget buildPostDetail(Map<String, dynamic> post) {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                post['name'],
+                post.nickName,
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
               Text(
-                post['date'],
+                DateFormat('dd/MM/yyyy').format(post.postDate),
                 style: TextStyle(
                   color: Colors.grey[600],
                   fontSize: 12,
@@ -99,7 +110,7 @@ Widget buildPostDetail(Map<String, dynamic> post) {
               ),
               const SizedBox(height: 5),
               Text(
-                post['comment'],
+                post.content,
                 style: const TextStyle(fontSize: 14),
               ),
             ],
@@ -110,14 +121,12 @@ Widget buildPostDetail(Map<String, dynamic> post) {
           children: [
             IconButton(
               icon: Icon(
-                post['likes'] > 0
-                    ? Icons.thumb_up
-                    : Icons.thumb_up_alt_outlined,
-                color: post['likes'] > 0 ? Colors.blue : Colors.grey,
+                isLiked ? Icons.thumb_up : Icons.thumb_up_alt_outlined,
+                color: isLiked ? Colors.blue : Colors.grey,
               ),
-              onPressed: () {},
+              onPressed: onLikePressed,
             ),
-            Text(post['likes'].toString()),
+            Text(post.likeCount.toString()),
           ],
         ),
       ],

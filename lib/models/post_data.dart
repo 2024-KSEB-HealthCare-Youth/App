@@ -17,6 +17,9 @@ class postData with _$postData {
     required int viewCount,
     required Category category,
     required String memberId,
+    required String profileImage,
+    required DateTime postDate,
+    required String nickName,
     required List<CommentData> comments,
   }) = _postData;
 

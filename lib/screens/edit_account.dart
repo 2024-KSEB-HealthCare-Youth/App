@@ -1,5 +1,3 @@
-// screens/edit_account_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -37,11 +35,21 @@ class _EditAccountPageState extends State<EditAccountPage> {
     _loadUserData();
   }
 
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _nickNameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _ageController.dispose();
+    _genderController.dispose();
+    super.dispose();
+  }
+
   Future<void> _loadUserData() async {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final userId = args['userId'] as String;
-    final accessToken = args['accessToken'] as String;
     _userId = userId;
 
     try {
@@ -56,7 +64,9 @@ class _EditAccountPageState extends State<EditAccountPage> {
         _genderController.text = userData.gender;
       });
     } catch (e) {
-      print('Failed to load user data: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load user data: $e')),
+      );
     }
   }
 
@@ -85,12 +95,17 @@ class _EditAccountPageState extends State<EditAccountPage> {
         profileImage: _profileImage?.path ?? _userData!.profileImage,
       );
 
-      // Update user data on the server
       await UserService().updateUserData(updatedUserData, _userId);
 
-      print('User data and profile image updated successfully.');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('User data updated successfully.')),
+      );
+
+      Navigator.pop(context);
     } catch (e) {
-      print('Failed to save account info: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save account info: $e')),
+      );
     }
   }
 
@@ -194,13 +209,13 @@ class _EditAccountPageState extends State<EditAccountPage> {
                   CustomTextFormField(
                     controller: _ageController,
                     labelText: 'Age',
-                    enabled: false, // 나이 수정 불가
+                    enabled: false, // Age is not editable
                   ),
                   const SizedBox(height: 10),
                   CustomTextFormField(
                     controller: _genderController,
                     labelText: 'Gender',
-                    enabled: false, // 성별 수정 불가
+                    enabled: false, // Gender is not editable
                   ),
                   const SizedBox(height: 30),
                   Center(
@@ -215,7 +230,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                       ),
                       onPressed: _saveAccountInfo,
                       child: const Text(
-                        'save',
+                        'Save',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,

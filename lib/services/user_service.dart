@@ -1,18 +1,17 @@
-// services/user_service.dart
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/user_data.dart';
 import '../models/result_data.dart';
-import '../models/past_data.dart'; // PastData 모델 추가
+import '../models/past_data.dart';
 import '../utils/rest_api.dart';
 
 class UserService {
+  final FlutterSecureStorage _storage = FlutterSecureStorage();
+
   Future<Map<String, dynamic>> fetchUserDataAndToken() async {
     final prefs = await SharedPreferences.getInstance();
-    final storage = FlutterSecureStorage();
     final userId = prefs.getString('userId');
-    final accessToken = await storage.read(key: 'access_token');
+    final accessToken = await _storage.read(key: 'access_token');
 
     if (userId == null || accessToken == null) {
       throw Exception('No user ID or access token found');
@@ -37,6 +36,8 @@ class UserService {
 
   Future<void> login(String userId, String password) async {
     await RestAPI.login(userId, password);
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userId', userId);
   }
 
   Future<void> updateUserData(UserData userData, String userId) async {
