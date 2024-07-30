@@ -10,6 +10,7 @@ class CommentData with _$CommentData {
     required String date,
     required String comment,
     required int likes,
+    required String commentImage,
   }) = _CommentData;
 
   factory CommentData.fromJson(Map<String, dynamic> json) =>

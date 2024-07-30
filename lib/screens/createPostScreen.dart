@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/widgets/custom_button.dart';
+import '../widgets/custom_button.dart';
 import '../utils/rest_api.dart';
 import '../models/user_data.dart';
 import '../services/user_service.dart';
-import '../widgets/common_widgets.dart'; // CustomButton이 정의된 파일 경로를 적절히 변경
 
 class CreatePostScreen extends StatefulWidget {
   final Function(Map<String, dynamic>) onPostCreated;

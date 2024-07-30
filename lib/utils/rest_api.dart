@@ -235,7 +235,7 @@ class RestAPI {
 
     try {
       final response = await dio.post(
-        '/posts/post',
+        '/posts',
         data: requestBody,
       );
       print('Response status: ${response.statusCode}');

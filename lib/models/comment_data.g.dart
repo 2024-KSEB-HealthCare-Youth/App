@@ -12,6 +12,7 @@ _$CommentDataImpl _$$CommentDataImplFromJson(Map<String, dynamic> json) =>
       date: json['date'] as String,
       comment: json['comment'] as String,
       likes: (json['likes'] as num).toInt(),
+      commentImage: json['commentImage'] as String,
     );
 
 Map<String, dynamic> _$$CommentDataImplToJson(_$CommentDataImpl instance) =>
@@ -20,4 +21,5 @@ Map<String, dynamic> _$$CommentDataImplToJson(_$CommentDataImpl instance) =>
       'date': instance.date,
       'comment': instance.comment,
       'likes': instance.likes,
+      'commentImage': instance.commentImage,
     };
