@@ -33,7 +33,7 @@ class MainPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          buildPlaceholderBox(),
+          buildImageBox(),
           const SizedBox(height: 16),
           buildDiagnosisButton(context),
           const SizedBox(height: 16),
@@ -53,6 +53,22 @@ class MainPage extends StatelessWidget {
     );
   }
 
+  Widget buildImageBox() {
+    return AspectRatio(
+      aspectRatio: 1457 / 800, // 원하는 비율로 설정합니다.
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Image.asset(
+          'assets/images/main_pic.png',
+          fit: BoxFit.cover, // BoxFit 옵션을 사용하여 이미지 크기를 조정합니다.
+        ),
+      ),
+    );
+  }
+
   Widget buildDiagnosisButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -68,6 +84,8 @@ class MainPage extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
+              Icon(Icons.camera_alt, color: Colors.white), // 카메라 아이콘 추가
+              SizedBox(width: 10), // 아이콘과 텍스트 간 간격 추가
               Text(
                 '진단하러가기',
                 style: TextStyle(
@@ -76,7 +94,7 @@ class MainPage extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(width: 10),
+              SizedBox(width: 10), // 아이콘 간 간격 추가
               Icon(Icons.arrow_forward, color: Colors.white),
             ],
           ),

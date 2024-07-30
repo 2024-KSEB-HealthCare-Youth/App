@@ -49,7 +49,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
   Future<void> _loadUserData() async {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final userId = args['userId'] as String;
+    final userId = args['loginId'] as String;
     _userId = userId;
 
     try {
