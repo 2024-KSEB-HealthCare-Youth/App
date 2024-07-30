@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../models/post_data.dart';
 import '../models/comment_data.dart';
 import '../utils/rest_api.dart';
+import '../services/user_service.dart';
+import '../widgets/post_detail_header.dart';
+import '../widgets/comment_section.dart';
 
 class PostDetailScreen extends StatefulWidget {
   final postData post;
@@ -23,20 +27,33 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
   final TextEditingController _commentController = TextEditingController();
   final Set<int> _likedComments = Set();
   late postData _currentPost;
+  late String _nickname;
+  late String _profileImage;
 
   @override
   void initState() {
     super.initState();
     _currentPost = widget.post;
+    _fetchUserData();
+  }
+
+  Future<void> _fetchUserData() async {
+    final userData = await UserService().fetchUserData();
+    setState(() {
+      _nickname = userData?.nickName ?? 'Unknown User';
+      _profileImage =
+          userData?.profileImage ?? 'https://via.placeholder.com/150';
+    });
   }
 
   void _addComment() async {
     if (_commentController.text.isEmpty) return;
     final newComment = CommentData(
-      name: 'New User',
-      date: DateTime.now().toIso8601String(), // Proper date format
+      name: _nickname,
+      date: DateTime.now().toIso8601String(),
       comment: _commentController.text,
       likes: 0,
+      commentImage: _profileImage,
     );
     setState(() {
       _currentPost = _currentPost.copyWith(
@@ -44,8 +61,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
         commentCount: _currentPost.commentCount + 1,
       );
     });
-    widget.onPostUpdated(_currentPost); // Notify parent widget of the change
-    await RestAPI.savePost(_currentPost.toJson()); // Save post to the server
+    widget.onPostUpdated(_currentPost);
+    await RestAPI.savePost(_currentPost.toJson());
     _commentController.clear();
   }
 
@@ -65,8 +82,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
       }
       _currentPost = _currentPost.copyWith(comments: updatedComments);
     });
-    widget.onPostUpdated(_currentPost); // Notify parent widget of the change
-    await RestAPI.savePost(_currentPost.toJson()); // Save post to the server
+    widget.onPostUpdated(_currentPost);
+    await RestAPI.savePost(_currentPost.toJson());
   }
 
   @override
@@ -90,126 +107,14 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CircleAvatar(
-                    backgroundImage:
-                        NetworkImage('https://via.placeholder.com/150'),
-                    radius: 20,
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          _currentPost.memberId,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          '25/06/2020', // Example date
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        Text(_currentPost.content),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            PostDetailHeader(post: _currentPost),
             const SizedBox(height: 20),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _currentPost.comments.length,
-                itemBuilder: (context, index) {
-                  final comment = _currentPost.comments[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const CircleAvatar(
-                          backgroundImage:
-                              NetworkImage('https://via.placeholder.com/150'),
-                          radius: 20,
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                comment.name,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                comment.date,
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(comment.comment),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          children: [
-                            IconButton(
-                              icon: Icon(
-                                _likedComments.contains(index)
-                                    ? Icons.thumb_up
-                                    : Icons.thumb_up_alt_outlined,
-                                color: _likedComments.contains(index)
-                                    ? Colors.blue
-                                    : Colors.grey,
-                              ),
-                              onPressed: () => _toggleLikeComment(index),
-                            ),
-                            Text(comment.likes.toString()),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _commentController,
-                    decoration: InputDecoration(
-                      labelText: '댓글을 입력하세요',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                        borderSide: const BorderSide(
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.send),
-                  onPressed: _addComment,
-                ),
-              ],
+            CommentSection(
+              comments: _currentPost.comments,
+              likedComments: _likedComments,
+              commentController: _commentController,
+              onToggleLikeComment: _toggleLikeComment,
+              onAddComment: _addComment,
             ),
           ],
         ),

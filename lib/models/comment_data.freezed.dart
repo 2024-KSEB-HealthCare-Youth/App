@@ -24,6 +24,7 @@ mixin _$CommentData {
   String get date => throw _privateConstructorUsedError;
   String get comment => throw _privateConstructorUsedError;
   int get likes => throw _privateConstructorUsedError;
+  String get commentImage => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -37,7 +38,12 @@ abstract class $CommentDataCopyWith<$Res> {
           CommentData value, $Res Function(CommentData) then) =
       _$CommentDataCopyWithImpl<$Res, CommentData>;
   @useResult
-  $Res call({String name, String date, String comment, int likes});
+  $Res call(
+      {String name,
+      String date,
+      String comment,
+      int likes,
+      String commentImage});
 }
 
 /// @nodoc
@@ -57,6 +63,7 @@ class _$CommentDataCopyWithImpl<$Res, $Val extends CommentData>
     Object? date = null,
     Object? comment = null,
     Object? likes = null,
+    Object? commentImage = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -75,6 +82,10 @@ class _$CommentDataCopyWithImpl<$Res, $Val extends CommentData>
           ? _value.likes
           : likes // ignore: cast_nullable_to_non_nullable
               as int,
+      commentImage: null == commentImage
+          ? _value.commentImage
+          : commentImage // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -87,7 +98,12 @@ abstract class _$$CommentDataImplCopyWith<$Res>
       __$$CommentDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String name, String date, String comment, int likes});
+  $Res call(
+      {String name,
+      String date,
+      String comment,
+      int likes,
+      String commentImage});
 }
 
 /// @nodoc
@@ -105,6 +121,7 @@ class __$$CommentDataImplCopyWithImpl<$Res>
     Object? date = null,
     Object? comment = null,
     Object? likes = null,
+    Object? commentImage = null,
   }) {
     return _then(_$CommentDataImpl(
       name: null == name
@@ -123,6 +140,10 @@ class __$$CommentDataImplCopyWithImpl<$Res>
           ? _value.likes
           : likes // ignore: cast_nullable_to_non_nullable
               as int,
+      commentImage: null == commentImage
+          ? _value.commentImage
+          : commentImage // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -134,7 +155,8 @@ class _$CommentDataImpl implements _CommentData {
       {required this.name,
       required this.date,
       required this.comment,
-      required this.likes});
+      required this.likes,
+      required this.commentImage});
 
   factory _$CommentDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$CommentDataImplFromJson(json);
@@ -147,10 +169,12 @@ class _$CommentDataImpl implements _CommentData {
   final String comment;
   @override
   final int likes;
+  @override
+  final String commentImage;
 
   @override
   String toString() {
-    return 'CommentData(name: $name, date: $date, comment: $comment, likes: $likes)';
+    return 'CommentData(name: $name, date: $date, comment: $comment, likes: $likes, commentImage: $commentImage)';
   }
 
   @override
@@ -161,12 +185,15 @@ class _$CommentDataImpl implements _CommentData {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.date, date) || other.date == date) &&
             (identical(other.comment, comment) || other.comment == comment) &&
-            (identical(other.likes, likes) || other.likes == likes));
+            (identical(other.likes, likes) || other.likes == likes) &&
+            (identical(other.commentImage, commentImage) ||
+                other.commentImage == commentImage));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, name, date, comment, likes);
+  int get hashCode =>
+      Object.hash(runtimeType, name, date, comment, likes, commentImage);
 
   @JsonKey(ignore: true)
   @override
@@ -187,7 +214,8 @@ abstract class _CommentData implements CommentData {
       {required final String name,
       required final String date,
       required final String comment,
-      required final int likes}) = _$CommentDataImpl;
+      required final int likes,
+      required final String commentImage}) = _$CommentDataImpl;
 
   factory _CommentData.fromJson(Map<String, dynamic> json) =
       _$CommentDataImpl.fromJson;
@@ -200,6 +228,8 @@ abstract class _CommentData implements CommentData {
   String get comment;
   @override
   int get likes;
+  @override
+  String get commentImage;
   @override
   @JsonKey(ignore: true)
   _$$CommentDataImplCopyWith<_$CommentDataImpl> get copyWith =>
