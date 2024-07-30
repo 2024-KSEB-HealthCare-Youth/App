@@ -13,8 +13,8 @@ _$AiDataImpl _$$AiDataImplFromJson(Map<String, dynamic> json) => _$AiDataImpl(
           (json['cosPaths'] as List<dynamic>).map((e) => e as String).toList(),
       nutrNames:
           (json['nutrNames'] as List<dynamic>).map((e) => e as String).toList(),
-      nutPaths:
-          (json['nutPaths'] as List<dynamic>).map((e) => e as String).toList(),
+      nutrPaths:
+          (json['nutrPaths'] as List<dynamic>).map((e) => e as String).toList(),
       simpleSkin: json['simpleSkin'] as String,
       expertSkin: (json['expertSkin'] as List<dynamic>)
           .map((e) => $enumDecode(_$SkinTypeEnumMap, e))
@@ -27,7 +27,7 @@ Map<String, dynamic> _$$AiDataImplToJson(_$AiDataImpl instance) =>
       'cosNames': instance.cosNames,
       'cosPaths': instance.cosPaths,
       'nutrNames': instance.nutrNames,
-      'nutPaths': instance.nutPaths,
+      'nutrPaths': instance.nutrPaths,
       'simpleSkin': instance.simpleSkin,
       'expertSkin':
           instance.expertSkin.map((e) => _$SkinTypeEnumMap[e]!).toList(),

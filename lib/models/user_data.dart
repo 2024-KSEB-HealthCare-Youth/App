@@ -9,7 +9,7 @@ enum UserRole { USER, ADMIN }
 class UserData with _$UserData {
   const factory UserData({
     required String loginId,
-    required String password,
+    String? password, // nullable로 변경
     required String name,
     String? nickName,
     required String gender,
@@ -17,14 +17,13 @@ class UserData with _$UserData {
     required String phoneNumber,
     String? email,
     String? profileImage,
-    required UserRole isAdmin,
+    @UserRoleConverter() UserRole? isAdmin, // nullable로 변경
   }) = _UserData;
 
   factory UserData.fromJson(Map<String, dynamic> json) =>
       _$UserDataFromJson(json);
 }
 
-// The following lines ensure the enum is properly serialized/deserialized
 const _userRoleValues = <String, UserRole>{
   'USER': UserRole.USER,
   'ADMIN': UserRole.ADMIN,

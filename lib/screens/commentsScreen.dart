@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
-import '../services/post_service.dart';
-import 'post_detail_screen.dart';
+import 'package:intl/intl.dart';
+import '../screens/CreatePostScreen.dart';
+import '../models/post_data.dart';
+import '../models/user_data.dart';
+import '../utils/rest_api.dart';
+import '../screens/PostDetailScreen.dart';
+import '../services/user_service.dart';
 import '../widgets/common_widgets.dart';
+import '../widgets/post_card.dart';
 
 class CommentsScreen extends StatefulWidget {
   const CommentsScreen({Key? key}) : super(key: key);
@@ -11,70 +17,67 @@ class CommentsScreen extends StatefulWidget {
 }
 
 class _CommentsScreenState extends State<CommentsScreen> {
-  final List<Map<String, dynamic>> _posts = PostService.getInitialPosts();
-  final Set<int> _likedPosts = Set(); // Tracks liked posts
-  final TextEditingController _postController = TextEditingController();
+  List<postData> _posts = [];
+  final Set<String> _likedPosts = Set();
 
-  void _showPostDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('새 글 작성하기'),
-          content: TextField(
-            controller: _postController,
-            maxLines: 5,
-            decoration: const InputDecoration(
-              hintText: '내용을 입력하세요',
-              border: OutlineInputBorder(),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('취소'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (_postController.text.isNotEmpty) {
-                  setState(() {
-                    _posts.insert(0, {
-                      'name': 'New User',
-                      'date': 'Today',
-                      'comment': _postController.text,
-                      'likes': 0,
-                      'comments': [],
-                    });
-                  });
-                  _postController.clear();
-                  Navigator.of(context).pop();
-                }
-              },
-              child: const Text('작성'),
-            ),
-          ],
-        );
-      },
-    );
+  @override
+  void initState() {
+    super.initState();
+    _fetchPosts();
   }
 
-  void _toggleLikePost(int index) {
+  Future<void> _fetchPosts() async {
+    try {
+      final posts = await RestAPI.fetchPosts();
+      setState(() {
+        _posts = posts;
+      });
+    } catch (e) {
+      print('Failed to fetch posts: $e');
+    }
+  }
+
+  Future<UserData?> _fetchUserData() async {
+    try {
+      final user = await UserService().fetchUserData();
+      return user;
+    } catch (e) {
+      print('Failed to fetch user data: $e');
+      return null;
+    }
+  }
+
+  void _navigateToCreatePost() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) => CreatePostScreen(onPostCreated: (newPost) {
+        setState(() {
+          _posts.insert(0, postData.fromJson(newPost));
+        });
+      }),
+    ));
+  }
+
+  void _toggleLikePost(String postId) {
     setState(() {
-      if (_likedPosts.contains(index)) {
-        _posts[index]['likes']--;
-        _likedPosts.remove(index);
-      } else {
-        _posts[index]['likes']++;
-        _likedPosts.add(index);
+      final index = _posts.indexWhere((post) => post.postId == postId);
+      if (index != -1) {
+        final post = _posts[index];
+        if (_likedPosts.contains(postId)) {
+          _posts[index] = post.copyWith(likeCount: post.likeCount - 1);
+          _likedPosts.remove(postId);
+        } else {
+          _posts[index] = post.copyWith(likeCount: post.likeCount + 1);
+          _likedPosts.add(postId);
+        }
+        RestAPI.savePost(_posts[index].toJson());
       }
     });
   }
 
-  void _updatePost(int index, Map<String, dynamic> updatedPost) {
+  void _updatePost(int index, postData updatedPost) {
     setState(() {
       _posts[index] = updatedPost;
+      RestAPI.savePost(updatedPost.toJson());
     });
   }
 
@@ -86,13 +89,34 @@ class _CommentsScreenState extends State<CommentsScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            buildCreatePostSection(_showPostDialog),
+            FutureBuilder<UserData?>(
+              future: _fetchUserData(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData) {
+                  return const Center(child: Text('Failed to load user data'));
+                } else {
+                  final user = snapshot.data!;
+                  return buildCreatePostSection(() {
+                    _navigateToCreatePost();
+                  }, user);
+                }
+              },
+            ),
             const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
                 itemCount: _posts.length,
                 itemBuilder: (context, index) {
-                  return GestureDetector(
+                  return PostCard(
+                    post: _posts[index],
+                    isLiked: _likedPosts.contains(_posts[index].postId),
+                    onLikePressed: () {
+                      _toggleLikePost(_posts[index].postId);
+                    },
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => PostDetailScreen(
@@ -104,63 +128,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
                         ),
                       ));
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const CircleAvatar(
-                            backgroundImage:
-                                NetworkImage('https://via.placeholder.com/150'),
-                            radius: 20,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _posts[index]['name'],
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                Text(
-                                  _posts[index]['date'],
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: 12,
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  _posts[index]['comment'],
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                          Column(
-                            children: [
-                              IconButton(
-                                icon: Icon(
-                                  _likedPosts.contains(index)
-                                      ? Icons.thumb_up
-                                      : Icons.thumb_up_alt_outlined,
-                                  color: _likedPosts.contains(index)
-                                      ? Colors.blue
-                                      : Colors.grey,
-                                ),
-                                onPressed: () => _toggleLikePost(index),
-                              ),
-                              Text(_posts[index]['likes'].toString()),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
                   );
                 },
               ),

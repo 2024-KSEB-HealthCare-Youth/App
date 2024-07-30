@@ -11,7 +11,7 @@ class AiData with _$AiData {
     required List<String> cosNames,
     required List<String> cosPaths,
     required List<String> nutrNames,
-    required List<String> nutPaths,
+    required List<String> nutrPaths,
     required String simpleSkin,
     required List<SkinType> expertSkin,
     required String resultPath,

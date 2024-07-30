@@ -1,40 +1,55 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import '../models/user_data.dart';
 import '../models/result_data.dart';
 import '../models/ai_data.dart';
 import '../models/token_response.dart';
 import '../models/past_data.dart';
+import '../models/post_data.dart';
+import '../models/comment_data.dart';
 
 class RestAPI {
   static const String baseUrl = 'http://52.79.103.61:8080';
-  static const String flaskUrl = 'http://your-flask-server-ip:5000';
+  static const String flaskUrl = 'http://3.37.66.194:5000'; // Flask 서버 URL 수정
   static const Map<String, String> headers = {
     'Content-Type': 'application/json'
   };
   static final FlutterSecureStorage storage = FlutterSecureStorage();
+  static final CookieJar cookieJar = CookieJar();
+  static final Dio dio = Dio(BaseOptions(
+    baseUrl: baseUrl,
+    headers: headers,
+  ))
+    ..interceptors.add(CookieManager(cookieJar));
 
-  // Save tokens to secure storage
-  static Future<void> saveTokens(
-      String accessToken, String refreshToken) async {
-    await storage.write(key: 'access_token', value: accessToken);
-    await storage.write(key: 'refresh_token', value: refreshToken);
+  // Flask 서버와 통신을 위한 별도의 Dio 인스턴스
+  static final Dio flaskDio = Dio(BaseOptions(
+    baseUrl: flaskUrl,
+    headers: headers,
+  ));
+
+  // Save loginId to shared preferences
+  static Future<void> saveLoginId(String loginId) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('loginId', loginId);
+  }
+
+  // Retrieve loginId from shared preferences
+  static Future<String?> getLoginId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('loginId');
   }
 
   // Delete tokens from secure storage
   static Future<void> deleteTokens() async {
     await storage.delete(key: 'access_token');
     await storage.delete(key: 'refresh_token');
-  }
-
-  // Retrieve tokens from secure storage
-  static Future<Map<String, String?>> getTokens() async {
-    final accessToken = await storage.read(key: 'access_token');
-    final refreshToken = await storage.read(key: 'refresh_token');
-    return {'access_token': accessToken, 'refresh_token': refreshToken};
+    await cookieJar.deleteAll();
   }
 
   // Login method
@@ -43,62 +58,42 @@ class RestAPI {
     print('Request body: $requestBody');
 
     try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/login'),
-        headers: headers,
-        body: requestBody,
+      final response = await dio.post(
+        '/login',
+        data: requestBody,
       );
       print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      print('Response headers: ${response.headers}');
+      print('Response body: ${response.data}');
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        await saveTokens(data['accessToken'], data['refreshToken']);
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('loginId', data['loginId']);
+        await saveLoginId(loginId);
+        print('Login successful.');
       } else {
-        throw Exception('Failed to log in: ${response.reasonPhrase}');
+        throw Exception('Failed to log in: ${response.statusMessage}');
       }
     } catch (e) {
-      print('Login failed: $e');
+      if (e is DioError && e.response?.statusCode == 401) {
+        print('Login failed: Invalid credentials');
+      } else {
+        print('Login failed: $e');
+      }
       throw Exception('Login failed: $e');
     }
   }
 
-  // Refresh access token
-  static Future<TokenResponse> refreshAccessToken(String refreshToken) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/token'),
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': 'Bearer $refreshToken'
-      },
-    );
-    if (response.statusCode == 200) {
-      return TokenResponse.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to refresh token');
-    }
-  }
-
-  // Fetch user data
-  static Future<UserData> fetchUserData(String userId) async {
-    final tokens = await getTokens();
-    final accessToken = tokens['access_token'];
-
+  static Future<UserData> fetchUserData(String memberId) async {
     try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/members/$userId'),
-        headers: {...headers, 'authorization': 'Bearer $accessToken'},
-      );
+      final response = await dio.get('/members/$memberId');
       print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      print('Response body: ${response.data}');
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = jsonDecode(response.body);
-        return UserData.fromJson(responseData);
+        final Map<String, dynamic> responseData = response.data;
+        final user = UserData.fromJson(responseData['results'][0]);
+        return user;
       } else {
-        throw Exception('Failed to fetch user data: ${response.reasonPhrase}');
+        throw Exception('Failed to fetch user data: ${response.statusMessage}');
       }
     } catch (e) {
       print('Fetch user data failed: $e');
@@ -108,23 +103,19 @@ class RestAPI {
 
   // Fetch result data
   static Future<ResultData> fetchResultData(String userId) async {
-    final tokens = await getTokens();
-    final accessToken = tokens['access_token'];
-
     try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/results/$userId'),
-        headers: {...headers, 'authorization': 'Bearer $accessToken'},
+      final response = await dio.get(
+        '/results/$userId',
       );
       print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      print('Response body: ${response.data}');
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = jsonDecode(response.body);
+        final Map<String, dynamic> responseData = response.data;
         return ResultData.fromJson(responseData);
       } else {
         throw Exception(
-            'Failed to fetch result data: ${response.reasonPhrase}');
+            'Failed to fetch result data: ${response.statusMessage}');
       }
     } catch (e) {
       print('Fetch result data failed: $e');
@@ -138,18 +129,17 @@ class RestAPI {
     print('Request body: $requestBody');
 
     try {
-      final response = await http.post(
-        Uri.parse('$baseUrl/members/join'),
-        headers: headers,
-        body: requestBody,
+      final response = await dio.post(
+        '/members/join',
+        data: requestBody,
       );
       print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      print('Response body: ${response.data}');
 
       if (response.statusCode == 200) {
         print('Sign up successful.');
       } else {
-        throw Exception('Failed to sign up: ${response.reasonPhrase}');
+        throw Exception('Failed to sign up: ${response.statusMessage}');
       }
     } catch (e) {
       print('Sign up failed: $e');
@@ -159,25 +149,22 @@ class RestAPI {
 
   // Update user data
   static Future<void> updateUserData(UserData userData, String userId) async {
-    final tokens = await getTokens();
-    final accessToken = tokens['access_token'];
-
     final requestBody = jsonEncode(userData.toJson());
     print('Request body: $requestBody');
 
     try {
-      final response = await http.put(
-        Uri.parse('$baseUrl/members/$userId'),
-        headers: {...headers, 'authorization': 'Bearer $accessToken'},
-        body: requestBody,
+      final response = await dio.put(
+        '/members/$userId',
+        data: requestBody,
       );
       print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      print('Response body: ${response.data}');
 
       if (response.statusCode == 200) {
         print('User data updated successfully.');
       } else {
-        throw Exception('Failed to update user data: ${response.reasonPhrase}');
+        throw Exception(
+            'Failed to update user data: ${response.statusMessage}');
       }
     } catch (e) {
       print('Update user data failed: $e');
@@ -187,19 +174,15 @@ class RestAPI {
 
   // Fetch past data
   static Future<PastData> fetchPastData(String userId) async {
-    final tokens = await getTokens();
-    final accessToken = tokens['access_token'];
-
     try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/results/lists'),
-        headers: {...headers, 'authorization': 'Bearer $accessToken'},
+      final response = await dio.get(
+        '/results/lists',
       );
 
       if (response.statusCode == 200) {
-        return PastData.fromJson(jsonDecode(response.body));
+        return PastData.fromJson(response.data);
       } else {
-        throw Exception('Failed to load past data: ${response.reasonPhrase}');
+        throw Exception('Failed to load past data: ${response.statusMessage}');
       }
     } catch (e) {
       print('Fetch past data failed: $e');
@@ -209,19 +192,15 @@ class RestAPI {
 
   // Fecth past log by result id & result date
   static Future<ResultData> fetchPast_Result(String resultId) async {
-    final tokens = await getTokens();
-    final accessToken = tokens['access_token'];
-
     try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/results/$resultId'),
-        headers: {...headers, 'authorization': 'Bearer $accessToken'},
+      final response = await dio.get(
+        '/results/$resultId',
       );
       if (response.statusCode == 200) {
-        return ResultData.fromJson(jsonDecode(response.body));
+        return ResultData.fromJson(response.data);
       } else {
         throw Exception(
-            'Failed to load Past_Result data:${response.reasonPhrase}');
+            'Failed to load Past_Result data:${response.statusMessage}');
       }
     } catch (e) {
       print('Fetch past data failed: $e');
@@ -229,20 +208,68 @@ class RestAPI {
     }
   }
 
-  static Future<Map<String, dynamic>> uploadImage(String imagePath) async {
-    var request = http.MultipartRequest('POST', Uri.parse('$flaskUrl/upload'));
-    request.files.add(await http.MultipartFile.fromPath('file', imagePath));
+  //fetch postdata
+  static Future<List<postData>> fetchPosts() async {
+    try {
+      final response = await dio.get(
+        '/posts',
+      );
+      if (response.statusCode == 200) {
+        List<dynamic> jsonData = response.data;
+        List<postData> posts =
+            jsonData.map((json) => postData.fromJson(json)).toList();
+        return posts;
+      } else {
+        throw Exception('Failed to load posts: ${response.statusMessage}');
+      }
+    } catch (e) {
+      print('Fetch posts failed: $e');
+      throw Exception('Fetch posts failed: $e');
+    }
+  }
+
+  // Save post data to the server
+  static Future<bool> savePost(Map<String, dynamic> post) async {
+    final requestBody = jsonEncode(post);
+    print('Request body: $requestBody');
 
     try {
-      var response = await request.send();
+      final response = await dio.post(
+        '/posts/post',
+        data: requestBody,
+      );
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.data}');
+
+      if (response.statusCode == 201) {
+        return true;
+      } else {
+        throw Exception('Failed to save post: ${response.statusMessage}');
+      }
+    } catch (e) {
+      print('Save post failed: $e');
+      throw Exception('Save post failed: $e');
+    }
+  }
+
+  //upload image to flask server
+  static Future<Map<String, dynamic>> uploadImage(String imagePath) async {
+    var formData = FormData.fromMap({
+      'file': await MultipartFile.fromFile(imagePath),
+    });
+
+    try {
+      final response = await flaskDio.post(
+        '/upload',
+        data: formData,
+      );
       if (response.statusCode == 200) {
-        var responseBody = await response.stream.bytesToString();
-        var decodedResponse = jsonDecode(responseBody) as Map<String, dynamic>;
+        var decodedResponse = response.data as Map<String, dynamic>;
         print('Image uploaded successfully.');
         return decodedResponse;
       } else {
         print('Image upload failed.');
-        throw Exception('Failed to upload image: ${response.reasonPhrase}');
+        throw Exception('Failed to upload image: ${response.statusMessage}');
       }
     } catch (e) {
       print('Image upload failed: $e');
@@ -252,13 +279,62 @@ class RestAPI {
 
   // Fetch AI data from Flask server
   static Future<AiData> fetchAiData() async {
-    final response = await http.get(Uri.parse('$flaskUrl/ai-data'));
+    try {
+      final response = await flaskDio.get('/ai-data');
+      if (response.statusCode == 200) {
+        return AiData.fromJson(response.data);
+      } else {
+        throw Exception('Failed to load AI data');
+      }
+    } catch (e) {
+      print('Fetch AI data failed: $e');
+      throw Exception('Fetch AI data failed: $e');
+    }
+  }
 
-    if (response.statusCode == 200) {
-      final jsonResponse = jsonDecode(response.body);
-      return AiData.fromJson(jsonResponse);
-    } else {
-      throw Exception('Failed to load AI data');
+  // Add a comment to a post
+  static Future<void> addCommentToPost(
+      String postId, CommentData comment) async {
+    final requestBody = jsonEncode(comment.toJson());
+    print('Request body: $requestBody');
+
+    try {
+      final response = await dio.post(
+        '/posts/$postId/comments',
+        data: requestBody,
+      );
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.data}');
+
+      if (response.statusCode != 201) {
+        throw Exception('Failed to add comment: ${response.statusMessage}');
+      }
+    } catch (e) {
+      print('Add comment failed: $e');
+      throw Exception('Add comment failed: $e');
+    }
+  }
+
+  // Update like status of a post
+  static Future<void> updateLikeStatus(String postId, int likes) async {
+    final requestBody = jsonEncode({'likes': likes});
+    print('Request body: $requestBody');
+
+    try {
+      final response = await dio.put(
+        '/posts/$postId/likes',
+        data: requestBody,
+      );
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.data}');
+
+      if (response.statusCode != 200) {
+        throw Exception(
+            'Failed to update like status: ${response.statusMessage}');
+      }
+    } catch (e) {
+      print('Update like status failed: $e');
+      throw Exception('Update like status failed: $e');
     }
   }
 }

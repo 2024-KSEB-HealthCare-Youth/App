@@ -9,7 +9,7 @@ part of 'user_data.dart';
 _$UserDataImpl _$$UserDataImplFromJson(Map<String, dynamic> json) =>
     _$UserDataImpl(
       loginId: json['loginId'] as String,
-      password: json['password'] as String,
+      password: json['password'] as String?,
       name: json['name'] as String,
       nickName: json['nickName'] as String?,
       gender: json['gender'] as String,
@@ -17,7 +17,8 @@ _$UserDataImpl _$$UserDataImplFromJson(Map<String, dynamic> json) =>
       phoneNumber: json['phoneNumber'] as String,
       email: json['email'] as String?,
       profileImage: json['profileImage'] as String?,
-      isAdmin: $enumDecode(_$UserRoleEnumMap, json['isAdmin']),
+      isAdmin: _$JsonConverterFromJson<String, UserRole>(
+          json['isAdmin'], const UserRoleConverter().fromJson),
     );
 
 Map<String, dynamic> _$$UserDataImplToJson(_$UserDataImpl instance) =>
@@ -31,10 +32,18 @@ Map<String, dynamic> _$$UserDataImplToJson(_$UserDataImpl instance) =>
       'phoneNumber': instance.phoneNumber,
       'email': instance.email,
       'profileImage': instance.profileImage,
-      'isAdmin': _$UserRoleEnumMap[instance.isAdmin]!,
+      'isAdmin': _$JsonConverterToJson<String, UserRole>(
+          instance.isAdmin, const UserRoleConverter().toJson),
     };
 
-const _$UserRoleEnumMap = {
-  UserRole.USER: 'USER',
-  UserRole.ADMIN: 'ADMIN',
-};
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);

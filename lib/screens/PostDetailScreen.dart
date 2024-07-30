@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../widgets/common_widgets.dart';
-import 'new_post_screen.dart'; // Import the new screen
+import '../models/post_data.dart';
+import '../models/comment_data.dart';
+import '../utils/rest_api.dart';
 
 class PostDetailScreen extends StatefulWidget {
-  final Map<String, dynamic> post;
+  final postData post;
   final int postIndex;
-  final Function(Map<String, dynamic>) onPostUpdated;
+  final Function(postData) onPostUpdated;
 
   const PostDetailScreen({
     Key? key,
@@ -21,90 +22,115 @@ class PostDetailScreen extends StatefulWidget {
 class _PostDetailScreenState extends State<PostDetailScreen> {
   final TextEditingController _commentController = TextEditingController();
   final Set<int> _likedComments = Set();
+  late postData _currentPost;
 
   @override
-  void dispose() {
-    _commentController.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    _currentPost = widget.post;
   }
 
-  void _addComment() {
+  void _addComment() async {
     if (_commentController.text.isEmpty) return;
-    final newComment = {
-      'name': 'New User',
-      'date': 'Today',
-      'comment': _commentController.text,
-      'likes': 0,
-    };
+    final newComment = CommentData(
+      name: 'New User',
+      date: DateTime.now().toIso8601String(), // Proper date format
+      comment: _commentController.text,
+      likes: 0,
+    );
     setState(() {
-      widget.post['comments'].add(newComment);
+      _currentPost = _currentPost.copyWith(
+        comments: [..._currentPost.comments, newComment],
+        commentCount: _currentPost.commentCount + 1,
+      );
     });
-    widget.onPostUpdated(widget.post); // Notify parent widget of the change
+    widget.onPostUpdated(_currentPost); // Notify parent widget of the change
+    await RestAPI.savePost(_currentPost.toJson()); // Save post to the server
     _commentController.clear();
   }
 
-  void _toggleLikeComment(int index) {
+  void _toggleLikeComment(int index) async {
     setState(() {
+      final updatedComments = _currentPost.comments.toList();
       if (_likedComments.contains(index)) {
-        widget.post['comments'][index]['likes']--;
+        updatedComments[index] = updatedComments[index].copyWith(
+          likes: updatedComments[index].likes - 1,
+        );
         _likedComments.remove(index);
       } else {
-        widget.post['comments'][index]['likes']++;
+        updatedComments[index] = updatedComments[index].copyWith(
+          likes: updatedComments[index].likes + 1,
+        );
         _likedComments.add(index);
       }
+      _currentPost = _currentPost.copyWith(comments: updatedComments);
     });
-    widget.onPostUpdated(widget.post); // Notify parent widget of the change
-  }
-
-  void _navigateToNewPostScreen() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const NewPostScreen()),
-    );
+    widget.onPostUpdated(_currentPost); // Notify parent widget of the change
+    await RestAPI.savePost(_currentPost.toJson()); // Save post to the server
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(context, 'Youth'),
+      appBar: AppBar(
+        title: const Text(
+          'Youth',
+          style: TextStyle(
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Pacifico',
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        foregroundColor: Colors.black,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            buildPostDetail(widget.post),
-            const SizedBox(height: 20),
-            // Create Post Section
-            GestureDetector(
-              onTap: _navigateToNewPostScreen,
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.grey[300]!),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    const CircleAvatar(
-                      backgroundImage:
-                          NetworkImage('https://via.placeholder.com/150'),
-                      radius: 25,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const CircleAvatar(
+                    backgroundImage:
+                        NetworkImage('https://via.placeholder.com/150'),
+                    radius: 20,
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _currentPost.memberId,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '25/06/2020', // Example date
+                          style: TextStyle(
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(_currentPost.content),
+                      ],
                     ),
-                    const SizedBox(width: 10),
-                    const Text(
-                      '글 작성하기',
-                      style: TextStyle(color: Colors.black54, fontSize: 14),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
-                itemCount: widget.post['comments'].length,
+                itemCount: _currentPost.comments.length,
                 itemBuilder: (context, index) {
-                  final comment = widget.post['comments'][index];
+                  final comment = _currentPost.comments[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Row(
@@ -121,24 +147,19 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                comment['name'],
+                                comment.name,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 16,
                                 ),
                               ),
                               Text(
-                                comment['date'],
+                                comment.date,
                                 style: TextStyle(
                                   color: Colors.grey[600],
-                                  fontSize: 12,
                                 ),
                               ),
                               const SizedBox(height: 5),
-                              Text(
-                                comment['comment'],
-                                style: const TextStyle(fontSize: 14),
-                              ),
+                              Text(comment.comment),
                             ],
                           ),
                         ),
@@ -156,7 +177,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
                               ),
                               onPressed: () => _toggleLikeComment(index),
                             ),
-                            Text(comment['likes'].toString()),
+                            Text(comment.likes.toString()),
                           ],
                         ),
                       ],

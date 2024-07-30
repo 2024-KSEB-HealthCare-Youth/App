@@ -1,7 +1,5 @@
-// screens/log_in_screen.dart
-
 import 'package:flutter/material.dart';
-import '../services/user_service.dart';
+import '../services/auth_service.dart';
 
 class LogIn extends StatefulWidget {
   @override
@@ -10,26 +8,36 @@ class LogIn extends StatefulWidget {
 
 class _LogInState extends State<LogIn> {
   final _formKey = GlobalKey<FormState>();
-  final Map<String, String> _formData = {
-    'userId': '',
-    'password': '',
-  };
+  final TextEditingController _userIdController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final AuthService _authService = AuthService();
 
   void _login() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
       try {
-        await UserService().login(_formData['userId']!, _formData['password']!);
+        await _authService.login(
+          context,
+          _userIdController.text,
+          _passwordController.text,
+        );
         Navigator.pushNamed(context, '/main_page');
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
               content: Text(
                   'Login failed. Please check your credentials and try again.')),
         );
       }
     }
+  }
+
+  @override
+  void dispose() {
+    _userIdController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -62,13 +70,15 @@ class _LogInState extends State<LogIn> {
               ),
               const SizedBox(height: 25),
               _buildTextFormField(
-                  labelText: 'Enter Your Id',
-                  onSaved: (value) => _formData['userId'] = value!),
+                labelText: 'Enter Your ID',
+                controller: _userIdController,
+              ),
               const SizedBox(height: 25),
               _buildTextFormField(
-                  labelText: 'Enter Your Password',
-                  obscureText: true,
-                  onSaved: (value) => _formData['password'] = value!),
+                labelText: 'Enter Your Password',
+                controller: _passwordController,
+                obscureText: true,
+              ),
               const SizedBox(height: 25),
               _buildLoginButton(context),
               const SizedBox(height: 25),
@@ -83,15 +93,15 @@ class _LogInState extends State<LogIn> {
   Widget _buildTextFormField({
     required String labelText,
     bool obscureText = false,
-    required FormFieldSetter<String> onSaved,
+    required TextEditingController controller,
   }) {
     return TextFormField(
+      controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
         labelText: labelText,
         errorStyle: const TextStyle(color: Colors.red),
       ),
-      onSaved: onSaved,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'This field is required';
