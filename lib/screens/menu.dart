@@ -35,7 +35,7 @@ class Menu extends StatelessWidget {
             onTap: () async {
               final userService = UserService();
               final prefs = await SharedPreferences.getInstance();
-              final userId = prefs.getString('userId');
+              final userId = prefs.getString('loginId');
               if (userId != null) {
                 try {
                   final pastData = await userService.fetchPastData(userId);

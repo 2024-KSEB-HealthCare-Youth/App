@@ -133,7 +133,7 @@ class Recommendation extends StatelessWidget {
       BuildContext context, List<String> names, List<String> paths) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(3, (index) {
+      children: List.generate(6, (index) {
         return _buildProductCard(context, names[index], paths[index]);
       }),
     );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import '../screens/CreatePostScreen.dart';
 import '../models/post_data.dart';
 import '../models/user_data.dart';
@@ -84,7 +83,24 @@ class _CommentsScreenState extends State<CommentsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(context, 'Youth'),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, '/main_page');
+          },
+          child: const Text(
+            'Youth',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 30,
+              fontFamily: 'Pacifico',
+            ),
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
