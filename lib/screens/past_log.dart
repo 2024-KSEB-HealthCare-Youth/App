@@ -1,5 +1,3 @@
-// screens/past_results_screen.dart
-
 import 'package:flutter/material.dart';
 import '../models/past_data.dart';
 import 'result_detail_screen.dart';
@@ -121,7 +119,8 @@ class _PastResultsScreenState extends State<PastResultsScreen> {
             },
       child: const Text(
         '확인하기',
-        style: TextStyle(fontSize: 16, color: Colors.white,fontFamily: 'Pacifico'),
+        style: TextStyle(
+            fontSize: 16, color: Colors.white, fontFamily: 'Pacifico'),
       ),
     );
   }
