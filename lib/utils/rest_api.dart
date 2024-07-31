@@ -5,13 +5,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import '../models/user_data.dart';
-import '../models/result_data.dart';
-import '../models/ai_data.dart';
-import '../models/token_response.dart';
-import '../models/past_data.dart';
-import '../models/post_data.dart';
-import '../models/comment_data.dart';
+import '../data/models/user_data.dart';
+import '../data/models/result_data.dart';
+import '../data/models/ai_data.dart';
+import '../data/models/past_data.dart';
+import '../data/models/post_data.dart';
+import '../data/models/comment_data.dart';
+import '../data/dtos/login_dto.dart';
 
 class RestAPI {
   static const String baseUrl = 'http://52.79.103.61:8080';
@@ -53,8 +53,8 @@ class RestAPI {
   }
 
   // Login method
-  static Future<void> login(String loginId, String password) async {
-    final requestBody = jsonEncode({'loginId': loginId, 'password': password});
+  static Future<void> login(LoginDTO loginDTO) async {
+    final requestBody = jsonEncode(loginDTO.toJson());
     print('Request body: $requestBody');
 
     try {
@@ -67,7 +67,7 @@ class RestAPI {
       print('Response body: ${response.data}');
 
       if (response.statusCode == 200) {
-        await saveLoginId(loginId);
+        await saveLoginId(loginDTO.loginId);
         print('Login successful.');
       } else {
         throw Exception('Failed to log in: ${response.statusMessage}');
@@ -102,10 +102,10 @@ class RestAPI {
   }
 
   // Fetch result data
-  static Future<ResultData> fetchResultData(String userId) async {
+  static Future<ResultData> fetchResultData(String resultId) async {
     try {
       final response = await dio.get(
-        '/results/$userId',
+        '/results/$resultId',
       );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.data}');
@@ -147,22 +147,20 @@ class RestAPI {
     }
   }
 
-  // Update user data
-  static Future<void> updateUserData(UserData userData, String userId) async {
-    final requestBody = jsonEncode(userData.toJson());
+  static Future<void> updateUserData(Map<String, dynamic> updatedUser) async {
+    final memberId = updatedUser['loginId'];
+    final requestBody = jsonEncode(updatedUser);
     print('Request body: $requestBody');
 
     try {
       final response = await dio.put(
-        '/members/$userId',
+        '/members/$memberId',
         data: requestBody,
       );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.data}');
 
-      if (response.statusCode == 200) {
-        print('User data updated successfully.');
-      } else {
+      if (response.statusCode != 200) {
         throw Exception(
             'Failed to update user data: ${response.statusMessage}');
       }
@@ -252,8 +250,8 @@ class RestAPI {
     }
   }
 
-  //upload image to flask server
-  static Future<Map<String, dynamic>> uploadImage(String imagePath) async {
+  // Upload image to flask server
+  static Future<AiData> uploadImage(String imagePath) async {
     var formData = FormData.fromMap({
       'file': await MultipartFile.fromFile(imagePath),
     });
@@ -266,7 +264,7 @@ class RestAPI {
       if (response.statusCode == 200) {
         var decodedResponse = response.data as Map<String, dynamic>;
         print('Image uploaded successfully.');
-        return decodedResponse;
+        return AiData.fromJson(decodedResponse);
       } else {
         print('Image upload failed.');
         throw Exception('Failed to upload image: ${response.statusMessage}');
@@ -277,10 +275,10 @@ class RestAPI {
     }
   }
 
-  // Fetch AI data from Flask server
+  // Fetch AI data from springboot server
   static Future<AiData> fetchAiData() async {
     try {
-      final response = await flaskDio.get('/ai-data');
+      final response = await dio.get('/ai-data');
       if (response.statusCode == 200) {
         return AiData.fromJson(response.data);
       } else {

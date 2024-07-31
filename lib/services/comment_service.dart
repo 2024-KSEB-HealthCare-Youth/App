@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/comment_data.dart';
-import '../models/post_data.dart';
+import '../data/models/comment_data.dart';
+import '../data/models/post_data.dart';
 
 class CommentService extends ChangeNotifier {
   final List<postData> _posts = [];

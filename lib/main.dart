@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'screens/splash_screen.dart';
-import 'screens/login.dart';
-import 'screens/sign_up.dart';
-import 'screens/main_page.dart';
-import 'screens/camera_screen.dart';
-import 'screens/loading_page.dart';
-import 'screens/recommendation.dart';
-import 'screens/my_page.dart';
-import 'screens/menu.dart';
-import 'screens/past_log.dart';
-import 'screens/edit_account.dart';
-import 'screens/commentsScreen.dart';
-import 'package:camera/camera.dart';
 import 'package:provider/provider.dart';
+import 'presentation/screens/splash_screen.dart';
+import 'presentation/screens/login.dart';
+import 'presentation/screens/sign_up.dart';
+import 'presentation/screens/main_page.dart';
+import 'presentation/screens/camera_screen.dart';
+import 'presentation/screens/loading_page.dart';
+import 'presentation/screens/recommendation.dart';
+import 'presentation/screens/my_page.dart';
+import 'presentation/screens/menu.dart';
+import 'presentation/screens/past_log.dart';
+import 'presentation/screens/edit_account.dart';
+import 'presentation/screens/commentsScreen.dart';
+import 'package:camera/camera.dart';
 import 'services/comment_service.dart';
 
 void main() async {
