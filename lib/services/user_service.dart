@@ -1,5 +1,4 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../data/models/past_data.dart';
 import '../utils/rest_api.dart';
 import '../data/dtos/recommend_dto.dart';
@@ -7,8 +6,6 @@ import '../data/dtos/my_page_dto.dart';
 import '../data/dtos/edit_user_dto.dart';
 
 class UserService {
-  final FlutterSecureStorage _storage = FlutterSecureStorage();
-
   Future<MyPageDTO> fetchMyPageDTO() async {
     final prefs = await SharedPreferences.getInstance();
     final loginId = prefs.getString('loginId');
