@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/data/dtos/post_user_dto.dart';
-import 'package:myapp/utils/rest_api.dart';
+import 'package:myapp/data/dtos/post_get_dto.dart';
+import 'package:myapp/services/post_service.dart';
+import '../../data/dtos/post_user_dto.dart';
 import 'package:provider/provider.dart';
-import '../../data/models/post_data.dart';
 import '../../services/comment_service.dart';
-import '../../services/post_service.dart';
 import '../screens/CreatePostScreen.dart';
 import '../screens/PostDetailScreen.dart';
 import '../widgets/post_card.dart';
@@ -18,31 +17,40 @@ class CommentsScreen extends StatefulWidget {
 
 class _CommentsScreenState extends State<CommentsScreen> {
   late Future<PostUserDTO> _userFuture;
-  late Future<void> _postsFuture;
+  late Future<List<PostGetDTO>> _postsFuture;
+  final PostService _postService = PostService();
 
   @override
   void initState() {
     super.initState();
-    _userFuture = PostService().fetchPostUserData();
-    _postsFuture = _fetchPosts();
+    _userFuture = _postService.fetchPostUserData();
+    _postsFuture = _postService.fetchPosts();
   }
 
-  Future<void> _fetchPosts() async {
-    try {
-      final List<postData> posts = await RestAPI.fetchPosts();
-      Provider.of<CommentService>(context, listen: false).setPosts(posts);
-    } catch (e) {
-      print('Failed to fetch posts: $e');
-    }
+  Future<void> _refreshPosts() async {
+    setState(() {
+      _postsFuture = _postService.fetchPosts();
+    });
   }
 
   void _navigateToCreatePost() {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (context) => CreatePostScreen(onPostCreated: (newPost) {
-        Provider.of<CommentService>(context, listen: false)
-            .addPost(postData.fromJson(newPost));
-      }),
-    ));
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute(
+            builder: (context) => const CreatePostScreen(),
+          ),
+        )
+        .then((_) => _refreshPosts());
+  }
+
+  void _navigateToPostDetail(String postId) {
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute(
+            builder: (context) => PostDetailScreen(postId: postId),
+          ),
+        )
+        .then((_) => _refreshPosts());
   }
 
   Widget _buildCreatePostSection(PostUserDTO user) {
@@ -57,7 +65,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
         children: [
           CircleAvatar(
             backgroundImage: NetworkImage(
-                user.profileImage ?? 'https://via.placeholder.com/150'),
+              user.profileImage ?? 'https://via.placeholder.com/150',
+            ),
             radius: 25,
           ),
           const SizedBox(width: 10),
@@ -82,10 +91,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
                       borderRadius: BorderRadius.circular(20.0),
                     ),
                   ),
-                  child: const Text(
-                    '글 작성하기',
-                    style: TextStyle(color: Colors.black54),
-                  ),
+                  child: const Text('글 작성하기',
+                      style: TextStyle(color: Colors.black54)),
                 ),
               ),
             ),
@@ -98,7 +105,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
   @override
   Widget build(BuildContext context) {
     final commentService = Provider.of<CommentService>(context);
-    final posts = commentService.posts;
 
     return Scaffold(
       appBar: AppBar(
@@ -119,68 +125,65 @@ class _CommentsScreenState extends State<CommentsScreen> {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            FutureBuilder<PostUserDTO>(
-              future: _userFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                } else if (!snapshot.hasData) {
-                  return const Center(child: Text('Failed to load user data'));
-                } else {
-                  final user = snapshot.data!;
-                  return _buildCreatePostSection(user);
-                }
-              },
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: FutureBuilder<void>(
-                future: _postsFuture,
+      body: RefreshIndicator(
+        onRefresh: _refreshPosts,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              FutureBuilder<PostUserDTO>(
+                future: _userFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
+                  } else if (!snapshot.hasData) {
+                    return const Center(
+                        child: Text('Failed to load user data'));
                   } else {
-                    return ListView.builder(
-                      itemCount: posts.length,
-                      itemBuilder: (context, index) {
-                        return PostCard(
-                          post: posts[index],
-                          isLiked:
-                              commentService.isPostLiked(posts[index].postId),
-                          onLikePressed: () {
-                            commentService.toggleLike(posts[index].postId);
-                          },
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) => PostDetailScreen(
-                                post: posts[index],
-                                postIndex: index,
-                                onPostUpdated: (updatedPost) {
-                                  commentService.setPosts([
-                                    ...posts.sublist(0, index),
-                                    updatedPost,
-                                    ...posts.sublist(index + 1)
-                                  ]);
-                                },
-                              ),
-                            ));
-                          },
-                        );
-                      },
-                    );
+                    final user = snapshot.data!;
+                    return _buildCreatePostSection(user);
                   }
                 },
               ),
-            ),
-          ],
+              const SizedBox(height: 20),
+              Expanded(
+                child: FutureBuilder<List<PostGetDTO>>(
+                  future: _postsFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text('No posts available'));
+                    } else {
+                      final posts = snapshot.data!;
+                      return ListView.builder(
+                        itemCount: posts.length,
+                        itemBuilder: (context, index) {
+                          return PostCard(
+                            post: posts[index],
+                            isLiked:
+                                commentService.isPostLiked(posts[index].postId.toString()),
+                            onLikePressed: () async {
+                              await commentService
+                                  .toggleLike(posts[index].postId.toString());
+                              setState(() {});
+                            },
+                            onTap: () {
+                              _navigateToPostDetail(posts[index].postId.toString());
+                            },
+                          );
+                        },
+                      );
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

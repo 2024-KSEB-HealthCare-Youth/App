@@ -78,7 +78,7 @@ Widget buildCreatePostSection(VoidCallback onTap, UserData user) {
 }
 
 Widget buildPostDetail(
-    postData post, bool isLiked, VoidCallback onLikePressed) {
+    PostData post, bool isLiked, VoidCallback onLikePressed) {
   return Padding(
     padding: const EdgeInsets.symmetric(vertical: 8.0),
     child: Row(
@@ -102,7 +102,7 @@ Widget buildPostDetail(
                 ),
               ),
               Text(
-                DateFormat('dd/MM/yyyy').format(post.postDate),
+                DateFormat('dd/MM/yyyy').format(post.createdAt),
                 style: TextStyle(
                   color: Colors.grey[600],
                   fontSize: 12,

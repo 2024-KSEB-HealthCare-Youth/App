@@ -7,12 +7,7 @@ import '../data/dtos/edit_user_dto.dart';
 
 class UserService {
   Future<MyPageDTO> fetchMyPageDTO() async {
-    final prefs = await SharedPreferences.getInstance();
-    final loginId = prefs.getString('loginId');
-    if (loginId == null) {
-      throw Exception('No login ID found');
-    }
-    final userData = await RestAPI.fetchUserData(loginId);
+    final userData = await RestAPI.fetchUserData();
     final aiData = await RestAPI.fetchAiData();
     return MyPageDTO(
       age: userData.age,
@@ -29,11 +24,7 @@ class UserService {
 
   // Fetch user data to be edited
   Future<EditUserDTO> fetchEditUserData() async {
-    final loginId = await RestAPI.getLoginId();
-    if (loginId == null) {
-      throw Exception('No login ID found');
-    }
-    final userData = await RestAPI.fetchUserData(loginId);
+    final userData = await RestAPI.fetchUserData();
     return EditUserDTO(
       name: userData.name,
       nickName: userData.nickName,
@@ -60,12 +51,7 @@ class UserService {
   }
 
   Future<RecommendDTO> fetchRecommendDTO() async {
-    final prefs = await SharedPreferences.getInstance();
-    final loginId = prefs.getString('loginId');
-    if (loginId == null) {
-      throw Exception('No login ID found');
-    }
-    final userData = await RestAPI.fetchUserData(loginId);
+    final userData = await RestAPI.fetchUserData();
     final aiData = await RestAPI.fetchAiData();
     return RecommendDTO(
       name: userData.name,

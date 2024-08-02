@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../data/models/post_data.dart';
+import 'package:myapp/data/dtos/onePostdetail_dto.dart';
 import 'package:intl/intl.dart';
 
 class PostDetailHeader extends StatelessWidget {
-  final postData post;
+  final OnepostdetailDTO post;
 
   const PostDetailHeader({Key? key, required this.post}) : super(key: key);
 
@@ -36,7 +36,7 @@ class PostDetailHeader extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  DateFormat.yMMMd().format(post.postDate),
+                  DateFormat('dd/MM/yyyy').format(post.createdAt),
                   style: TextStyle(
                     color: Colors.grey[600],
                   ),

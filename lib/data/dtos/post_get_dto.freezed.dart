@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'post_data.dart';
+part of 'post_get_dto.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,49 +14,47 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-PostData _$PostDataFromJson(Map<String, dynamic> json) {
-  return _PostData.fromJson(json);
+PostGetDTO _$PostGetDTOFromJson(Map<String, dynamic> json) {
+  return _PostGetDTO.fromJson(json);
 }
 
 /// @nodoc
-mixin _$PostData {
-  String get postId => throw _privateConstructorUsedError;
+mixin _$PostGetDTO {
+  int get postId => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
-  String get content => throw _privateConstructorUsedError;
-  int get likeCount => throw _privateConstructorUsedError;
+  int? get likeCount =>
+      throw _privateConstructorUsedError; // likeCount can be null
   Category get category => throw _privateConstructorUsedError;
   String get profileImage => throw _privateConstructorUsedError;
   String get nickName => throw _privateConstructorUsedError;
-  List<CommentData> get comments => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $PostDataCopyWith<PostData> get copyWith =>
+  $PostGetDTOCopyWith<PostGetDTO> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $PostDataCopyWith<$Res> {
-  factory $PostDataCopyWith(PostData value, $Res Function(PostData) then) =
-      _$PostDataCopyWithImpl<$Res, PostData>;
+abstract class $PostGetDTOCopyWith<$Res> {
+  factory $PostGetDTOCopyWith(
+          PostGetDTO value, $Res Function(PostGetDTO) then) =
+      _$PostGetDTOCopyWithImpl<$Res, PostGetDTO>;
   @useResult
   $Res call(
-      {String postId,
+      {int postId,
       String title,
-      String content,
-      int likeCount,
+      int? likeCount,
       Category category,
       String profileImage,
       String nickName,
-      List<CommentData> comments,
       DateTime createdAt});
 }
 
 /// @nodoc
-class _$PostDataCopyWithImpl<$Res, $Val extends PostData>
-    implements $PostDataCopyWith<$Res> {
-  _$PostDataCopyWithImpl(this._value, this._then);
+class _$PostGetDTOCopyWithImpl<$Res, $Val extends PostGetDTO>
+    implements $PostGetDTOCopyWith<$Res> {
+  _$PostGetDTOCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -68,31 +66,25 @@ class _$PostDataCopyWithImpl<$Res, $Val extends PostData>
   $Res call({
     Object? postId = null,
     Object? title = null,
-    Object? content = null,
-    Object? likeCount = null,
+    Object? likeCount = freezed,
     Object? category = null,
     Object? profileImage = null,
     Object? nickName = null,
-    Object? comments = null,
     Object? createdAt = null,
   }) {
     return _then(_value.copyWith(
       postId: null == postId
           ? _value.postId
           : postId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      content: null == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      likeCount: null == likeCount
+      likeCount: freezed == likeCount
           ? _value.likeCount
           : likeCount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
@@ -105,10 +97,6 @@ class _$PostDataCopyWithImpl<$Res, $Val extends PostData>
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
               as String,
-      comments: null == comments
-          ? _value.comments
-          : comments // ignore: cast_nullable_to_non_nullable
-              as List<CommentData>,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -118,31 +106,29 @@ class _$PostDataCopyWithImpl<$Res, $Val extends PostData>
 }
 
 /// @nodoc
-abstract class _$$PostDataImplCopyWith<$Res>
-    implements $PostDataCopyWith<$Res> {
-  factory _$$PostDataImplCopyWith(
-          _$PostDataImpl value, $Res Function(_$PostDataImpl) then) =
-      __$$PostDataImplCopyWithImpl<$Res>;
+abstract class _$$PostGetDTOImplCopyWith<$Res>
+    implements $PostGetDTOCopyWith<$Res> {
+  factory _$$PostGetDTOImplCopyWith(
+          _$PostGetDTOImpl value, $Res Function(_$PostGetDTOImpl) then) =
+      __$$PostGetDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
-      {String postId,
+      {int postId,
       String title,
-      String content,
-      int likeCount,
+      int? likeCount,
       Category category,
       String profileImage,
       String nickName,
-      List<CommentData> comments,
       DateTime createdAt});
 }
 
 /// @nodoc
-class __$$PostDataImplCopyWithImpl<$Res>
-    extends _$PostDataCopyWithImpl<$Res, _$PostDataImpl>
-    implements _$$PostDataImplCopyWith<$Res> {
-  __$$PostDataImplCopyWithImpl(
-      _$PostDataImpl _value, $Res Function(_$PostDataImpl) _then)
+class __$$PostGetDTOImplCopyWithImpl<$Res>
+    extends _$PostGetDTOCopyWithImpl<$Res, _$PostGetDTOImpl>
+    implements _$$PostGetDTOImplCopyWith<$Res> {
+  __$$PostGetDTOImplCopyWithImpl(
+      _$PostGetDTOImpl _value, $Res Function(_$PostGetDTOImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -150,31 +136,25 @@ class __$$PostDataImplCopyWithImpl<$Res>
   $Res call({
     Object? postId = null,
     Object? title = null,
-    Object? content = null,
-    Object? likeCount = null,
+    Object? likeCount = freezed,
     Object? category = null,
     Object? profileImage = null,
     Object? nickName = null,
-    Object? comments = null,
     Object? createdAt = null,
   }) {
-    return _then(_$PostDataImpl(
+    return _then(_$PostGetDTOImpl(
       postId: null == postId
           ? _value.postId
           : postId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      content: null == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      likeCount: null == likeCount
+      likeCount: freezed == likeCount
           ? _value.likeCount
           : likeCount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
@@ -187,10 +167,6 @@ class __$$PostDataImplCopyWithImpl<$Res>
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
               as String,
-      comments: null == comments
-          ? _value._comments
-          : comments // ignore: cast_nullable_to_non_nullable
-              as List<CommentData>,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -201,60 +177,47 @@ class __$$PostDataImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$PostDataImpl implements _PostData {
-  const _$PostDataImpl(
+class _$PostGetDTOImpl implements _PostGetDTO {
+  _$PostGetDTOImpl(
       {required this.postId,
       required this.title,
-      required this.content,
       required this.likeCount,
       required this.category,
       required this.profileImage,
       required this.nickName,
-      required final List<CommentData> comments,
-      required this.createdAt})
-      : _comments = comments;
+      required this.createdAt});
 
-  factory _$PostDataImpl.fromJson(Map<String, dynamic> json) =>
-      _$$PostDataImplFromJson(json);
+  factory _$PostGetDTOImpl.fromJson(Map<String, dynamic> json) =>
+      _$$PostGetDTOImplFromJson(json);
 
   @override
-  final String postId;
+  final int postId;
   @override
   final String title;
   @override
-  final String content;
-  @override
-  final int likeCount;
+  final int? likeCount;
+// likeCount can be null
   @override
   final Category category;
   @override
   final String profileImage;
   @override
   final String nickName;
-  final List<CommentData> _comments;
-  @override
-  List<CommentData> get comments {
-    if (_comments is EqualUnmodifiableListView) return _comments;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_comments);
-  }
-
   @override
   final DateTime createdAt;
 
   @override
   String toString() {
-    return 'PostData(postId: $postId, title: $title, content: $content, likeCount: $likeCount, category: $category, profileImage: $profileImage, nickName: $nickName, comments: $comments, createdAt: $createdAt)';
+    return 'PostGetDTO(postId: $postId, title: $title, likeCount: $likeCount, category: $category, profileImage: $profileImage, nickName: $nickName, createdAt: $createdAt)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PostDataImpl &&
+            other is _$PostGetDTOImpl &&
             (identical(other.postId, postId) || other.postId == postId) &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.content, content) || other.content == content) &&
             (identical(other.likeCount, likeCount) ||
                 other.likeCount == likeCount) &&
             (identical(other.category, category) ||
@@ -263,74 +226,58 @@ class _$PostDataImpl implements _PostData {
                 other.profileImage == profileImage) &&
             (identical(other.nickName, nickName) ||
                 other.nickName == nickName) &&
-            const DeepCollectionEquality().equals(other._comments, _comments) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      postId,
-      title,
-      content,
-      likeCount,
-      category,
-      profileImage,
-      nickName,
-      const DeepCollectionEquality().hash(_comments),
-      createdAt);
+  int get hashCode => Object.hash(runtimeType, postId, title, likeCount,
+      category, profileImage, nickName, createdAt);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$PostDataImplCopyWith<_$PostDataImpl> get copyWith =>
-      __$$PostDataImplCopyWithImpl<_$PostDataImpl>(this, _$identity);
+  _$$PostGetDTOImplCopyWith<_$PostGetDTOImpl> get copyWith =>
+      __$$PostGetDTOImplCopyWithImpl<_$PostGetDTOImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$PostDataImplToJson(
+    return _$$PostGetDTOImplToJson(
       this,
     );
   }
 }
 
-abstract class _PostData implements PostData {
-  const factory _PostData(
-      {required final String postId,
+abstract class _PostGetDTO implements PostGetDTO {
+  factory _PostGetDTO(
+      {required final int postId,
       required final String title,
-      required final String content,
-      required final int likeCount,
+      required final int? likeCount,
       required final Category category,
       required final String profileImage,
       required final String nickName,
-      required final List<CommentData> comments,
-      required final DateTime createdAt}) = _$PostDataImpl;
+      required final DateTime createdAt}) = _$PostGetDTOImpl;
 
-  factory _PostData.fromJson(Map<String, dynamic> json) =
-      _$PostDataImpl.fromJson;
+  factory _PostGetDTO.fromJson(Map<String, dynamic> json) =
+      _$PostGetDTOImpl.fromJson;
 
   @override
-  String get postId;
+  int get postId;
   @override
   String get title;
   @override
-  String get content;
-  @override
-  int get likeCount;
-  @override
+  int? get likeCount;
+  @override // likeCount can be null
   Category get category;
   @override
   String get profileImage;
   @override
   String get nickName;
   @override
-  List<CommentData> get comments;
-  @override
   DateTime get createdAt;
   @override
   @JsonKey(ignore: true)
-  _$$PostDataImplCopyWith<_$PostDataImpl> get copyWith =>
+  _$$PostGetDTOImplCopyWith<_$PostGetDTOImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

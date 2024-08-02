@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import '../widgets/custom_button.dart';
 import '../../data/dtos/post_dto.dart';
 import '../../data/dtos/post_user_dto.dart';
 import '../../services/post_service.dart';
 
 class CreatePostScreen extends StatefulWidget {
-  final Function(Map<String, dynamic>) onPostCreated;
-
-  const CreatePostScreen({Key? key, required this.onPostCreated})
-      : super(key: key);
+  const CreatePostScreen({Key? key}) : super(key: key);
 
   @override
   _CreatePostScreenState createState() => _CreatePostScreenState();
@@ -53,7 +49,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         final success = await _postService.createPost(postDto);
 
         if (success) {
-          widget.onPostCreated(postDto.toJson());
           Navigator.of(context).pop();
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -157,9 +152,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             ),
             const SizedBox(height: 20),
             Center(
-              child: CustomButton(
-                text: 'SUBMIT',
+              child: ElevatedButton(
                 onPressed: _submitPost,
+                child: const Text('SUBMIT'),
               ),
             ),
           ],

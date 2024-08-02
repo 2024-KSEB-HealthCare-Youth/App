@@ -7,22 +7,19 @@ part 'post_data.g.dart';
 enum Category { FREE }
 
 @freezed
-class postData with _$postData {
-  const factory postData({
+class PostData with _$PostData {
+  const factory PostData({
     required String postId,
     required String title,
     required String content,
     required int likeCount,
-    required int commentCount,
-    required int viewCount,
     required Category category,
-    required String memberId,
     required String profileImage,
-    required DateTime postDate,
     required String nickName,
     required List<CommentData> comments,
-  }) = _postData;
+    required DateTime createdAt,
+  }) = _PostData;
 
-  factory postData.fromJson(Map<String, dynamic> json) =>
-      _$postDataFromJson(json);
+  factory PostData.fromJson(Map<String, dynamic> json) =>
+      _$PostDataFromJson(json);
 }

@@ -6,11 +6,11 @@ part 'comment_data.g.dart';
 @freezed
 class CommentData with _$CommentData {
   const factory CommentData({
-    required String name,
-    required String date,
-    required String comment,
-    required int likes,
-    required String commentImage,
+    required String postId,
+    required String nickName,
+    required String profileImage,
+    required String content,
+    required DateTime createdAt,
   }) = _CommentData;
 
   factory CommentData.fromJson(Map<String, dynamic> json) =>

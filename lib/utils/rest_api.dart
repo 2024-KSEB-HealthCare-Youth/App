@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as dio;
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -10,8 +10,11 @@ import '../data/models/result_data.dart';
 import '../data/models/ai_data.dart';
 import '../data/models/past_data.dart';
 import '../data/models/post_data.dart';
-import '../data/models/comment_data.dart';
+import '../data/dtos/comment_dto.dart';
 import '../data/dtos/login_dto.dart';
+import '../data/dtos/comment_get_dto.dart';
+import '../data/dtos/post_get_dto.dart';
+import '../data/dtos/onePostdetail_dto.dart';
 
 class RestAPI {
   static const String baseUrl = 'http://52.79.103.61:8080';
@@ -21,14 +24,14 @@ class RestAPI {
   };
   static final FlutterSecureStorage storage = FlutterSecureStorage();
   static final CookieJar cookieJar = CookieJar();
-  static final Dio dio = Dio(BaseOptions(
+  static final dio.Dio dioClient = dio.Dio(dio.BaseOptions(
     baseUrl: baseUrl,
     headers: headers,
   ))
     ..interceptors.add(CookieManager(cookieJar));
 
   // Flask 서버와 통신을 위한 별도의 Dio 인스턴스
-  static final Dio flaskDio = Dio(BaseOptions(
+  static final dio.Dio flaskDio = dio.Dio(dio.BaseOptions(
     baseUrl: flaskUrl,
     headers: headers,
   ));
@@ -52,13 +55,13 @@ class RestAPI {
     await cookieJar.deleteAll();
   }
 
-  // Login method
+
   static Future<void> login(LoginDTO loginDTO) async {
     final requestBody = jsonEncode(loginDTO.toJson());
     print('Request body: $requestBody');
 
     try {
-      final response = await dio.post(
+      final response = await dioClient.post(
         '/login',
         data: requestBody,
       );
@@ -68,12 +71,31 @@ class RestAPI {
 
       if (response.statusCode == 200) {
         await saveLoginId(loginDTO.loginId);
+
+        // 응답에서 Authorization 헤더 추출
+        final authorizationHeader = response.headers['authorization']?.first;
+        if (authorizationHeader != null) {
+          final accessToken = authorizationHeader.replaceFirst('Bearer ', '');
+          await storage.write(key: 'access_token', value: accessToken);
+        }
+
+        // 응답에서 set-cookie 헤더 추출
+        final setCookieHeader = response.headers['set-cookie']?.first;
+        if (setCookieHeader != null) {
+          final refreshToken = setCookieHeader.split(';').firstWhere(
+                  (part) => part.trim().startsWith('refresh='),
+              orElse: () => '').replaceFirst('refresh=', '');
+          if (refreshToken.isNotEmpty) {
+            await storage.write(key: 'refresh_token', value: refreshToken);
+          }
+        }
+
         print('Login successful.');
       } else {
         throw Exception('Failed to log in: ${response.statusMessage}');
       }
     } catch (e) {
-      if (e is DioError && e.response?.statusCode == 401) {
+      if (e is dio.DioError && e.response?.statusCode == 401) {
         print('Login failed: Invalid credentials');
       } else {
         print('Login failed: $e');
@@ -82,16 +104,36 @@ class RestAPI {
     }
   }
 
-  static Future<UserData> fetchUserData(String memberId) async {
+  static Future<UserData> fetchUserData() async {
     try {
-      final response = await dio.get('/members/$memberId');
+      // 저장된 액세스 토큰을 읽어옴
+      final token = await storage.read(key: 'access_token');
+      if (token == null) {
+        throw Exception('No access token found');
+      }
+
+      final response = await dioClient.get(
+        '/members/me',
+        options: dio.Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.data}');
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = response.data;
-        final user = UserData.fromJson(responseData['results'][0]);
-        return user;
+        // Ensure the response format is as expected
+        if (response.data is Map<String, dynamic> &&
+            response.data['results'] is List &&
+            response.data['results'].isNotEmpty) {
+          final Map<String, dynamic> responseData = response.data;
+          final user = UserData.fromJson(responseData['results'][0]);
+          return user;
+        } else {
+          throw Exception('Unexpected response format');
+        }
       } else {
         throw Exception('Failed to fetch user data: ${response.statusMessage}');
       }
@@ -104,8 +146,17 @@ class RestAPI {
   // Fetch result data
   static Future<ResultData> fetchResultData(String resultId) async {
     try {
-      final response = await dio.get(
+      final token = await storage.read(key: 'access_token');
+      if (token == null) {
+        throw Exception('No access token found');
+      }
+      final response = await dioClient.get(
         '/results/$resultId',
+        options: dio.Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          }
+        )
       );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.data}');
@@ -129,7 +180,7 @@ class RestAPI {
     print('Request body: $requestBody');
 
     try {
-      final response = await dio.post(
+      final response = await dioClient.post(
         '/members/join',
         data: requestBody,
       );
@@ -153,7 +204,7 @@ class RestAPI {
     print('Request body: $requestBody');
 
     try {
-      final response = await dio.put(
+      final response = await dioClient.put(
         '/members/$memberId',
         data: requestBody,
       );
@@ -173,7 +224,7 @@ class RestAPI {
   // Fetch past data
   static Future<PastData> fetchPastData(String userId) async {
     try {
-      final response = await dio.get(
+      final response = await dioClient.get(
         '/results/lists',
       );
 
@@ -191,7 +242,7 @@ class RestAPI {
   // Fecth past log by result id & result date
   static Future<ResultData> fetchPast_Result(String resultId) async {
     try {
-      final response = await dio.get(
+      final response = await dioClient.get(
         '/results/$resultId',
       );
       if (response.statusCode == 200) {
@@ -206,23 +257,47 @@ class RestAPI {
     }
   }
 
-  //fetch postdata
-  static Future<List<postData>> fetchPosts() async {
+  static Future<OnepostdetailDTO> fetchPostById(String postId) async {
     try {
-      final response = await dio.get(
-        '/posts',
-      );
+      final token = await storage.read(key: 'access_token');
+      final response = await dioClient.get('/posts/$postId',
+          options: dio.Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+          ),
+          ); 
       if (response.statusCode == 200) {
-        List<dynamic> jsonData = response.data;
-        List<postData> posts =
-            jsonData.map((json) => postData.fromJson(json)).toList();
-        return posts;
+        return OnepostdetailDTO.fromJson(response.data);
       } else {
-        throw Exception('Failed to load posts: ${response.statusMessage}');
+        throw Exception('Failed to load post: ${response.statusMessage}');
       }
     } catch (e) {
-      print('Fetch posts failed: $e');
-      throw Exception('Fetch posts failed: $e');
+      print('Fetch post failed: $e');
+      throw Exception('Fetch post failed: $e');
+    }
+  }
+
+  static Future<List<PostGetDTO>> fetchPostGet() async {
+    try {
+      final response = await dioClient.get('/posts');
+      if (response.statusCode == 200) {
+        // Check if the response format is as expected
+        if (response.data is Map<String, dynamic> &&
+            response.data['results'] is List) {
+          List<dynamic> jsonData = response.data['results'];
+          List<PostGetDTO> posts =
+          jsonData.map((json) => PostGetDTO.fromJson(json)).toList();
+          return posts;
+        } else {
+          throw Exception('Unexpected response format');
+        }
+      } else {
+        throw Exception('Failed to load PostGet data: ${response.statusMessage}');
+      }
+    } catch (e) {
+      print('Fetch PostGet data failed: $e');
+      throw Exception('Fetch PostGet data failed: $e');
     }
   }
 
@@ -232,14 +307,18 @@ class RestAPI {
     print('Request body: $requestBody');
 
     try {
-      final response = await dio.post(
+      final token = await storage.read(key: 'access_token');
+      final response = await dioClient.post(
         '/posts',
         data: requestBody,
+        options: dio.Options(
+          headers: {'Authorization': 'Bearer $token',}
+        )
       );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.data}');
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         return true;
       } else {
         throw Exception('Failed to save post: ${response.statusMessage}');
@@ -252,8 +331,8 @@ class RestAPI {
 
   // Upload image to flask server
   static Future<AiData> uploadImage(String imagePath) async {
-    var formData = FormData.fromMap({
-      'file': await MultipartFile.fromFile(imagePath),
+    var formData = dio.FormData.fromMap({
+      'file': await dio.MultipartFile.fromFile(imagePath),
     });
 
     try {
@@ -278,7 +357,7 @@ class RestAPI {
   // Fetch AI data from springboot server
   static Future<AiData> fetchAiData() async {
     try {
-      final response = await dio.get('/ai-data');
+      final response = await dioClient.get('/ai-data');
       if (response.statusCode == 200) {
         return AiData.fromJson(response.data);
       } else {
@@ -291,20 +370,22 @@ class RestAPI {
   }
 
   // Add a comment to a post
-  static Future<void> addCommentToPost(
-      String postId, CommentData comment) async {
+  static Future<CommentDTO> addCommentToPost(
+      String postId, CommentDTO comment) async {
     final requestBody = jsonEncode(comment.toJson());
     print('Request body: $requestBody');
 
     try {
-      final response = await dio.post(
+      final response = await dioClient.post(
         '/posts/$postId/comments',
         data: requestBody,
       );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.data}');
 
-      if (response.statusCode != 201) {
+      if (response.statusCode == 201) {
+        return CommentDTO.fromJson(response.data);
+      } else {
         throw Exception('Failed to add comment: ${response.statusMessage}');
       }
     } catch (e) {
@@ -313,22 +394,58 @@ class RestAPI {
     }
   }
 
-  // Update like status of a post
-  static Future<void> updateLikeStatus(String postId, int likes) async {
-    final requestBody = jsonEncode({'likes': likes});
-    print('Request body: $requestBody');
-
+  // Get comments of a post
+  static Future<List<CommentGetDTO>> getComments(String postId) async {
     try {
-      final response = await dio.put(
-        '/posts/$postId/likes',
-        data: requestBody,
-      );
+      final response = await dioClient.get('/posts/$postId/comments');
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.data}');
 
+      if (response.statusCode == 200) {
+        List<dynamic> jsonData = response.data;
+        List<CommentGetDTO> comments =
+            jsonData.map((json) => CommentGetDTO.fromJson(json)).toList();
+        return comments;
+      } else {
+        throw Exception('Failed to load comments: ${response.statusMessage}');
+      }
+    } catch (e) {
+      print('Get comments failed: $e');
+      throw Exception('Get comments failed: $e');
+    }
+  }
+
+  static Future<void> removeLikeStatus(String token) async {
+    try {
+      final response = await dioClient.delete(
+        '/posts/likes',
+        options: dio.Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
       if (response.statusCode != 200) {
-        throw Exception(
-            'Failed to update like status: ${response.statusMessage}');
+        throw Exception('Failed to remove like status: ${response.statusMessage}');
+      }
+    } catch (e) {
+      print('Remove like status failed: $e');
+      throw Exception('Remove like status failed: $e');
+    }
+  }
+
+  static Future<void> updateLikeStatus(String token) async {
+    try {
+      final response = await dioClient.put(
+        '/posts/likes',
+        options: dio.Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+      if (response.statusCode != 200) {
+        throw Exception('Failed to update like status: ${response.statusMessage}');
       }
     } catch (e) {
       print('Update like status failed: $e');

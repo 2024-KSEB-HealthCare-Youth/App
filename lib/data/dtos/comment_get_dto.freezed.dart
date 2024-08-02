@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'comment_data.dart';
+part of 'comment_get_dto.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,13 +14,12 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-CommentData _$CommentDataFromJson(Map<String, dynamic> json) {
-  return _CommentData.fromJson(json);
+CommentGetDTO _$CommentGetDTOFromJson(Map<String, dynamic> json) {
+  return _CommentGetDTO.fromJson(json);
 }
 
 /// @nodoc
-mixin _$CommentData {
-  String get postId => throw _privateConstructorUsedError;
+mixin _$CommentGetDTO {
   String get nickName => throw _privateConstructorUsedError;
   String get profileImage => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
@@ -28,28 +27,27 @@ mixin _$CommentData {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $CommentDataCopyWith<CommentData> get copyWith =>
+  $CommentGetDTOCopyWith<CommentGetDTO> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $CommentDataCopyWith<$Res> {
-  factory $CommentDataCopyWith(
-          CommentData value, $Res Function(CommentData) then) =
-      _$CommentDataCopyWithImpl<$Res, CommentData>;
+abstract class $CommentGetDTOCopyWith<$Res> {
+  factory $CommentGetDTOCopyWith(
+          CommentGetDTO value, $Res Function(CommentGetDTO) then) =
+      _$CommentGetDTOCopyWithImpl<$Res, CommentGetDTO>;
   @useResult
   $Res call(
-      {String postId,
-      String nickName,
+      {String nickName,
       String profileImage,
       String content,
       DateTime createdAt});
 }
 
 /// @nodoc
-class _$CommentDataCopyWithImpl<$Res, $Val extends CommentData>
-    implements $CommentDataCopyWith<$Res> {
-  _$CommentDataCopyWithImpl(this._value, this._then);
+class _$CommentGetDTOCopyWithImpl<$Res, $Val extends CommentGetDTO>
+    implements $CommentGetDTOCopyWith<$Res> {
+  _$CommentGetDTOCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -59,17 +57,12 @@ class _$CommentDataCopyWithImpl<$Res, $Val extends CommentData>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? postId = null,
     Object? nickName = null,
     Object? profileImage = null,
     Object? content = null,
     Object? createdAt = null,
   }) {
     return _then(_value.copyWith(
-      postId: null == postId
-          ? _value.postId
-          : postId // ignore: cast_nullable_to_non_nullable
-              as String,
       nickName: null == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
@@ -91,43 +84,37 @@ class _$CommentDataCopyWithImpl<$Res, $Val extends CommentData>
 }
 
 /// @nodoc
-abstract class _$$CommentDataImplCopyWith<$Res>
-    implements $CommentDataCopyWith<$Res> {
-  factory _$$CommentDataImplCopyWith(
-          _$CommentDataImpl value, $Res Function(_$CommentDataImpl) then) =
-      __$$CommentDataImplCopyWithImpl<$Res>;
+abstract class _$$CommentGetDTOImplCopyWith<$Res>
+    implements $CommentGetDTOCopyWith<$Res> {
+  factory _$$CommentGetDTOImplCopyWith(
+          _$CommentGetDTOImpl value, $Res Function(_$CommentGetDTOImpl) then) =
+      __$$CommentGetDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
-      {String postId,
-      String nickName,
+      {String nickName,
       String profileImage,
       String content,
       DateTime createdAt});
 }
 
 /// @nodoc
-class __$$CommentDataImplCopyWithImpl<$Res>
-    extends _$CommentDataCopyWithImpl<$Res, _$CommentDataImpl>
-    implements _$$CommentDataImplCopyWith<$Res> {
-  __$$CommentDataImplCopyWithImpl(
-      _$CommentDataImpl _value, $Res Function(_$CommentDataImpl) _then)
+class __$$CommentGetDTOImplCopyWithImpl<$Res>
+    extends _$CommentGetDTOCopyWithImpl<$Res, _$CommentGetDTOImpl>
+    implements _$$CommentGetDTOImplCopyWith<$Res> {
+  __$$CommentGetDTOImplCopyWithImpl(
+      _$CommentGetDTOImpl _value, $Res Function(_$CommentGetDTOImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? postId = null,
     Object? nickName = null,
     Object? profileImage = null,
     Object? content = null,
     Object? createdAt = null,
   }) {
-    return _then(_$CommentDataImpl(
-      postId: null == postId
-          ? _value.postId
-          : postId // ignore: cast_nullable_to_non_nullable
-              as String,
+    return _then(_$CommentGetDTOImpl(
       nickName: null == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
@@ -150,19 +137,16 @@ class __$$CommentDataImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$CommentDataImpl implements _CommentData {
-  const _$CommentDataImpl(
-      {required this.postId,
-      required this.nickName,
+class _$CommentGetDTOImpl implements _CommentGetDTO {
+  const _$CommentGetDTOImpl(
+      {required this.nickName,
       required this.profileImage,
       required this.content,
       required this.createdAt});
 
-  factory _$CommentDataImpl.fromJson(Map<String, dynamic> json) =>
-      _$$CommentDataImplFromJson(json);
+  factory _$CommentGetDTOImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CommentGetDTOImplFromJson(json);
 
-  @override
-  final String postId;
   @override
   final String nickName;
   @override
@@ -174,15 +158,14 @@ class _$CommentDataImpl implements _CommentData {
 
   @override
   String toString() {
-    return 'CommentData(postId: $postId, nickName: $nickName, profileImage: $profileImage, content: $content, createdAt: $createdAt)';
+    return 'CommentGetDTO(nickName: $nickName, profileImage: $profileImage, content: $content, createdAt: $createdAt)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$CommentDataImpl &&
-            (identical(other.postId, postId) || other.postId == postId) &&
+            other is _$CommentGetDTOImpl &&
             (identical(other.nickName, nickName) ||
                 other.nickName == nickName) &&
             (identical(other.profileImage, profileImage) ||
@@ -194,36 +177,33 @@ class _$CommentDataImpl implements _CommentData {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, postId, nickName, profileImage, content, createdAt);
+  int get hashCode =>
+      Object.hash(runtimeType, nickName, profileImage, content, createdAt);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$CommentDataImplCopyWith<_$CommentDataImpl> get copyWith =>
-      __$$CommentDataImplCopyWithImpl<_$CommentDataImpl>(this, _$identity);
+  _$$CommentGetDTOImplCopyWith<_$CommentGetDTOImpl> get copyWith =>
+      __$$CommentGetDTOImplCopyWithImpl<_$CommentGetDTOImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$CommentDataImplToJson(
+    return _$$CommentGetDTOImplToJson(
       this,
     );
   }
 }
 
-abstract class _CommentData implements CommentData {
-  const factory _CommentData(
-      {required final String postId,
-      required final String nickName,
+abstract class _CommentGetDTO implements CommentGetDTO {
+  const factory _CommentGetDTO(
+      {required final String nickName,
       required final String profileImage,
       required final String content,
-      required final DateTime createdAt}) = _$CommentDataImpl;
+      required final DateTime createdAt}) = _$CommentGetDTOImpl;
 
-  factory _CommentData.fromJson(Map<String, dynamic> json) =
-      _$CommentDataImpl.fromJson;
+  factory _CommentGetDTO.fromJson(Map<String, dynamic> json) =
+      _$CommentGetDTOImpl.fromJson;
 
-  @override
-  String get postId;
   @override
   String get nickName;
   @override
@@ -234,6 +214,6 @@ abstract class _CommentData implements CommentData {
   DateTime get createdAt;
   @override
   @JsonKey(ignore: true)
-  _$$CommentDataImplCopyWith<_$CommentDataImpl> get copyWith =>
+  _$$CommentGetDTOImplCopyWith<_$CommentGetDTOImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
