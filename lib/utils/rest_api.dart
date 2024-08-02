@@ -10,7 +10,7 @@ import '../data/models/ai_data.dart';
 import '../data/models/past_data.dart';
 import '../data/dtos/comment_dto.dart';
 import '../data/dtos/login_dto.dart';
-import '../data/dtos/comment_get_dto.dart';
+import '../data/dtos/recommend_dto.dart';
 import '../data/dtos/post_get_dto.dart';
 import '../data/dtos/onePostdetail_dto.dart';
 
@@ -349,9 +349,36 @@ class RestAPI {
     }
   }
 
+  Future<void> sendDataToServer(AiData aiData) async {
+    try {
+      final token = await storage.read(key: 'access_token');
+      final response = await dioClient.post(
+        '/receive-data',
+        data: aiData.toJson(),
+        options: dio.Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+      if (response.statusCode == 200) {
+        print('Data sent successfully.');
+      } else {
+        print('Data sending failed.');
+        throw Exception('Failed to send data: ${response.statusMessage}');
+      }
+    } catch (e) {
+      print('Data sending failed: $e');
+      throw Exception('Data sending failed: $e');
+    }
+  }
+
   static Future<AiData> fetchAiData() async {
     try {
-      final response = await dioClient.get('/ai-data');
+      final token = await storage.read(key: 'access_token');
+      final response = await dioClient.get('/ai-data',
+        options: dio.Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
       if (response.statusCode == 200) {
         return AiData.fromJson(response.data);
       } else {

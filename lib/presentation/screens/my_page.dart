@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import '../../data/dtos/my_page_dto.dart';
 import '../../services/user_service.dart';
@@ -6,6 +8,10 @@ import '../widgets/profile_detail.dart';
 
 class MyPage extends StatelessWidget {
   const MyPage({super.key});
+
+  Uint8List decodeBase64Image(String base64String) {
+    return base64Decode(base64String);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +51,10 @@ class MyPage extends StatelessWidget {
             return const Center(child: Text('No data found'));
           } else {
             final data = snapshot.data!;
+            Uint8List? decodedImage;
+            if (data.resultPath != null && data.resultPath!.isNotEmpty) {
+              decodedImage = decodeBase64Image(data.resultPath!);
+            }
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: SingleChildScrollView(
@@ -59,8 +69,8 @@ class MyPage extends StatelessWidget {
                           backgroundImage: data.profileImage != null
                               ? NetworkImage(data.profileImage!)
                               : const AssetImage(
-                                      'assets/images/default_profile.png')
-                                  as ImageProvider,
+                              'assets/images/default_profile.png')
+                          as ImageProvider,
                         ),
                         const SizedBox(width: 16),
                         Expanded(
@@ -121,8 +131,8 @@ class MyPage extends StatelessWidget {
                           color: const Color(0xFFD9D9D9),
                           shape: StarBorder.polygon(sides: 6),
                         ),
-                        child: data.resultPath.isNotEmpty
-                            ? Image.network(data.resultPath)
+                        child: decodedImage != null
+                            ? Image.memory(decodedImage)
                             : const Icon(Icons.image_not_supported),
                       ),
                     ),

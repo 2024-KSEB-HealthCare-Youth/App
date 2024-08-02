@@ -18,7 +18,7 @@ class UserService {
       phoneNumber: userData.phoneNumber ?? '',
       loginId: userData.loginId,
       simpleSkin: aiData.simpleSkin,
-      resultPath: aiData.resultPath,
+      resultPath: aiData.resultImage,
     );
   }
 

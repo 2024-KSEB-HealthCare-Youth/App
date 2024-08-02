@@ -12,6 +12,7 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
+  final RestAPI _restAPI = RestAPI();
   @override
   void initState() {
     super.initState();
@@ -22,13 +23,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
     try {
       // Upload the image and fetch AI data
       AiData aiData = await RestAPI.uploadImage(widget.imagePath);
-
+      await _restAPI.sendDataToServer(aiData);
       // Navigate to MyPage with the received AI data and image path
       Navigator.of(context).pushReplacementNamed(
         '/my_page',
-        arguments: {
-          'aiData': aiData,
-        },
       );
     } catch (e) {
       // Handle error
