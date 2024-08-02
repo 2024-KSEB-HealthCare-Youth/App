@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../models/user_data.dart';
+import '../../data/models/user_data.dart';
 import '../utils/rest_api.dart';
 import '../main.dart'; // 필요한 경우 import 추가
+import '../data/dtos/login_dto.dart';
 
 class AuthService {
   Future<void> signUp(BuildContext context, UserData userData) async {
@@ -32,18 +33,9 @@ class AuthService {
     }
   }
 
-  Future<void> login(
-      BuildContext context, String loginId, String password) async {
-    try {
-      await RestAPI.login(loginId, password);
-      print('Login successful');
-      Navigator.pushNamed(context, Routes.mainPage);
-    } catch (e) {
-      print('Login failed: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login failed: $e')),
-      );
-    }
+  Future<void> login(String loginId, String password) async {
+    final loginDTO = LoginDTO(loginId: loginId, password: password);
+    await RestAPI.login(loginDTO);
   }
 
   Future<void> logout(BuildContext context) async {
@@ -56,22 +48,6 @@ class AuthService {
       print('Logout failed: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Logout failed: $e')),
-      );
-    }
-  }
-
-  Future<void> updateUser(
-      BuildContext context, UserData userData, String userId) async {
-    try {
-      await RestAPI.updateUserData(userData, userId);
-      print('User data updated successfully');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('User data updated successfully')),
-      );
-    } catch (e) {
-      print('Update user data failed: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Update user data failed: $e')),
       );
     }
   }

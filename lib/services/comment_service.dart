@@ -1,48 +1,74 @@
 import 'package:flutter/material.dart';
-import '../models/comment_data.dart';
-import '../models/post_data.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:myapp/data/models/comment_data.dart';
+import 'package:myapp/utils/rest_api.dart';
+import '../data/dtos/comment_dto.dart';
+import '../data/dtos/comment_get_dto.dart';
+import '../data/models/post_data.dart';
 
 class CommentService extends ChangeNotifier {
-  final List<postData> _posts = [];
+  final List<PostData> _posts = [];
   final Set<String> _likedPosts = Set<String>();
+  final FlutterSecureStorage storage = FlutterSecureStorage();
 
-  List<postData> get posts => List.unmodifiable(_posts);
+  List<PostData> get posts => List.unmodifiable(_posts);
 
-  void setPosts(List<postData> posts) {
+  void setPosts(List<PostData> posts) {
     _posts.clear();
     _posts.addAll(posts);
     notifyListeners();
   }
 
-  void addPost(postData post) {
+  void addPost(PostData post) {
     _posts.insert(0, post);
     notifyListeners();
   }
 
-  void addComment(String postId, CommentData comment) {
+  Future<void> addComment(String postId, CommentDTO newComment) async {
+    await RestAPI.addCommentToPost(postId, newComment);
+    notifyListeners();
+  }
+
+  Future<void> fetchComments(String postId) async {
+    final comments = await RestAPI.getComments(postId);
     final postIndex = _posts.indexWhere((post) => post.postId == postId);
     if (postIndex != -1) {
-      _posts[postIndex] = _posts[postIndex].copyWith(
-        comments: List.from(_posts[postIndex].comments)..add(comment),
-        commentCount: _posts[postIndex].commentCount + 1,
-      );
+      _posts[postIndex].comments.clear();
+      _posts[postIndex].comments.addAll(comments.map((comment) => CommentData(
+        postId: postId,
+        nickName: comment.nickName,
+        createdAt: comment.createdAt,
+        content: comment.content,
+        profileImage: comment.profileImage,
+      )));
       notifyListeners();
+    } else {
+      throw Exception('Post not found');
     }
   }
 
-  void toggleLike(String postId) {
+  Future<void> toggleLike(String postId) async {
+    final token = await storage.read(key: 'access_token');
+    if (token == null) {
+      throw Exception('No access token found');
+    }
+
     final postIndex = _posts.indexWhere((post) => post.postId == postId);
     if (postIndex != -1) {
       if (_likedPosts.contains(postId)) {
         _likedPosts.remove(postId);
-        _posts[postIndex] = _posts[postIndex].copyWith(
+        final updatedPost = _posts[postIndex].copyWith(
           likeCount: _posts[postIndex].likeCount - 1,
         );
+        await RestAPI.removeLikeStatus(token); // DELETE 요청
+        _posts[postIndex] = updatedPost;
       } else {
         _likedPosts.add(postId);
-        _posts[postIndex] = _posts[postIndex].copyWith(
+        final updatedPost = _posts[postIndex].copyWith(
           likeCount: _posts[postIndex].likeCount + 1,
         );
+        await RestAPI.updateLikeStatus(token); // PUT 요청
+        _posts[postIndex] = updatedPost;
       }
       notifyListeners();
     }
