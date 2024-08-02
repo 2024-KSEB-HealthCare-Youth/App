@@ -8,7 +8,7 @@ class CommentData with _$CommentData {
   const factory CommentData({
     required String postId,
     required String nickName,
-    required String profileImage,
+    String? profileImage,
     required String content,
     required DateTime createdAt,
   }) = _CommentData;

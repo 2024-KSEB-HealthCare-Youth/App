@@ -20,8 +20,9 @@ CommentGetDTO _$CommentGetDTOFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CommentGetDTO {
+  int get postId => throw _privateConstructorUsedError;
   String get nickName => throw _privateConstructorUsedError;
-  String get profileImage => throw _privateConstructorUsedError;
+  String? get profileImage => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
 
@@ -38,8 +39,9 @@ abstract class $CommentGetDTOCopyWith<$Res> {
       _$CommentGetDTOCopyWithImpl<$Res, CommentGetDTO>;
   @useResult
   $Res call(
-      {String nickName,
-      String profileImage,
+      {int postId,
+      String nickName,
+      String? profileImage,
       String content,
       DateTime createdAt});
 }
@@ -57,20 +59,25 @@ class _$CommentGetDTOCopyWithImpl<$Res, $Val extends CommentGetDTO>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? postId = null,
     Object? nickName = null,
-    Object? profileImage = null,
+    Object? profileImage = freezed,
     Object? content = null,
     Object? createdAt = null,
   }) {
     return _then(_value.copyWith(
+      postId: null == postId
+          ? _value.postId
+          : postId // ignore: cast_nullable_to_non_nullable
+              as int,
       nickName: null == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
               as String,
-      profileImage: null == profileImage
+      profileImage: freezed == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
@@ -92,8 +99,9 @@ abstract class _$$CommentGetDTOImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String nickName,
-      String profileImage,
+      {int postId,
+      String nickName,
+      String? profileImage,
       String content,
       DateTime createdAt});
 }
@@ -109,20 +117,25 @@ class __$$CommentGetDTOImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? postId = null,
     Object? nickName = null,
-    Object? profileImage = null,
+    Object? profileImage = freezed,
     Object? content = null,
     Object? createdAt = null,
   }) {
     return _then(_$CommentGetDTOImpl(
+      postId: null == postId
+          ? _value.postId
+          : postId // ignore: cast_nullable_to_non_nullable
+              as int,
       nickName: null == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
               as String,
-      profileImage: null == profileImage
+      profileImage: freezed == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
@@ -139,8 +152,9 @@ class __$$CommentGetDTOImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CommentGetDTOImpl implements _CommentGetDTO {
   const _$CommentGetDTOImpl(
-      {required this.nickName,
-      required this.profileImage,
+      {required this.postId,
+      required this.nickName,
+      this.profileImage,
       required this.content,
       required this.createdAt});
 
@@ -148,9 +162,11 @@ class _$CommentGetDTOImpl implements _CommentGetDTO {
       _$$CommentGetDTOImplFromJson(json);
 
   @override
+  final int postId;
+  @override
   final String nickName;
   @override
-  final String profileImage;
+  final String? profileImage;
   @override
   final String content;
   @override
@@ -158,7 +174,7 @@ class _$CommentGetDTOImpl implements _CommentGetDTO {
 
   @override
   String toString() {
-    return 'CommentGetDTO(nickName: $nickName, profileImage: $profileImage, content: $content, createdAt: $createdAt)';
+    return 'CommentGetDTO(postId: $postId, nickName: $nickName, profileImage: $profileImage, content: $content, createdAt: $createdAt)';
   }
 
   @override
@@ -166,6 +182,7 @@ class _$CommentGetDTOImpl implements _CommentGetDTO {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CommentGetDTOImpl &&
+            (identical(other.postId, postId) || other.postId == postId) &&
             (identical(other.nickName, nickName) ||
                 other.nickName == nickName) &&
             (identical(other.profileImage, profileImage) ||
@@ -177,8 +194,8 @@ class _$CommentGetDTOImpl implements _CommentGetDTO {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, nickName, profileImage, content, createdAt);
+  int get hashCode => Object.hash(
+      runtimeType, postId, nickName, profileImage, content, createdAt);
 
   @JsonKey(ignore: true)
   @override
@@ -196,8 +213,9 @@ class _$CommentGetDTOImpl implements _CommentGetDTO {
 
 abstract class _CommentGetDTO implements CommentGetDTO {
   const factory _CommentGetDTO(
-      {required final String nickName,
-      required final String profileImage,
+      {required final int postId,
+      required final String nickName,
+      final String? profileImage,
       required final String content,
       required final DateTime createdAt}) = _$CommentGetDTOImpl;
 
@@ -205,9 +223,11 @@ abstract class _CommentGetDTO implements CommentGetDTO {
       _$CommentGetDTOImpl.fromJson;
 
   @override
+  int get postId;
+  @override
   String get nickName;
   @override
-  String get profileImage;
+  String? get profileImage;
   @override
   String get content;
   @override

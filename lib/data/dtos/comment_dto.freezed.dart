@@ -21,8 +21,8 @@ CommentDTO _$CommentDTOFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$CommentDTO {
   String get nickName => throw _privateConstructorUsedError;
+  String? get profileImage => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
-  String get profileImage => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +36,7 @@ abstract class $CommentDTOCopyWith<$Res> {
           CommentDTO value, $Res Function(CommentDTO) then) =
       _$CommentDTOCopyWithImpl<$Res, CommentDTO>;
   @useResult
-  $Res call({String nickName, String content, String profileImage});
+  $Res call({String nickName, String? profileImage, String content});
 }
 
 /// @nodoc
@@ -53,21 +53,21 @@ class _$CommentDTOCopyWithImpl<$Res, $Val extends CommentDTO>
   @override
   $Res call({
     Object? nickName = null,
+    Object? profileImage = freezed,
     Object? content = null,
-    Object? profileImage = null,
   }) {
     return _then(_value.copyWith(
       nickName: null == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
               as String,
+      profileImage: freezed == profileImage
+          ? _value.profileImage
+          : profileImage // ignore: cast_nullable_to_non_nullable
+              as String?,
       content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      profileImage: null == profileImage
-          ? _value.profileImage
-          : profileImage // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -81,7 +81,7 @@ abstract class _$$CommentDTOImplCopyWith<$Res>
       __$$CommentDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String nickName, String content, String profileImage});
+  $Res call({String nickName, String? profileImage, String content});
 }
 
 /// @nodoc
@@ -96,21 +96,21 @@ class __$$CommentDTOImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? nickName = null,
+    Object? profileImage = freezed,
     Object? content = null,
-    Object? profileImage = null,
   }) {
     return _then(_$CommentDTOImpl(
       nickName: null == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
               as String,
+      profileImage: freezed == profileImage
+          ? _value.profileImage
+          : profileImage // ignore: cast_nullable_to_non_nullable
+              as String?,
       content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
-              as String,
-      profileImage: null == profileImage
-          ? _value.profileImage
-          : profileImage // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -120,9 +120,7 @@ class __$$CommentDTOImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CommentDTOImpl implements _CommentDTO {
   const _$CommentDTOImpl(
-      {required this.nickName,
-      required this.content,
-      required this.profileImage});
+      {required this.nickName, this.profileImage, required this.content});
 
   factory _$CommentDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$CommentDTOImplFromJson(json);
@@ -130,13 +128,13 @@ class _$CommentDTOImpl implements _CommentDTO {
   @override
   final String nickName;
   @override
-  final String content;
+  final String? profileImage;
   @override
-  final String profileImage;
+  final String content;
 
   @override
   String toString() {
-    return 'CommentDTO(nickName: $nickName, content: $content, profileImage: $profileImage)';
+    return 'CommentDTO(nickName: $nickName, profileImage: $profileImage, content: $content)';
   }
 
   @override
@@ -146,14 +144,14 @@ class _$CommentDTOImpl implements _CommentDTO {
             other is _$CommentDTOImpl &&
             (identical(other.nickName, nickName) ||
                 other.nickName == nickName) &&
-            (identical(other.content, content) || other.content == content) &&
             (identical(other.profileImage, profileImage) ||
-                other.profileImage == profileImage));
+                other.profileImage == profileImage) &&
+            (identical(other.content, content) || other.content == content));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, nickName, content, profileImage);
+  int get hashCode => Object.hash(runtimeType, nickName, profileImage, content);
 
   @JsonKey(ignore: true)
   @override
@@ -172,8 +170,8 @@ class _$CommentDTOImpl implements _CommentDTO {
 abstract class _CommentDTO implements CommentDTO {
   const factory _CommentDTO(
       {required final String nickName,
-      required final String content,
-      required final String profileImage}) = _$CommentDTOImpl;
+      final String? profileImage,
+      required final String content}) = _$CommentDTOImpl;
 
   factory _CommentDTO.fromJson(Map<String, dynamic> json) =
       _$CommentDTOImpl.fromJson;
@@ -181,9 +179,9 @@ abstract class _CommentDTO implements CommentDTO {
   @override
   String get nickName;
   @override
-  String get content;
+  String? get profileImage;
   @override
-  String get profileImage;
+  String get content;
   @override
   @JsonKey(ignore: true)
   _$$CommentDTOImplCopyWith<_$CommentDTOImpl> get copyWith =>

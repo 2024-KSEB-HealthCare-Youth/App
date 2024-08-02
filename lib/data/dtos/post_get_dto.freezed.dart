@@ -25,7 +25,7 @@ mixin _$PostGetDTO {
   int? get likeCount =>
       throw _privateConstructorUsedError; // likeCount can be null
   Category get category => throw _privateConstructorUsedError;
-  String get profileImage => throw _privateConstructorUsedError;
+  String? get profileImage => throw _privateConstructorUsedError;
   String get nickName => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
 
@@ -46,7 +46,7 @@ abstract class $PostGetDTOCopyWith<$Res> {
       String title,
       int? likeCount,
       Category category,
-      String profileImage,
+      String? profileImage,
       String nickName,
       DateTime createdAt});
 }
@@ -68,7 +68,7 @@ class _$PostGetDTOCopyWithImpl<$Res, $Val extends PostGetDTO>
     Object? title = null,
     Object? likeCount = freezed,
     Object? category = null,
-    Object? profileImage = null,
+    Object? profileImage = freezed,
     Object? nickName = null,
     Object? createdAt = null,
   }) {
@@ -89,10 +89,10 @@ class _$PostGetDTOCopyWithImpl<$Res, $Val extends PostGetDTO>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as Category,
-      profileImage: null == profileImage
+      profileImage: freezed == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       nickName: null == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
@@ -118,7 +118,7 @@ abstract class _$$PostGetDTOImplCopyWith<$Res>
       String title,
       int? likeCount,
       Category category,
-      String profileImage,
+      String? profileImage,
       String nickName,
       DateTime createdAt});
 }
@@ -138,7 +138,7 @@ class __$$PostGetDTOImplCopyWithImpl<$Res>
     Object? title = null,
     Object? likeCount = freezed,
     Object? category = null,
-    Object? profileImage = null,
+    Object? profileImage = freezed,
     Object? nickName = null,
     Object? createdAt = null,
   }) {
@@ -159,10 +159,10 @@ class __$$PostGetDTOImplCopyWithImpl<$Res>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as Category,
-      profileImage: null == profileImage
+      profileImage: freezed == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       nickName: null == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
@@ -181,9 +181,9 @@ class _$PostGetDTOImpl implements _PostGetDTO {
   _$PostGetDTOImpl(
       {required this.postId,
       required this.title,
-      required this.likeCount,
+      this.likeCount,
       required this.category,
-      required this.profileImage,
+      this.profileImage,
       required this.nickName,
       required this.createdAt});
 
@@ -200,7 +200,7 @@ class _$PostGetDTOImpl implements _PostGetDTO {
   @override
   final Category category;
   @override
-  final String profileImage;
+  final String? profileImage;
   @override
   final String nickName;
   @override
@@ -253,9 +253,9 @@ abstract class _PostGetDTO implements PostGetDTO {
   factory _PostGetDTO(
       {required final int postId,
       required final String title,
-      required final int? likeCount,
+      final int? likeCount,
       required final Category category,
-      required final String profileImage,
+      final String? profileImage,
       required final String nickName,
       required final DateTime createdAt}) = _$PostGetDTOImpl;
 
@@ -271,7 +271,7 @@ abstract class _PostGetDTO implements PostGetDTO {
   @override // likeCount can be null
   Category get category;
   @override
-  String get profileImage;
+  String? get profileImage;
   @override
   String get nickName;
   @override

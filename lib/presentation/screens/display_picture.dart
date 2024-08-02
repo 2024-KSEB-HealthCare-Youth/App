@@ -35,7 +35,6 @@ class DisplayPictureScreen extends StatelessWidget {
                   onPressed: () async {
                     // Upload the image before navigating to the LoadingScreen
                     try {
-                      await RestAPI.uploadImage(imagePath);
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) =>

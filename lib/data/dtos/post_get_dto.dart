@@ -10,9 +10,9 @@ class PostGetDTO with _$PostGetDTO {
   factory PostGetDTO({
     required int postId,
     required String title,
-    required int? likeCount, // likeCount can be null
+    int? likeCount, // likeCount can be null
     required Category category,
-    required String profileImage,
+    String? profileImage,
     required String nickName,
     required DateTime createdAt,
   }) = _PostGetDTO;

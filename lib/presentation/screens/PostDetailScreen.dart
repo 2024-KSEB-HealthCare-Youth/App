@@ -4,11 +4,12 @@ import 'package:provider/provider.dart';
 import '../../data/dtos/comment_dto.dart';
 import '../widgets/post_detail_header.dart';
 import '../widgets/comment_section.dart';
-import '../../services/comment_service.dart';
 import '../../services/post_service.dart';
+import '../../services/comment_service.dart';
+import '../../services/like_service.dart';
 
 class PostDetailScreen extends StatefulWidget {
-  final String postId;
+  final int postId;
 
   const PostDetailScreen({
     Key? key,
@@ -22,44 +23,32 @@ class PostDetailScreen extends StatefulWidget {
 class _PostDetailScreenState extends State<PostDetailScreen> {
   final TextEditingController _commentController = TextEditingController();
   late Future<OnepostdetailDTO> _postFuture;
-  late String _nickname;
-  late String _profileImage;
+  final PostService _postService = PostService();
+  final CommentService _commentService = CommentService();
 
   @override
   void initState() {
     super.initState();
-    _fetchUserData();
     _postFuture = _fetchPostData();
   }
 
-  Future<void> _fetchUserData() async {
-    final userData = await PostService().fetchPostUserData();
-    setState(() {
-      _nickname = userData.nickName ?? 'Unknown User';
-      _profileImage =
-          userData.profileImage ?? 'https://via.placeholder.com/150';
-    });
-  }
-
   Future<OnepostdetailDTO> _fetchPostData() async {
-    return await PostService().fetchPostById(widget.postId);
+    return await _postService.fetchPostById(widget.postId);
   }
 
-  void _addComment() async {
+  void _addComment(OnepostdetailDTO post) async {
     if (_commentController.text.isEmpty) return;
     final newComment = CommentDTO(
-      nickName: _nickname,
+      nickName: post.nickName,
       content: _commentController.text,
-      profileImage: _profileImage,
+      profileImage: post.profileImage ?? 'https://via.placeholder.com/150',
     );
     try {
-      await Provider.of<CommentService>(context, listen: false)
-          .addComment(widget.postId,newComment);
+      await _commentService.addComment(widget.postId, newComment);
       setState(() {
         _postFuture = _fetchPostData();
       });
     } catch (e) {
-      // Handle error
       print('Failed to add comment: $e');
     }
     _commentController.clear();
@@ -67,13 +56,11 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
 
   void _toggleLikePost(OnepostdetailDTO post) async {
     try {
-      await Provider.of<CommentService>(context, listen: false)
-          .toggleLike(post.postId.toString());
+      await Provider.of<LikeService>(context, listen: false).toggleLike(post.postId, post.likeCount);
       setState(() {
         _postFuture = _fetchPostData();
       });
     } catch (e) {
-      // Handle error
       print('Failed to update like status: $e');
     }
   }
@@ -95,6 +82,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
         elevation: 0,
         foregroundColor: Colors.black,
       ),
+      resizeToAvoidBottomInset: true, // Ensures the keyboard does not cause overflow
       body: FutureBuilder<OnepostdetailDTO>(
         future: _postFuture,
         builder: (context, snapshot) {
@@ -106,34 +94,29 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
             return const Center(child: Text('Failed to load post data'));
           } else {
             final post = snapshot.data!;
-            final isLiked =
-                Provider.of<CommentService>(context).isPostLiked(widget.postId);
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  PostDetailHeader(post: post),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      IconButton(
-                        icon: Icon(
-                          isLiked ? Icons.favorite : Icons.favorite_border,
-                          color: isLiked ? Colors.red : Colors.grey,
-                        ),
-                        onPressed: () => _toggleLikePost(post),
+                      PostDetailHeader(
+                        post: post,
+                        onLikePressed: () => _toggleLikePost(post),
                       ),
-                      Text('${post.likeCount}'),
+                      const SizedBox(height: 20),
+                      CommentSection(
+                        comments: post.comments,
+                        commentController: _commentController,
+                        onAddComment: () => _addComment(post),
+                      ),
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  CommentSection(
-                    comments: post.comments,
-                    commentController: _commentController,
-                    onAddComment: _addComment,
-                  ),
-                ],
+                ),
               ),
             );
           }

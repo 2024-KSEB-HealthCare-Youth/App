@@ -20,12 +20,12 @@ PostData _$PostDataFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PostData {
-  String get postId => throw _privateConstructorUsedError;
+  int get postId => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
   int get likeCount => throw _privateConstructorUsedError;
   Category get category => throw _privateConstructorUsedError;
-  String get profileImage => throw _privateConstructorUsedError;
+  String? get profileImage => throw _privateConstructorUsedError;
   String get nickName => throw _privateConstructorUsedError;
   List<CommentData> get comments => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
@@ -42,12 +42,12 @@ abstract class $PostDataCopyWith<$Res> {
       _$PostDataCopyWithImpl<$Res, PostData>;
   @useResult
   $Res call(
-      {String postId,
+      {int postId,
       String title,
       String content,
       int likeCount,
       Category category,
-      String profileImage,
+      String? profileImage,
       String nickName,
       List<CommentData> comments,
       DateTime createdAt});
@@ -71,7 +71,7 @@ class _$PostDataCopyWithImpl<$Res, $Val extends PostData>
     Object? content = null,
     Object? likeCount = null,
     Object? category = null,
-    Object? profileImage = null,
+    Object? profileImage = freezed,
     Object? nickName = null,
     Object? comments = null,
     Object? createdAt = null,
@@ -80,7 +80,7 @@ class _$PostDataCopyWithImpl<$Res, $Val extends PostData>
       postId: null == postId
           ? _value.postId
           : postId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -97,10 +97,10 @@ class _$PostDataCopyWithImpl<$Res, $Val extends PostData>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as Category,
-      profileImage: null == profileImage
+      profileImage: freezed == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       nickName: null == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
@@ -126,12 +126,12 @@ abstract class _$$PostDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String postId,
+      {int postId,
       String title,
       String content,
       int likeCount,
       Category category,
-      String profileImage,
+      String? profileImage,
       String nickName,
       List<CommentData> comments,
       DateTime createdAt});
@@ -153,7 +153,7 @@ class __$$PostDataImplCopyWithImpl<$Res>
     Object? content = null,
     Object? likeCount = null,
     Object? category = null,
-    Object? profileImage = null,
+    Object? profileImage = freezed,
     Object? nickName = null,
     Object? comments = null,
     Object? createdAt = null,
@@ -162,7 +162,7 @@ class __$$PostDataImplCopyWithImpl<$Res>
       postId: null == postId
           ? _value.postId
           : postId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -179,10 +179,10 @@ class __$$PostDataImplCopyWithImpl<$Res>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as Category,
-      profileImage: null == profileImage
+      profileImage: freezed == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       nickName: null == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
@@ -208,7 +208,7 @@ class _$PostDataImpl implements _PostData {
       required this.content,
       required this.likeCount,
       required this.category,
-      required this.profileImage,
+      this.profileImage,
       required this.nickName,
       required final List<CommentData> comments,
       required this.createdAt})
@@ -218,7 +218,7 @@ class _$PostDataImpl implements _PostData {
       _$$PostDataImplFromJson(json);
 
   @override
-  final String postId;
+  final int postId;
   @override
   final String title;
   @override
@@ -228,7 +228,7 @@ class _$PostDataImpl implements _PostData {
   @override
   final Category category;
   @override
-  final String profileImage;
+  final String? profileImage;
   @override
   final String nickName;
   final List<CommentData> _comments;
@@ -298,12 +298,12 @@ class _$PostDataImpl implements _PostData {
 
 abstract class _PostData implements PostData {
   const factory _PostData(
-      {required final String postId,
+      {required final int postId,
       required final String title,
       required final String content,
       required final int likeCount,
       required final Category category,
-      required final String profileImage,
+      final String? profileImage,
       required final String nickName,
       required final List<CommentData> comments,
       required final DateTime createdAt}) = _$PostDataImpl;
@@ -312,7 +312,7 @@ abstract class _PostData implements PostData {
       _$PostDataImpl.fromJson;
 
   @override
-  String get postId;
+  int get postId;
   @override
   String get title;
   @override
@@ -322,7 +322,7 @@ abstract class _PostData implements PostData {
   @override
   Category get category;
   @override
-  String get profileImage;
+  String? get profileImage;
   @override
   String get nickName;
   @override

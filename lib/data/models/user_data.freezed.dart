@@ -21,12 +21,12 @@ UserData _$UserDataFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$UserData {
   String get loginId => throw _privateConstructorUsedError;
-  String? get password => throw _privateConstructorUsedError; // nullable로 변경
+  String? get password => throw _privateConstructorUsedError; // Made nullable
   String get name => throw _privateConstructorUsedError;
-  String? get nickName => throw _privateConstructorUsedError;
+  String get nickName => throw _privateConstructorUsedError;
   String get gender => throw _privateConstructorUsedError;
   int get age => throw _privateConstructorUsedError;
-  String get phoneNumber => throw _privateConstructorUsedError;
+  String? get phoneNumber => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   String? get profileImage => throw _privateConstructorUsedError;
   @UserRoleConverter()
@@ -47,10 +47,10 @@ abstract class $UserDataCopyWith<$Res> {
       {String loginId,
       String? password,
       String name,
-      String? nickName,
+      String nickName,
       String gender,
       int age,
-      String phoneNumber,
+      String? phoneNumber,
       String? email,
       String? profileImage,
       @UserRoleConverter() UserRole? isAdmin});
@@ -72,10 +72,10 @@ class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
     Object? loginId = null,
     Object? password = freezed,
     Object? name = null,
-    Object? nickName = freezed,
+    Object? nickName = null,
     Object? gender = null,
     Object? age = null,
-    Object? phoneNumber = null,
+    Object? phoneNumber = freezed,
     Object? email = freezed,
     Object? profileImage = freezed,
     Object? isAdmin = freezed,
@@ -93,10 +93,10 @@ class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      nickName: freezed == nickName
+      nickName: null == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       gender: null == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
@@ -105,10 +105,10 @@ class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
           ? _value.age
           : age // ignore: cast_nullable_to_non_nullable
               as int,
-      phoneNumber: null == phoneNumber
+      phoneNumber: freezed == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -137,10 +137,10 @@ abstract class _$$UserDataImplCopyWith<$Res>
       {String loginId,
       String? password,
       String name,
-      String? nickName,
+      String nickName,
       String gender,
       int age,
-      String phoneNumber,
+      String? phoneNumber,
       String? email,
       String? profileImage,
       @UserRoleConverter() UserRole? isAdmin});
@@ -160,10 +160,10 @@ class __$$UserDataImplCopyWithImpl<$Res>
     Object? loginId = null,
     Object? password = freezed,
     Object? name = null,
-    Object? nickName = freezed,
+    Object? nickName = null,
     Object? gender = null,
     Object? age = null,
-    Object? phoneNumber = null,
+    Object? phoneNumber = freezed,
     Object? email = freezed,
     Object? profileImage = freezed,
     Object? isAdmin = freezed,
@@ -181,10 +181,10 @@ class __$$UserDataImplCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      nickName: freezed == nickName
+      nickName: null == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       gender: null == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
@@ -193,10 +193,10 @@ class __$$UserDataImplCopyWithImpl<$Res>
           ? _value.age
           : age // ignore: cast_nullable_to_non_nullable
               as int,
-      phoneNumber: null == phoneNumber
+      phoneNumber: freezed == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -218,14 +218,14 @@ class __$$UserDataImplCopyWithImpl<$Res>
 class _$UserDataImpl implements _UserData {
   const _$UserDataImpl(
       {required this.loginId,
-      required this.password,
+      this.password,
       required this.name,
       required this.nickName,
       required this.gender,
       required this.age,
-      required this.phoneNumber,
-      required this.email,
-      required this.profileImage,
+      this.phoneNumber,
+      this.email,
+      this.profileImage,
       @UserRoleConverter() this.isAdmin});
 
   factory _$UserDataImpl.fromJson(Map<String, dynamic> json) =>
@@ -235,17 +235,17 @@ class _$UserDataImpl implements _UserData {
   final String loginId;
   @override
   final String? password;
-// nullable로 변경
+// Made nullable
   @override
   final String name;
   @override
-  final String? nickName;
+  final String nickName;
   @override
   final String gender;
   @override
   final int age;
   @override
-  final String phoneNumber;
+  final String? phoneNumber;
   @override
   final String? email;
   @override
@@ -302,14 +302,14 @@ class _$UserDataImpl implements _UserData {
 abstract class _UserData implements UserData {
   const factory _UserData(
       {required final String loginId,
-      required final String? password,
+      final String? password,
       required final String name,
-      required final String? nickName,
+      required final String nickName,
       required final String gender,
       required final int age,
-      required final String phoneNumber,
-      required final String? email,
-      required final String? profileImage,
+      final String? phoneNumber,
+      final String? email,
+      final String? profileImage,
       @UserRoleConverter() final UserRole? isAdmin}) = _$UserDataImpl;
 
   factory _UserData.fromJson(Map<String, dynamic> json) =
@@ -319,16 +319,16 @@ abstract class _UserData implements UserData {
   String get loginId;
   @override
   String? get password;
-  @override // nullable로 변경
+  @override // Made nullable
   String get name;
   @override
-  String? get nickName;
+  String get nickName;
   @override
   String get gender;
   @override
   int get age;
   @override
-  String get phoneNumber;
+  String? get phoneNumber;
   @override
   String? get email;
   @override

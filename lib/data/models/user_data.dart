@@ -9,15 +9,15 @@ enum UserRole { USER, ADMIN }
 class UserData with _$UserData {
   const factory UserData({
     required String loginId,
-    required String? password, // nullable로 변경
+    String? password, // Made nullable
     required String name,
-    required String? nickName,
+    required String nickName,
     required String gender,
     required int age,
-    required String phoneNumber,
-    required String? email,
-    required String? profileImage,
-    @UserRoleConverter() UserRole? isAdmin, // nullable로 변경
+    String? phoneNumber,
+    String? email,
+    String? profileImage,
+    @UserRoleConverter() UserRole? isAdmin, // Made nullable
   }) = _UserData;
 
   factory UserData.fromJson(Map<String, dynamic> json) =>

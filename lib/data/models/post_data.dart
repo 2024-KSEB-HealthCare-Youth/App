@@ -9,12 +9,12 @@ enum Category { FREE }
 @freezed
 class PostData with _$PostData {
   const factory PostData({
-    required String postId,
+    required int postId,
     required String title,
     required String content,
     required int likeCount,
     required Category category,
-    required String profileImage,
+    String? profileImage,
     required String nickName,
     required List<CommentData> comments,
     required DateTime createdAt,
