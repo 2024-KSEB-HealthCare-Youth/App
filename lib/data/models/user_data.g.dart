@@ -11,10 +11,10 @@ _$UserDataImpl _$$UserDataImplFromJson(Map<String, dynamic> json) =>
       loginId: json['loginId'] as String,
       password: json['password'] as String?,
       name: json['name'] as String,
-      nickName: json['nickName'] as String?,
+      nickName: json['nickName'] as String,
       gender: json['gender'] as String,
       age: (json['age'] as num).toInt(),
-      phoneNumber: json['phoneNumber'] as String,
+      phoneNumber: json['phoneNumber'] as String?,
       email: json['email'] as String?,
       profileImage: json['profileImage'] as String?,
       isAdmin: _$JsonConverterFromJson<String, UserRole>(

@@ -6,8 +6,9 @@ part 'comment_get_dto.g.dart';
 @freezed
 class CommentGetDTO with _$CommentGetDTO {
   const factory CommentGetDTO({
+    required int postId,
     required String nickName,
-    required String profileImage,
+    String? profileImage,
     required String content,
     required DateTime createdAt,
   }) = _CommentGetDTO;

@@ -13,7 +13,7 @@ import 'presentation/screens/past_log.dart';
 import 'presentation/screens/edit_account.dart';
 import 'presentation/screens/commentsScreen.dart';
 import 'package:camera/camera.dart';
-import 'services/comment_service.dart';
+import 'services/like_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +28,7 @@ void main() async {
     runApp(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => CommentService()),
+          ChangeNotifierProvider(create: (_) => LikeService()),
         ],
         child: FigmaToCodeApp(camera: firstCamera),
       ),

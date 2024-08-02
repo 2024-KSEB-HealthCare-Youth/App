@@ -7,10 +7,9 @@ part 'comment_dto.g.dart';
 class CommentDTO with _$CommentDTO {
   const factory CommentDTO({
     required String nickName,
+    String? profileImage,
     required String content,
-    required String profileImage,
   }) = _CommentDTO;
 
-  factory CommentDTO.fromJson(Map<String, dynamic> json) =>
-      _$CommentDTOFromJson(json);
+  factory CommentDTO.fromJson(Map<String, dynamic> json) => _$CommentDTOFromJson(json);
 }

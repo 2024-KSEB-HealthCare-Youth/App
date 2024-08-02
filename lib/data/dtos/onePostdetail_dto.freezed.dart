@@ -24,10 +24,10 @@ mixin _$OnepostdetailDTO {
   String get title => throw _privateConstructorUsedError;
   int get likeCount => throw _privateConstructorUsedError;
   Category get category => throw _privateConstructorUsedError;
-  String get profileImage => throw _privateConstructorUsedError;
+  String? get profileImage => throw _privateConstructorUsedError;
   String get nickName => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
-  List<CommentDTO> get comments => throw _privateConstructorUsedError;
+  List<CommentGetDTO> get comments => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,10 +47,10 @@ abstract class $OnepostdetailDTOCopyWith<$Res> {
       String title,
       int likeCount,
       Category category,
-      String profileImage,
+      String? profileImage,
       String nickName,
       String content,
-      List<CommentDTO> comments,
+      List<CommentGetDTO> comments,
       DateTime createdAt});
 }
 
@@ -71,7 +71,7 @@ class _$OnepostdetailDTOCopyWithImpl<$Res, $Val extends OnepostdetailDTO>
     Object? title = null,
     Object? likeCount = null,
     Object? category = null,
-    Object? profileImage = null,
+    Object? profileImage = freezed,
     Object? nickName = null,
     Object? content = null,
     Object? comments = null,
@@ -94,10 +94,10 @@ class _$OnepostdetailDTOCopyWithImpl<$Res, $Val extends OnepostdetailDTO>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as Category,
-      profileImage: null == profileImage
+      profileImage: freezed == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       nickName: null == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
@@ -109,7 +109,7 @@ class _$OnepostdetailDTOCopyWithImpl<$Res, $Val extends OnepostdetailDTO>
       comments: null == comments
           ? _value.comments
           : comments // ignore: cast_nullable_to_non_nullable
-              as List<CommentDTO>,
+              as List<CommentGetDTO>,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -131,10 +131,10 @@ abstract class _$$OnepostdetailDTOImplCopyWith<$Res>
       String title,
       int likeCount,
       Category category,
-      String profileImage,
+      String? profileImage,
       String nickName,
       String content,
-      List<CommentDTO> comments,
+      List<CommentGetDTO> comments,
       DateTime createdAt});
 }
 
@@ -153,7 +153,7 @@ class __$$OnepostdetailDTOImplCopyWithImpl<$Res>
     Object? title = null,
     Object? likeCount = null,
     Object? category = null,
-    Object? profileImage = null,
+    Object? profileImage = freezed,
     Object? nickName = null,
     Object? content = null,
     Object? comments = null,
@@ -176,10 +176,10 @@ class __$$OnepostdetailDTOImplCopyWithImpl<$Res>
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as Category,
-      profileImage: null == profileImage
+      profileImage: freezed == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       nickName: null == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
@@ -191,7 +191,7 @@ class __$$OnepostdetailDTOImplCopyWithImpl<$Res>
       comments: null == comments
           ? _value._comments
           : comments // ignore: cast_nullable_to_non_nullable
-              as List<CommentDTO>,
+              as List<CommentGetDTO>,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -203,15 +203,15 @@ class __$$OnepostdetailDTOImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$OnepostdetailDTOImpl implements _OnepostdetailDTO {
-  _$OnepostdetailDTOImpl(
+  const _$OnepostdetailDTOImpl(
       {required this.postId,
       required this.title,
       required this.likeCount,
       required this.category,
-      required this.profileImage,
+      this.profileImage,
       required this.nickName,
       required this.content,
-      required final List<CommentDTO> comments,
+      required final List<CommentGetDTO> comments,
       required this.createdAt})
       : _comments = comments;
 
@@ -227,14 +227,14 @@ class _$OnepostdetailDTOImpl implements _OnepostdetailDTO {
   @override
   final Category category;
   @override
-  final String profileImage;
+  final String? profileImage;
   @override
   final String nickName;
   @override
   final String content;
-  final List<CommentDTO> _comments;
+  final List<CommentGetDTO> _comments;
   @override
-  List<CommentDTO> get comments {
+  List<CommentGetDTO> get comments {
     if (_comments is EqualUnmodifiableListView) return _comments;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_comments);
@@ -299,15 +299,15 @@ class _$OnepostdetailDTOImpl implements _OnepostdetailDTO {
 }
 
 abstract class _OnepostdetailDTO implements OnepostdetailDTO {
-  factory _OnepostdetailDTO(
+  const factory _OnepostdetailDTO(
       {required final int postId,
       required final String title,
       required final int likeCount,
       required final Category category,
-      required final String profileImage,
+      final String? profileImage,
       required final String nickName,
       required final String content,
-      required final List<CommentDTO> comments,
+      required final List<CommentGetDTO> comments,
       required final DateTime createdAt}) = _$OnepostdetailDTOImpl;
 
   factory _OnepostdetailDTO.fromJson(Map<String, dynamic> json) =
@@ -322,13 +322,13 @@ abstract class _OnepostdetailDTO implements OnepostdetailDTO {
   @override
   Category get category;
   @override
-  String get profileImage;
+  String? get profileImage;
   @override
   String get nickName;
   @override
   String get content;
   @override
-  List<CommentDTO> get comments;
+  List<CommentGetDTO> get comments;
   @override
   DateTime get createdAt;
   @override

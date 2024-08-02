@@ -8,14 +8,16 @@ part of 'comment_get_dto.dart';
 
 _$CommentGetDTOImpl _$$CommentGetDTOImplFromJson(Map<String, dynamic> json) =>
     _$CommentGetDTOImpl(
+      postId: (json['postId'] as num).toInt(),
       nickName: json['nickName'] as String,
-      profileImage: json['profileImage'] as String,
+      profileImage: json['profileImage'] as String?,
       content: json['content'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
     );
 
 Map<String, dynamic> _$$CommentGetDTOImplToJson(_$CommentGetDTOImpl instance) =>
     <String, dynamic>{
+      'postId': instance.postId,
       'nickName': instance.nickName,
       'profileImage': instance.profileImage,
       'content': instance.content,

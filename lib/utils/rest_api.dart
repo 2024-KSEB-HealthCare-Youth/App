@@ -242,7 +242,7 @@ class RestAPI {
     }
   }
 
-  static Future<OnepostdetailDTO> fetchPostById(String postId) async {
+  Future<OnepostdetailDTO> fetchPostById(int postId) async {
     try {
       final token = await storage.read(key: 'access_token');
       final response = await dioClient.get('/posts/$postId',
@@ -252,15 +252,18 @@ class RestAPI {
           },
         ),
       );
-
       if (response.statusCode == 200) {
         if (response.data is Map<String, dynamic> &&
             response.data['results'] is List &&
             response.data['results'].isNotEmpty) {
-          final Map<String, dynamic> responseData = response.data;
-          final user = UserData.fromJson(responseData['results'][0]);
+          final Map<String, dynamic> postData = response.data['results'][0];
 
-          return OnepostdetailDTO.fromJson(responseData);
+          // Print response data for debugging
+          print('Response Data: $postData');
+
+          // Parse JSON data
+          final postDetail = OnepostdetailDTO.fromJson(postData);
+          return postDetail;
         } else {
           throw Exception('Failed to load post: ${response.statusMessage}');
         }
@@ -360,25 +363,25 @@ class RestAPI {
     }
   }
 
-  static Future<CommentDTO> addCommentToPost(
-      String postId, CommentDTO comment) async {
+
+  static Future<bool> addCommentToPost(int postId, CommentDTO comment) async {
     final requestBody = jsonEncode(comment.toJson());
     print('Request body: $requestBody');
 
     try {
       final token = await storage.read(key: 'access_token');
       final response = await dioClient.post(
-          '/posts/$postId/comments',
-          data: requestBody,
-          options: dio.Options(
-              headers: {'Authorization': 'Bearer $token',}
-          )
+        '/comments/$postId',
+        data: requestBody,
+        options: dio.Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
       );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.data}');
 
-      if (response.statusCode == 201) {
-        return CommentDTO.fromJson(response.data);
+      if (response.statusCode == 200) {
+        return true;
       } else {
         throw Exception('Failed to add comment: ${response.statusMessage}');
       }
@@ -388,30 +391,11 @@ class RestAPI {
     }
   }
 
-  static Future<List<CommentGetDTO>> getComments(String postId) async {
+  static Future<void> removeLikeStatus(int postId) async {
     try {
-      final response = await dioClient.get('/posts/$postId/comments');
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.data}');
-
-      if (response.statusCode == 200) {
-        List<dynamic> jsonData = response.data;
-        List<CommentGetDTO> comments =
-        jsonData.map((json) => CommentGetDTO.fromJson(json)).toList();
-        return comments;
-      } else {
-        throw Exception('Failed to load comments: ${response.statusMessage}');
-      }
-    } catch (e) {
-      print('Get comments failed: $e');
-      throw Exception('Get comments failed: $e');
-    }
-  }
-
-  static Future<void> removeLikeStatus(String token) async {
-    try {
+      final token = await storage.read(key: 'access_token');
       final response = await dioClient.delete(
-        '/posts/likes',
+        '/likes/$postId',
         options: dio.Options(
           headers: {
             'Authorization': 'Bearer $token',
@@ -427,10 +411,11 @@ class RestAPI {
     }
   }
 
-  static Future<void> updateLikeStatus(String token) async {
+  static Future<void> updateLikeStatus(int postId) async {
     try {
+      final token = await storage.read(key: 'access_token');
       final response = await dioClient.put(
-        '/posts/likes',
+        '/likes/$postId',
         options: dio.Options(
           headers: {
             'Authorization': 'Bearer $token',

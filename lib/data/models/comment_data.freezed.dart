@@ -22,7 +22,7 @@ CommentData _$CommentDataFromJson(Map<String, dynamic> json) {
 mixin _$CommentData {
   String get postId => throw _privateConstructorUsedError;
   String get nickName => throw _privateConstructorUsedError;
-  String get profileImage => throw _privateConstructorUsedError;
+  String? get profileImage => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
 
@@ -41,7 +41,7 @@ abstract class $CommentDataCopyWith<$Res> {
   $Res call(
       {String postId,
       String nickName,
-      String profileImage,
+      String? profileImage,
       String content,
       DateTime createdAt});
 }
@@ -61,7 +61,7 @@ class _$CommentDataCopyWithImpl<$Res, $Val extends CommentData>
   $Res call({
     Object? postId = null,
     Object? nickName = null,
-    Object? profileImage = null,
+    Object? profileImage = freezed,
     Object? content = null,
     Object? createdAt = null,
   }) {
@@ -74,10 +74,10 @@ class _$CommentDataCopyWithImpl<$Res, $Val extends CommentData>
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
               as String,
-      profileImage: null == profileImage
+      profileImage: freezed == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
@@ -101,7 +101,7 @@ abstract class _$$CommentDataImplCopyWith<$Res>
   $Res call(
       {String postId,
       String nickName,
-      String profileImage,
+      String? profileImage,
       String content,
       DateTime createdAt});
 }
@@ -119,7 +119,7 @@ class __$$CommentDataImplCopyWithImpl<$Res>
   $Res call({
     Object? postId = null,
     Object? nickName = null,
-    Object? profileImage = null,
+    Object? profileImage = freezed,
     Object? content = null,
     Object? createdAt = null,
   }) {
@@ -132,10 +132,10 @@ class __$$CommentDataImplCopyWithImpl<$Res>
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
               as String,
-      profileImage: null == profileImage
+      profileImage: freezed == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
@@ -154,7 +154,7 @@ class _$CommentDataImpl implements _CommentData {
   const _$CommentDataImpl(
       {required this.postId,
       required this.nickName,
-      required this.profileImage,
+      this.profileImage,
       required this.content,
       required this.createdAt});
 
@@ -166,7 +166,7 @@ class _$CommentDataImpl implements _CommentData {
   @override
   final String nickName;
   @override
-  final String profileImage;
+  final String? profileImage;
   @override
   final String content;
   @override
@@ -215,7 +215,7 @@ abstract class _CommentData implements CommentData {
   const factory _CommentData(
       {required final String postId,
       required final String nickName,
-      required final String profileImage,
+      final String? profileImage,
       required final String content,
       required final DateTime createdAt}) = _$CommentDataImpl;
 
@@ -227,7 +227,7 @@ abstract class _CommentData implements CommentData {
   @override
   String get nickName;
   @override
-  String get profileImage;
+  String? get profileImage;
   @override
   String get content;
   @override

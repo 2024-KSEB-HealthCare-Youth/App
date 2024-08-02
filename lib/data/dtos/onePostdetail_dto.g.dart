@@ -13,11 +13,11 @@ _$OnepostdetailDTOImpl _$$OnepostdetailDTOImplFromJson(
       title: json['title'] as String,
       likeCount: (json['likeCount'] as num).toInt(),
       category: $enumDecode(_$CategoryEnumMap, json['category']),
-      profileImage: json['profileImage'] as String,
+      profileImage: json['profileImage'] as String?,
       nickName: json['nickName'] as String,
       content: json['content'] as String,
       comments: (json['comments'] as List<dynamic>)
-          .map((e) => CommentDTO.fromJson(e as Map<String, dynamic>))
+          .map((e) => CommentGetDTO.fromJson(e as Map<String, dynamic>))
           .toList(),
       createdAt: DateTime.parse(json['createdAt'] as String),
     );

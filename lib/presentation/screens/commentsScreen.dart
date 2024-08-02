@@ -7,6 +7,7 @@ import '../../services/comment_service.dart';
 import '../screens/CreatePostScreen.dart';
 import '../screens/PostDetailScreen.dart';
 import '../widgets/post_card.dart';
+import '../../services/like_service.dart';
 
 class CommentsScreen extends StatefulWidget {
   const CommentsScreen({Key? key}) : super(key: key);
@@ -19,38 +20,59 @@ class _CommentsScreenState extends State<CommentsScreen> {
   late Future<PostUserDTO> _userFuture;
   late Future<List<PostGetDTO>> _postsFuture;
   final PostService _postService = PostService();
+  List<PostGetDTO> _posts = [];
 
   @override
   void initState() {
     super.initState();
     _userFuture = _postService.fetchPostUserData();
-    _postsFuture = _postService.fetchPosts();
+    _postsFuture = _fetchPosts();
+  }
+
+  Future<List<PostGetDTO>> _fetchPosts() async {
+    final posts = await _postService.fetchPosts();
+    setState(() {
+      _posts = posts;
+    });
+    return posts;
   }
 
   Future<void> _refreshPosts() async {
     setState(() {
-      _postsFuture = _postService.fetchPosts();
+      _postsFuture = _fetchPosts();
     });
   }
 
   void _navigateToCreatePost() {
     Navigator.of(context)
         .push(
-          MaterialPageRoute(
-            builder: (context) => const CreatePostScreen(),
-          ),
-        )
+      MaterialPageRoute(
+        builder: (context) => const CreatePostScreen(),
+      ),
+    )
         .then((_) => _refreshPosts());
   }
 
-  void _navigateToPostDetail(String postId) {
+  void _navigateToPostDetail(int postId) {
     Navigator.of(context)
         .push(
-          MaterialPageRoute(
-            builder: (context) => PostDetailScreen(postId: postId),
-          ),
-        )
+      MaterialPageRoute(
+        builder: (context) => PostDetailScreen(postId: postId),
+      ),
+    )
         .then((_) => _refreshPosts());
+  }
+
+  void _updateLikeCount(int postId, bool isLiked) {
+    setState(() {
+      _posts = _posts.map((post) {
+        if (post.postId == postId) {
+          final newLikeCount = (post.likeCount ?? 0) + (isLiked ? 1 : -1);
+          return post.copyWith(likeCount: newLikeCount); // Assuming copyWith method exists
+        }
+        return post;
+      }).toList();
+    });
   }
 
   Widget _buildCreatePostSection(PostUserDTO user) {
@@ -104,8 +126,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final commentService = Provider.of<CommentService>(context);
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -159,21 +179,27 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                       return const Center(child: Text('No posts available'));
                     } else {
-                      final posts = snapshot.data!;
                       return ListView.builder(
-                        itemCount: posts.length,
+                        itemCount: _posts.length,
                         itemBuilder: (context, index) {
-                          return PostCard(
-                            post: posts[index],
-                            isLiked:
-                                commentService.isPostLiked(posts[index].postId.toString()),
-                            onLikePressed: () async {
-                              await commentService
-                                  .toggleLike(posts[index].postId.toString());
-                              setState(() {});
-                            },
-                            onTap: () {
-                              _navigateToPostDetail(posts[index].postId.toString());
+                          final post = _posts[index];
+                          return Consumer<LikeService>(
+                            builder: (context, likeService, child) {
+                              return PostCard(
+                                post: post,
+                                isLiked: likeService.isPostLiked(post.postId),
+                                onLikePressed: () async {
+                                  await likeService.toggleLike(
+                                    post.postId,
+                                    post.likeCount ?? 0,
+                                  );
+                                  // Update the like count locally
+                                  _updateLikeCount(post.postId, likeService.isPostLiked(post.postId));
+                                },
+                                onTap: () {
+                                  _navigateToPostDetail(post.postId);
+                                },
+                              );
                             },
                           );
                         },

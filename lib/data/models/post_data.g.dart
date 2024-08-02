@@ -8,12 +8,12 @@ part of 'post_data.dart';
 
 _$PostDataImpl _$$PostDataImplFromJson(Map<String, dynamic> json) =>
     _$PostDataImpl(
-      postId: json['postId'] as String,
+      postId: (json['postId'] as num).toInt(),
       title: json['title'] as String,
       content: json['content'] as String,
       likeCount: (json['likeCount'] as num).toInt(),
       category: $enumDecode(_$CategoryEnumMap, json['category']),
-      profileImage: json['profileImage'] as String,
+      profileImage: json['profileImage'] as String?,
       nickName: json['nickName'] as String,
       comments: (json['comments'] as List<dynamic>)
           .map((e) => CommentData.fromJson(e as Map<String, dynamic>))
