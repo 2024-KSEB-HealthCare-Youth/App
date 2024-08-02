@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:dio/dio.dart' as dio;
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -9,7 +8,6 @@ import '../data/models/user_data.dart';
 import '../data/models/result_data.dart';
 import '../data/models/ai_data.dart';
 import '../data/models/past_data.dart';
-import '../data/models/post_data.dart';
 import '../data/dtos/comment_dto.dart';
 import '../data/dtos/login_dto.dart';
 import '../data/dtos/comment_get_dto.dart';
@@ -18,7 +16,7 @@ import '../data/dtos/onePostdetail_dto.dart';
 
 class RestAPI {
   static const String baseUrl = 'http://52.79.103.61:8080';
-  static const String flaskUrl = 'http://3.37.66.194:5000'; // Flask 서버 URL 수정
+  static const String flaskUrl = 'http://3.37.66.194:5000';
   static const Map<String, String> headers = {
     'Content-Type': 'application/json'
   };
@@ -30,31 +28,26 @@ class RestAPI {
   ))
     ..interceptors.add(CookieManager(cookieJar));
 
-  // Flask 서버와 통신을 위한 별도의 Dio 인스턴스
   static final dio.Dio flaskDio = dio.Dio(dio.BaseOptions(
     baseUrl: flaskUrl,
     headers: headers,
   ));
 
-  // Save loginId to shared preferences
   static Future<void> saveLoginId(String loginId) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('loginId', loginId);
   }
 
-  // Retrieve loginId from shared preferences
   static Future<String?> getLoginId() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('loginId');
   }
 
-  // Delete tokens from secure storage
   static Future<void> deleteTokens() async {
     await storage.delete(key: 'access_token');
     await storage.delete(key: 'refresh_token');
     await cookieJar.deleteAll();
   }
-
 
   static Future<void> login(LoginDTO loginDTO) async {
     final requestBody = jsonEncode(loginDTO.toJson());
@@ -72,14 +65,12 @@ class RestAPI {
       if (response.statusCode == 200) {
         await saveLoginId(loginDTO.loginId);
 
-        // 응답에서 Authorization 헤더 추출
         final authorizationHeader = response.headers['authorization']?.first;
         if (authorizationHeader != null) {
           final accessToken = authorizationHeader.replaceFirst('Bearer ', '');
           await storage.write(key: 'access_token', value: accessToken);
         }
 
-        // 응답에서 set-cookie 헤더 추출
         final setCookieHeader = response.headers['set-cookie']?.first;
         if (setCookieHeader != null) {
           final refreshToken = setCookieHeader.split(';').firstWhere(
@@ -106,7 +97,6 @@ class RestAPI {
 
   static Future<UserData> fetchUserData() async {
     try {
-      // 저장된 액세스 토큰을 읽어옴
       final token = await storage.read(key: 'access_token');
       if (token == null) {
         throw Exception('No access token found');
@@ -124,7 +114,6 @@ class RestAPI {
       print('Response body: ${response.data}');
 
       if (response.statusCode == 200) {
-        // Ensure the response format is as expected
         if (response.data is Map<String, dynamic> &&
             response.data['results'] is List &&
             response.data['results'].isNotEmpty) {
@@ -143,7 +132,6 @@ class RestAPI {
     }
   }
 
-  // Fetch result data
   static Future<ResultData> fetchResultData(String resultId) async {
     try {
       final token = await storage.read(key: 'access_token');
@@ -153,10 +141,10 @@ class RestAPI {
       final response = await dioClient.get(
         '/results/$resultId',
         options: dio.Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-          }
-        )
+            headers: {
+              'Authorization': 'Bearer $token',
+            }
+        ),
       );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.data}');
@@ -174,7 +162,6 @@ class RestAPI {
     }
   }
 
-  // Sign up method
   static Future<void> signUp(UserData userData) async {
     final requestBody = jsonEncode(userData.toJson());
     print('Request body: $requestBody');
@@ -221,7 +208,6 @@ class RestAPI {
     }
   }
 
-  // Fetch past data
   static Future<PastData> fetchPastData(String userId) async {
     try {
       final response = await dioClient.get(
@@ -239,7 +225,6 @@ class RestAPI {
     }
   }
 
-  // Fecth past log by result id & result date
   static Future<ResultData> fetchPast_Result(String resultId) async {
     try {
       final response = await dioClient.get(
@@ -261,14 +246,24 @@ class RestAPI {
     try {
       final token = await storage.read(key: 'access_token');
       final response = await dioClient.get('/posts/$postId',
-          options: dio.Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
-          ),
-          ); 
+        options: dio.Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+        ),
+      );
+
       if (response.statusCode == 200) {
-        return OnepostdetailDTO.fromJson(response.data);
+        if (response.data is Map<String, dynamic> &&
+            response.data['results'] is List &&
+            response.data['results'].isNotEmpty) {
+          final Map<String, dynamic> responseData = response.data;
+          final user = UserData.fromJson(responseData['results'][0]);
+
+          return OnepostdetailDTO.fromJson(responseData);
+        } else {
+          throw Exception('Failed to load post: ${response.statusMessage}');
+        }
       } else {
         throw Exception('Failed to load post: ${response.statusMessage}');
       }
@@ -282,7 +277,6 @@ class RestAPI {
     try {
       final response = await dioClient.get('/posts');
       if (response.statusCode == 200) {
-        // Check if the response format is as expected
         if (response.data is Map<String, dynamic> &&
             response.data['results'] is List) {
           List<dynamic> jsonData = response.data['results'];
@@ -301,7 +295,6 @@ class RestAPI {
     }
   }
 
-  // Save post data to the server
   static Future<bool> savePost(Map<String, dynamic> post) async {
     final requestBody = jsonEncode(post);
     print('Request body: $requestBody');
@@ -309,11 +302,11 @@ class RestAPI {
     try {
       final token = await storage.read(key: 'access_token');
       final response = await dioClient.post(
-        '/posts',
-        data: requestBody,
-        options: dio.Options(
-          headers: {'Authorization': 'Bearer $token',}
-        )
+          '/posts',
+          data: requestBody,
+          options: dio.Options(
+              headers: {'Authorization': 'Bearer $token',}
+          )
       );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.data}');
@@ -329,7 +322,6 @@ class RestAPI {
     }
   }
 
-  // Upload image to flask server
   static Future<AiData> uploadImage(String imagePath) async {
     var formData = dio.FormData.fromMap({
       'file': await dio.MultipartFile.fromFile(imagePath),
@@ -354,7 +346,6 @@ class RestAPI {
     }
   }
 
-  // Fetch AI data from springboot server
   static Future<AiData> fetchAiData() async {
     try {
       final response = await dioClient.get('/ai-data');
@@ -369,16 +360,19 @@ class RestAPI {
     }
   }
 
-  // Add a comment to a post
   static Future<CommentDTO> addCommentToPost(
       String postId, CommentDTO comment) async {
     final requestBody = jsonEncode(comment.toJson());
     print('Request body: $requestBody');
 
     try {
+      final token = await storage.read(key: 'access_token');
       final response = await dioClient.post(
-        '/posts/$postId/comments',
-        data: requestBody,
+          '/posts/$postId/comments',
+          data: requestBody,
+          options: dio.Options(
+              headers: {'Authorization': 'Bearer $token',}
+          )
       );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.data}');
@@ -394,7 +388,6 @@ class RestAPI {
     }
   }
 
-  // Get comments of a post
   static Future<List<CommentGetDTO>> getComments(String postId) async {
     try {
       final response = await dioClient.get('/posts/$postId/comments');
@@ -404,7 +397,7 @@ class RestAPI {
       if (response.statusCode == 200) {
         List<dynamic> jsonData = response.data;
         List<CommentGetDTO> comments =
-            jsonData.map((json) => CommentGetDTO.fromJson(json)).toList();
+        jsonData.map((json) => CommentGetDTO.fromJson(json)).toList();
         return comments;
       } else {
         throw Exception('Failed to load comments: ${response.statusMessage}');
