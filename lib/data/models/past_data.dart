@@ -6,7 +6,7 @@ part 'past_data.g.dart';
 @freezed
 class PastData with _$PastData {
   const factory PastData({
-    required List<String> resultId,
+    required List<int> resultId,
     required List<DateTime> resultDate,
   }) = _PastData;
 

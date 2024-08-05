@@ -3,7 +3,7 @@ import '../data/dtos/result_detail_dto.dart';
 import '../utils/rest_api.dart';
 
 class ResultService {
-  Future<ResultDetailDTO> fetchResultDetail(String userId) async {
+  Future<ResultDetailDTO> fetchResultDetail(int userId) async {
     try {
       // ResultData를 가져옵니다.
       final resultData = await RestAPI.fetchResultData(userId);

@@ -34,11 +34,8 @@ class Menu extends StatelessWidget {
             title: '과거 진단 결과 조회',
             onTap: () async {
               final userService = UserService();
-              final prefs = await SharedPreferences.getInstance();
-              final userId = prefs.getString('loginId');
-              if (userId != null) {
                 try {
-                  final pastData = await userService.fetchPastData(userId);
+                  final pastData = await userService.fetchPastData();
                   Navigator.pushNamed(
                     context,
                     '/past_log',
@@ -50,7 +47,6 @@ class Menu extends StatelessWidget {
                     SnackBar(content: Text('Failed to load past data')),
                   );
                 }
-              }
             },
           ),
           _buildMenuItem(

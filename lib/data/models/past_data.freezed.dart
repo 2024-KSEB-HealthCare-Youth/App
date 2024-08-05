@@ -20,7 +20,7 @@ PastData _$PastDataFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PastData {
-  List<String> get resultId => throw _privateConstructorUsedError;
+  List<int> get resultId => throw _privateConstructorUsedError;
   List<DateTime> get resultDate => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -34,7 +34,7 @@ abstract class $PastDataCopyWith<$Res> {
   factory $PastDataCopyWith(PastData value, $Res Function(PastData) then) =
       _$PastDataCopyWithImpl<$Res, PastData>;
   @useResult
-  $Res call({List<String> resultId, List<DateTime> resultDate});
+  $Res call({List<int> resultId, List<DateTime> resultDate});
 }
 
 /// @nodoc
@@ -57,7 +57,7 @@ class _$PastDataCopyWithImpl<$Res, $Val extends PastData>
       resultId: null == resultId
           ? _value.resultId
           : resultId // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<int>,
       resultDate: null == resultDate
           ? _value.resultDate
           : resultDate // ignore: cast_nullable_to_non_nullable
@@ -74,7 +74,7 @@ abstract class _$$PastDataImplCopyWith<$Res>
       __$$PastDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<String> resultId, List<DateTime> resultDate});
+  $Res call({List<int> resultId, List<DateTime> resultDate});
 }
 
 /// @nodoc
@@ -95,7 +95,7 @@ class __$$PastDataImplCopyWithImpl<$Res>
       resultId: null == resultId
           ? _value._resultId
           : resultId // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<int>,
       resultDate: null == resultDate
           ? _value._resultDate
           : resultDate // ignore: cast_nullable_to_non_nullable
@@ -108,7 +108,7 @@ class __$$PastDataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$PastDataImpl implements _PastData {
   const _$PastDataImpl(
-      {required final List<String> resultId,
+      {required final List<int> resultId,
       required final List<DateTime> resultDate})
       : _resultId = resultId,
         _resultDate = resultDate;
@@ -116,9 +116,9 @@ class _$PastDataImpl implements _PastData {
   factory _$PastDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$PastDataImplFromJson(json);
 
-  final List<String> _resultId;
+  final List<int> _resultId;
   @override
-  List<String> get resultId {
+  List<int> get resultId {
     if (_resultId is EqualUnmodifiableListView) return _resultId;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_resultId);
@@ -170,14 +170,14 @@ class _$PastDataImpl implements _PastData {
 
 abstract class _PastData implements PastData {
   const factory _PastData(
-      {required final List<String> resultId,
+      {required final List<int> resultId,
       required final List<DateTime> resultDate}) = _$PastDataImpl;
 
   factory _PastData.fromJson(Map<String, dynamic> json) =
       _$PastDataImpl.fromJson;
 
   @override
-  List<String> get resultId;
+  List<int> get resultId;
   @override
   List<DateTime> get resultDate;
   @override
