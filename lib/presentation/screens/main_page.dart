@@ -24,7 +24,7 @@ class _MainPageState extends State<MainPage> {
     {
       'title': '여드름(염증성)',
       'description':
-      '여드름 검출 영역(ROI) 내에서 염증 정도를 농포, 구진, 결절 형태로 구분하여 염증성 여드름을 검출합니다.',
+          '여드름 검출 영역(ROI) 내에서 염증 정도를 농포, 구진, 결절 형태로 구분하여 염증성 여드름을 검출합니다.',
       'icon': 'assets/icons/inflammatory_acne.png',
     },
     {
@@ -170,14 +170,13 @@ class _MainPageState extends State<MainPage> {
             '단 한 번의 촬영으로\n당신의 피부를 정확하게 알아보세요.',
             style: TextStyle(
               color: Colors.black,
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 8),
           const Text(
-            'Youth는 전 세계 3만개 이상의 피부 데이터를 보유하고 있습니다. '
-                '전문평가기관 공인 92% 이상의 정확도는 당신의 피부를 누구보다 견고하게 분석해냅니다.',
+            'Youth는 전 세계 3만개 이상의 피부 데이터를 보유하고 있습니다. ',
             style: TextStyle(
               color: Colors.black,
               fontSize: 14,
@@ -291,7 +290,7 @@ class _MainPageState extends State<MainPage> {
             decoration: BoxDecoration(
               border: Border.all(
                 color:
-                _selectedIndex == index ? Colors.red : Colors.transparent,
+                    _selectedIndex == index ? Colors.red : Colors.transparent,
                 width: 2,
               ),
               borderRadius: BorderRadius.circular(10),
