@@ -49,10 +49,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        AspectRatio(
-                          aspectRatio: _controller.value.aspectRatio,
-                          child: CameraPreview(_controller),
-                        ),
+                        CameraPreview(_controller),
                         Container(
                           width: 300, // Adjust width as needed
                           height: 400, // Adjust height as needed
@@ -60,7 +57,9 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                             shape: BoxShape.rectangle,
                             borderRadius: BorderRadius.circular(
                                 200), // Adjust for ellipse shape
-                            border: Border.all(color: Colors.pink, width: 4),
+                            border: Border.all(
+                                color: Color.fromARGB(255, 194, 40, 91),
+                                width: 4),
                           ),
                         ),
                       ],

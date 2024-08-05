@@ -24,13 +24,14 @@ void main() async {
       runApp(ErrorApp());
       return;
     }
-    final firstCamera = cameras.first;
+    final frontCamera = cameras.firstWhere(
+        (camera) => camera.lensDirection == CameraLensDirection.front);
     runApp(
       MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => LikeService()),
         ],
-        child: FigmaToCodeApp(camera: firstCamera),
+        child: FigmaToCodeApp(camera: frontCamera),
       ),
     );
   } catch (e) {

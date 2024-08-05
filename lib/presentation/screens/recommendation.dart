@@ -50,7 +50,7 @@ class Recommendation extends StatelessWidget {
           } else {
             final recommendDTO = snapshot.data!;
             final skinTypeDescription =
-                '${recommendDTO.simpleSkin}, ${recommendDTO.expertSkin.join(', ')}';
+                '${recommendDTO.simpleSkin}& ${recommendDTO.expertSkin.join(', ')}';
 
             return Padding(
               padding: const EdgeInsets.all(16.0),
