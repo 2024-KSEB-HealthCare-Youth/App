@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'loading_page.dart';
-import '../../utils/rest_api.dart'; // Ensure you have this import
 
 class DisplayPictureScreen extends StatelessWidget {
   final String imagePath;

@@ -8,8 +8,9 @@ part of 'past_data.dart';
 
 _$PastDataImpl _$$PastDataImplFromJson(Map<String, dynamic> json) =>
     _$PastDataImpl(
-      resultId:
-          (json['resultId'] as List<dynamic>).map((e) => e as String).toList(),
+      resultId: (json['resultId'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
       resultDate: (json['resultDate'] as List<dynamic>)
           .map((e) => DateTime.parse(e as String))
           .toList(),

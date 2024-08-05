@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart' as dio;
+import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -134,7 +135,7 @@ class RestAPI {
     }
   }
 
-  static Future<ResultData> fetchResultData(String resultId) async {
+  static Future<ResultData> fetchResultData(int resultId) async {
     try {
       final token = await storage.read(key: 'access_token');
       if (token == null) {
@@ -188,14 +189,19 @@ class RestAPI {
   }
 
   static Future<void> updateUserData(Map<String, dynamic> updatedUser) async {
-    final memberId = updatedUser['loginId'];
+    final token = await storage.read(key: 'access_token');
     final requestBody = jsonEncode(updatedUser);
     print('Request body: $requestBody');
 
     try {
       final response = await dioClient.put(
-        '/members/$memberId',
+        '/members/me',
         data: requestBody,
+        options: dio.Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            }
+        ),
       );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.data}');
@@ -210,33 +216,27 @@ class RestAPI {
     }
   }
 
-  static Future<PastData> fetchPastData(String userId) async {
+  static Future<PastData> fetchPastData() async {
     try {
+      final token = await storage.read(key: 'access-token');
       final response = await dioClient.get(
         '/results/lists',
+        options: dio.Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
       );
 
       if (response.statusCode == 200) {
-        return PastData.fromJson(response.data);
+        if (response.data is Map<String, dynamic> &&
+            response.data['results'] is List &&
+            response.data['results'].isNotEmpty) {
+          final Map<String, dynamic> pastDataJson = response.data['results'][0];
+          return PastData.fromJson(pastDataJson);
+        } else {
+          throw Exception('Unexpected response format or empty results');
+        }
       } else {
         throw Exception('Failed to load past data: ${response.statusMessage}');
-      }
-    } catch (e) {
-      print('Fetch past data failed: $e');
-      throw Exception('Fetch past data failed: $e');
-    }
-  }
-
-  static Future<ResultData> fetchPast_Result(String resultId) async {
-    try {
-      final response = await dioClient.get(
-        '/results/$resultId',
-      );
-      if (response.statusCode == 200) {
-        return ResultData.fromJson(response.data);
-      } else {
-        throw Exception(
-            'Failed to load Past_Result data:${response.statusMessage}');
       }
     } catch (e) {
       print('Fetch past data failed: $e');

@@ -56,8 +56,8 @@ class UserService {
     }
   }
 
-  Future<PastData> fetchPastData(String loginId) async {
-    return await RestAPI.fetchPastData(loginId);
+  Future<PastData> fetchPastData() async {
+    return await RestAPI.fetchPastData();
   }
 
   Future<RecommendDTO> fetchRecommendDTO() async {

@@ -3,7 +3,7 @@ import '../../services/result_service.dart';
 import '../../data/dtos/result_detail_dto.dart';
 
 class ResultDetailScreen extends StatefulWidget {
-  final String resultId;
+  final int resultId;
   final DateTime resultDate;
 
   const ResultDetailScreen({
