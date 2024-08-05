@@ -130,7 +130,7 @@ class MyPage extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  'Simple Skin: ${myPageData.simpleSkin}\n',
+                  'Explanation: ${myPageData.resultDetails}\n',
                   style: const TextStyle(fontSize: 16),
                 ),
               ),
