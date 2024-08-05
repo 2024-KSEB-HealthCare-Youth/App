@@ -17,6 +17,7 @@ class MyPageDTO with _$MyPageDTO {
     required String loginId,
     required String simpleSkin,
     required String resultPath,
+    required String resultDetails,
   }) = _MyPageDTO;
 
   factory MyPageDTO.fromJson(Map<String, dynamic> json) =>

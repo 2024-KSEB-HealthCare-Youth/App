@@ -13,6 +13,8 @@ import '../data/dtos/login_dto.dart';
 import '../data/dtos/recommend_dto.dart';
 import '../data/dtos/post_get_dto.dart';
 import '../data/dtos/onePostdetail_dto.dart';
+import '../data/dtos/my_page_dto.dart';
+import '../data/dtos/send_data_dto.dart';
 
 class RestAPI {
   static const String baseUrl = 'http://52.79.103.61:8080';
@@ -349,18 +351,31 @@ class RestAPI {
     }
   }
 
-  Future<void> sendDataToServer(AiData aiData) async {
+  Future<SendDataDTO> sendDataToServer(AiData aiData) async {
     try {
       final token = await storage.read(key: 'access_token');
       final response = await dioClient.post(
-        '/receive-data',
+        '/members/mypage',
         data: aiData.toJson(),
         options: dio.Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
       );
+
       if (response.statusCode == 200) {
         print('Data sent successfully.');
+
+        if (response.data is Map<String, dynamic> && response.data['results'] is List) {
+          List<dynamic> jsonData = response.data['results'];
+          if (jsonData.isNotEmpty) {
+            SendDataDTO data = SendDataDTO.fromJson(jsonData[0]);
+            return data;
+          } else {
+            throw Exception('No data returned in response');
+          }
+        } else {
+          throw Exception('Unexpected response format');
+        }
       } else {
         print('Data sending failed.');
         throw Exception('Failed to send data: ${response.statusMessage}');
@@ -371,24 +386,37 @@ class RestAPI {
     }
   }
 
-  static Future<AiData> fetchAiData() async {
+
+  static Future<RecommendDTO> fetchRecommendData() async {
     try {
       final token = await storage.read(key: 'access_token');
-      final response = await dioClient.get('/ai-data',
+      final response = await dioClient.get(
+        'path', // 서버의 경로를 입력하세요.
         options: dio.Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
       );
       if (response.statusCode == 200) {
-        return AiData.fromJson(response.data);
+        if (response.data is Map<String, dynamic> &&
+            response.data['results'] is List) {
+          List<dynamic> jsonData = response.data['results'];
+          if (jsonData.isNotEmpty) {
+            return RecommendDTO.fromJson(jsonData[0]);
+          } else {
+            throw Exception('No data returned in response');
+          }
+        } else {
+          throw Exception('Unexpected response format');
+        }
       } else {
-        throw Exception('Failed to load AI data');
+        throw Exception('Failed to load RecommendDTO data: ${response.statusMessage}');
       }
     } catch (e) {
-      print('Fetch AI data failed: $e');
-      throw Exception('Fetch AI data failed: $e');
+      print('Data fetching failed: $e');
+      throw Exception('Data fetching failed: $e');
     }
   }
+
 
 
   static Future<bool> addCommentToPost(int postId, CommentDTO comment) async {

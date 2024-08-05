@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import '../../data/dtos/my_page_dto.dart';
-import '../../services/user_service.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/profile_detail.dart';
 
@@ -15,6 +14,12 @@ class MyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final MyPageDTO myPageData = ModalRoute.of(context)!.settings.arguments as MyPageDTO;
+    Uint8List? decodedImage;
+    if (myPageData.resultPath != null && myPageData.resultPath.isNotEmpty) {
+      decodedImage = decodeBase64Image(myPageData.resultPath);
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -40,130 +45,105 @@ class MyPage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: FutureBuilder<MyPageDTO>(
-        future: UserService().fetchMyPageDTO(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData) {
-            return const Center(child: Text('No data found'));
-          } else {
-            final data = snapshot.data!;
-            Uint8List? decodedImage;
-            if (data.resultPath != null && data.resultPath!.isNotEmpty) {
-              decodedImage = decodeBase64Image(data.resultPath!);
-            }
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    radius: 36,
+                    backgroundImage: myPageData.resultPath.isNotEmpty
+                        ? NetworkImage(myPageData.resultPath)
+                        : const AssetImage(
+                        'assets/images/default_profile.png') as ImageProvider,
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CircleAvatar(
-                          radius: 36,
-                          backgroundImage: data.profileImage != null
-                              ? NetworkImage(data.profileImage!)
-                              : const AssetImage(
-                              'assets/images/default_profile.png')
-                          as ImageProvider,
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ProfileDetail(label: 'Name', value: data.name),
-                              const SizedBox(height: 8),
-                              ProfileDetail(
-                                  label: 'Gender', value: data.gender),
-                              const SizedBox(height: 8),
-                              ProfileDetail(
-                                  label: 'Age', value: data.age.toString()),
-                              const SizedBox(height: 8),
-                              ProfileDetail(
-                                  label: 'Email', value: data.email ?? 'N/A'),
-                              const SizedBox(height: 8),
-                              ProfileDetail(
-                                  label: 'Phone', value: data.phoneNumber),
-                              const SizedBox(height: 8),
-                              ProfileDetail(
-                                  label: 'Skin Type',
-                                  value: data.simpleSkin ?? 'Unknown'),
-                            ],
-                          ),
-                        ),
+                        ProfileDetail(label: 'Name', value: myPageData.name),
+                        const SizedBox(height: 8),
+                        ProfileDetail(label: 'Gender', value: myPageData.gender),
+                        const SizedBox(height: 8),
+                        ProfileDetail(label: 'Age', value: myPageData.age.toString()),
+                        const SizedBox(height: 8),
+                        ProfileDetail(label: 'Email', value: myPageData.email ?? 'N/A'),
+                        const SizedBox(height: 8),
+                        ProfileDetail(label: 'Phone', value: myPageData.phoneNumber),
+                        const SizedBox(height: 8),
+                        ProfileDetail(label: 'Skin Type', value: myPageData.simpleSkin),
                       ],
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: CustomButton(
-                        text: '수정',
-                        onPressed: () {
-                          Navigator.pushNamed(
-                            context,
-                            '/edit_account',
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-                    const Text(
-                      'Diagnostic Results',
-                      style: TextStyle(
-                        color: Color(0xFFE26169),
-                        fontSize: 20,
-                        fontFamily: 'Nobile',
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 0.30,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Center(
-                      child: Container(
-                        width: 183,
-                        height: 183,
-                        decoration: ShapeDecoration(
-                          color: const Color(0xFFD9D9D9),
-                          shape: StarBorder.polygon(sides: 6),
-                        ),
-                        child: decodedImage != null
-                            ? Image.memory(decodedImage)
-                            : const Icon(Icons.image_not_supported),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    Container(
-                      padding: const EdgeInsets.all(16.0),
-                      width: double.infinity,
-                      decoration: ShapeDecoration(
-                        color: const Color(0x7FE8E8E8),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      child: Text(
-                        'Simple Skin: ${data.simpleSkin}\n',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    const SizedBox(height: 32),
-                    CustomButton(
-                      text: 'find my suitable cosmetics&nutrition',
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/recommendation_page');
-                      },
-                    ),
-                  ],
+                  ),
+                ],
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: CustomButton(
+                  text: '수정',
+                  onPressed: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/edit_account',
+                    );
+                  },
                 ),
               ),
-            );
-          }
-        },
+              const SizedBox(height: 32),
+              const Text(
+                'Diagnostic Results',
+                style: TextStyle(
+                  color: Color(0xFFE26169),
+                  fontSize: 20,
+                  fontFamily: 'Nobile',
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.30,
+                ),
+              ),
+              const SizedBox(height: 16),
+              Center(
+                child: Container(
+                  width: 183,
+                  height: 183,
+                  decoration: ShapeDecoration(
+                    color: const Color(0xFFD9D9D9),
+                    shape: StarBorder.polygon(sides: 6),
+                  ),
+                  child: decodedImage != null
+                      ? Image.memory(decodedImage)
+                      : const Icon(Icons.image_not_supported),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                width: double.infinity,
+                decoration: ShapeDecoration(
+                  color: const Color(0x7FE8E8E8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                child: Text(
+                  'Simple Skin: ${myPageData.simpleSkin}\n',
+                  style: const TextStyle(fontSize: 16),
+                ),
+              ),
+              const SizedBox(height: 32),
+              CustomButton(
+                text: 'find my suitable cosmetics&nutrition',
+                onPressed: () {
+                  Navigator.pushNamed(context, '/recommendation_page');
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

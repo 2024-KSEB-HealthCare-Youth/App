@@ -29,6 +29,7 @@ mixin _$MyPageDTO {
   String get loginId => throw _privateConstructorUsedError;
   String get simpleSkin => throw _privateConstructorUsedError;
   String get resultPath => throw _privateConstructorUsedError;
+  String get resultDetails => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -50,7 +51,8 @@ abstract class $MyPageDTOCopyWith<$Res> {
       String phoneNumber,
       String loginId,
       String simpleSkin,
-      String resultPath});
+      String resultPath,
+      String resultDetails});
 }
 
 /// @nodoc
@@ -75,6 +77,7 @@ class _$MyPageDTOCopyWithImpl<$Res, $Val extends MyPageDTO>
     Object? loginId = null,
     Object? simpleSkin = null,
     Object? resultPath = null,
+    Object? resultDetails = null,
   }) {
     return _then(_value.copyWith(
       profileImage: freezed == profileImage
@@ -113,6 +116,10 @@ class _$MyPageDTOCopyWithImpl<$Res, $Val extends MyPageDTO>
           ? _value.resultPath
           : resultPath // ignore: cast_nullable_to_non_nullable
               as String,
+      resultDetails: null == resultDetails
+          ? _value.resultDetails
+          : resultDetails // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -134,7 +141,8 @@ abstract class _$$MyPageDTOImplCopyWith<$Res>
       String phoneNumber,
       String loginId,
       String simpleSkin,
-      String resultPath});
+      String resultPath,
+      String resultDetails});
 }
 
 /// @nodoc
@@ -157,6 +165,7 @@ class __$$MyPageDTOImplCopyWithImpl<$Res>
     Object? loginId = null,
     Object? simpleSkin = null,
     Object? resultPath = null,
+    Object? resultDetails = null,
   }) {
     return _then(_$MyPageDTOImpl(
       profileImage: freezed == profileImage
@@ -195,6 +204,10 @@ class __$$MyPageDTOImplCopyWithImpl<$Res>
           ? _value.resultPath
           : resultPath // ignore: cast_nullable_to_non_nullable
               as String,
+      resultDetails: null == resultDetails
+          ? _value.resultDetails
+          : resultDetails // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -211,7 +224,8 @@ class _$MyPageDTOImpl implements _MyPageDTO {
       required this.phoneNumber,
       required this.loginId,
       required this.simpleSkin,
-      required this.resultPath});
+      required this.resultPath,
+      required this.resultDetails});
 
   factory _$MyPageDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$MyPageDTOImplFromJson(json);
@@ -234,10 +248,12 @@ class _$MyPageDTOImpl implements _MyPageDTO {
   final String simpleSkin;
   @override
   final String resultPath;
+  @override
+  final String resultDetails;
 
   @override
   String toString() {
-    return 'MyPageDTO(profileImage: $profileImage, name: $name, gender: $gender, age: $age, email: $email, phoneNumber: $phoneNumber, loginId: $loginId, simpleSkin: $simpleSkin, resultPath: $resultPath)';
+    return 'MyPageDTO(profileImage: $profileImage, name: $name, gender: $gender, age: $age, email: $email, phoneNumber: $phoneNumber, loginId: $loginId, simpleSkin: $simpleSkin, resultPath: $resultPath, resultDetails: $resultDetails)';
   }
 
   @override
@@ -257,13 +273,15 @@ class _$MyPageDTOImpl implements _MyPageDTO {
             (identical(other.simpleSkin, simpleSkin) ||
                 other.simpleSkin == simpleSkin) &&
             (identical(other.resultPath, resultPath) ||
-                other.resultPath == resultPath));
+                other.resultPath == resultPath) &&
+            (identical(other.resultDetails, resultDetails) ||
+                other.resultDetails == resultDetails));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, profileImage, name, gender, age,
-      email, phoneNumber, loginId, simpleSkin, resultPath);
+      email, phoneNumber, loginId, simpleSkin, resultPath, resultDetails);
 
   @JsonKey(ignore: true)
   @override
@@ -289,7 +307,8 @@ abstract class _MyPageDTO implements MyPageDTO {
       required final String phoneNumber,
       required final String loginId,
       required final String simpleSkin,
-      required final String resultPath}) = _$MyPageDTOImpl;
+      required final String resultPath,
+      required final String resultDetails}) = _$MyPageDTOImpl;
 
   factory _MyPageDTO.fromJson(Map<String, dynamic> json) =
       _$MyPageDTOImpl.fromJson;
@@ -312,6 +331,8 @@ abstract class _MyPageDTO implements MyPageDTO {
   String get simpleSkin;
   @override
   String get resultPath;
+  @override
+  String get resultDetails;
   @override
   @JsonKey(ignore: true)
   _$$MyPageDTOImplCopyWith<_$MyPageDTOImpl> get copyWith =>

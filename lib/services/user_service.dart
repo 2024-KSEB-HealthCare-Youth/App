@@ -4,21 +4,31 @@ import '../utils/rest_api.dart';
 import '../data/dtos/recommend_dto.dart';
 import '../data/dtos/my_page_dto.dart';
 import '../data/dtos/edit_user_dto.dart';
+import '../data/dtos/send_data_dto.dart';
+import '../../data/models/ai_data.dart';
 
 class UserService {
-  Future<MyPageDTO> fetchMyPageDTO() async {
+
+  Future<MyPageDTO> uploadImageAndFetchData(String imagePath) async {
+
+    final RestAPI _restAPI = RestAPI();
+
+    AiData aiData = await RestAPI.uploadImage(imagePath);
+    SendDataDTO sendData = await _restAPI.sendDataToServer(aiData);
     final userData = await RestAPI.fetchUserData();
-    final aiData = await RestAPI.fetchAiData();
+
+    // Convert SendDataDTO to MyPageDTO
     return MyPageDTO(
-      age: userData.age,
+      age: sendData.age,
+      name: sendData.name,
+      gender: sendData.gender,
+      email: sendData.email,
+      phoneNumber: sendData.phoneNumber,
+      resultPath: sendData.resultImage,
+      resultDetails: sendData.resultDetails ?? '',
+      simpleSkin: sendData.basicSkinType,
       profileImage: userData.profileImage,
-      name: userData.name,
-      gender: userData.gender,
-      email: userData.email,
-      phoneNumber: userData.phoneNumber ?? '',
       loginId: userData.loginId,
-      simpleSkin: aiData.simpleSkin,
-      resultPath: aiData.resultImage,
     );
   }
 
@@ -51,16 +61,6 @@ class UserService {
   }
 
   Future<RecommendDTO> fetchRecommendDTO() async {
-    final userData = await RestAPI.fetchUserData();
-    final aiData = await RestAPI.fetchAiData();
-    return RecommendDTO(
-      name: userData.name,
-      simpleSkin: aiData.simpleSkin,
-      expertSkin: aiData.expertSkin,
-      cosNames: aiData.cosNames,
-      cosPaths: aiData.cosPaths,
-      nutrNames: aiData.nutrNames,
-      nutrPaths: aiData.nutrPaths,
-    );
+    return await RestAPI.fetchRecommendData();
   }
 }
