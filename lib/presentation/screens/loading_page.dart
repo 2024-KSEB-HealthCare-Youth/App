@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../utils/rest_api.dart';
-import '../../data/models/ai_data.dart'; // Ensure this import
+import '../../services/user_service.dart';
+import '../../data/dtos/my_page_dto.dart';
 
 class LoadingScreen extends StatefulWidget {
   final String imagePath;
@@ -12,7 +12,8 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  final RestAPI _restAPI = RestAPI();
+  final UserService _userService = UserService();
+
   @override
   void initState() {
     super.initState();
@@ -21,12 +22,13 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   Future<void> _uploadImageAndFetchAiData() async {
     try {
-      // Upload the image and fetch AI data
-      AiData aiData = await RestAPI.uploadImage(widget.imagePath);
-      await _restAPI.sendDataToServer(aiData);
-      // Navigate to MyPage with the received AI data and image path
+      // Use UserService to upload image and fetch data
+      MyPageDTO myPageData = await _userService.uploadImageAndFetchData(widget.imagePath);
+
+      // Navigate to MyPage with the received AI data
       Navigator.of(context).pushReplacementNamed(
         '/my_page',
+        arguments: myPageData,
       );
     } catch (e) {
       // Handle error

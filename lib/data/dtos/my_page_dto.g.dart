@@ -17,6 +17,7 @@ _$MyPageDTOImpl _$$MyPageDTOImplFromJson(Map<String, dynamic> json) =>
       loginId: json['loginId'] as String,
       simpleSkin: json['simpleSkin'] as String,
       resultPath: json['resultPath'] as String,
+      resultDetails: json['resultDetails'] as String,
     );
 
 Map<String, dynamic> _$$MyPageDTOImplToJson(_$MyPageDTOImpl instance) =>
@@ -30,4 +31,5 @@ Map<String, dynamic> _$$MyPageDTOImplToJson(_$MyPageDTOImpl instance) =>
       'loginId': instance.loginId,
       'simpleSkin': instance.simpleSkin,
       'resultPath': instance.resultPath,
+      'resultDetails': instance.resultDetails,
     };
