@@ -176,7 +176,7 @@ class _MainPageState extends State<MainPage> {
           ),
           const SizedBox(height: 8),
           const Text(
-            'Youth는 전 세계 3만개 이상의 피부 데이터를 보유하고 있습니다. ',
+            'Youth를 통해 매일매일 달라지는 \n당신의 피부상태를 정확하게 알아보세요.',
             style: TextStyle(
               color: Colors.black,
               fontSize: 14,
@@ -272,7 +272,7 @@ class _MainPageState extends State<MainPage> {
           _skinInfo[_selectedIndex]['description']!,
           style: const TextStyle(
             color: Colors.black,
-            fontSize: 14,
+            fontSize: 12,
           ),
         ),
       ],

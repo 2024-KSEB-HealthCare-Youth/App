@@ -36,10 +36,24 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Youth', style: TextStyle(fontFamily: 'Pacifico')),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: Text('Youth', style: TextStyle(fontFamily: 'Pacifico')),
+        centerTitle: true,
       ),
       body: Column(
         children: [
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'keep your face inside the circle',
+              style: TextStyle(fontFamily: 'Pacifico'),
+            ),
+          ),
           Expanded(
             child: FutureBuilder<void>(
               future: _initializeControllerFuture,
@@ -51,12 +65,11 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                       children: [
                         CameraPreview(_controller),
                         Container(
-                          width: 300, // Adjust width as needed
-                          height: 400, // Adjust height as needed
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          height: MediaQuery.of(context).size.width * 1.2,
                           decoration: BoxDecoration(
                             shape: BoxShape.rectangle,
-                            borderRadius: BorderRadius.circular(
-                                200), // Adjust for ellipse shape
+                            borderRadius: BorderRadius.circular(200),
                             border: Border.all(
                                 color: Color.fromARGB(255, 194, 40, 91),
                                 width: 4),
@@ -70,11 +83,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                 }
               },
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text('keep your face inside the circle',
-                style: TextStyle(fontFamily: 'Pacifico')),
           ),
           SizedBox(
             width: double.infinity,

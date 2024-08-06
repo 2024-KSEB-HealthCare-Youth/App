@@ -18,6 +18,10 @@ class PostCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 2.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: InkWell(
         onTap: onTap,
         child: Padding(
@@ -32,45 +36,38 @@ class PostCard extends StatelessWidget {
                     radius: 20,
                   ),
                   const SizedBox(width: 8),
-                  Text(
-                    post.nickName,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        post.nickName,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        '${post.createdAt.day}/${post.createdAt.month}/${post.createdAt.year}',
+                        style: const TextStyle(color: Colors.grey, fontSize: 12),
+                      ),
+                    ],
                   ),
                   const Spacer(),
-                  Text(
-                    '${post.createdAt.day}/${post.createdAt.month}/${post.createdAt.year}',
-                    style: const TextStyle(color: Colors.grey),
+                  IconButton(
+                    icon: Icon(
+                      isLiked ? Icons.favorite : Icons.favorite_border,
+                      color: isLiked ? Colors.red : null,
+                    ),
+                    onPressed: onLikePressed,
                   ),
+                  Text('${post.likeCount ?? '0'} likes'),
                 ],
               ),
               const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Text(
-                      post.title,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          isLiked ? Icons.favorite : Icons.favorite_border,
-                          color: isLiked ? Colors.red : null,
-                        ),
-                        onPressed: onLikePressed,
-                      ),
-                      Text('${post.likeCount ?? '0'} likes'),
-                    ],
-                  ),
-                ],
+              Text(
+                post.title,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.start,
               ),
             ],
           ),
