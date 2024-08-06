@@ -19,7 +19,7 @@ import '../data/dtos/send_data_dto.dart';
 
 class RestAPI {
   static const String baseUrl = 'http://52.79.103.61:8080';
-  static const String flaskUrl = 'http://3.37.66.194:5000';
+  static const String flaskUrl = 'http://172.16.146.75:8000/';
   static const Map<String, String> headers = {
     'Content-Type': 'application/json'
   };
@@ -446,25 +446,25 @@ class RestAPI {
     }
   }
 
-  static Future<void> removeLikeStatus(int postId) async {
-    try {
-      final token = await storage.read(key: 'access_token');
-      final response = await dioClient.delete(
-        '/likes/$postId',
-        options: dio.Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-          },
-        ),
-      );
-      if (response.statusCode != 200) {
-        throw Exception('Failed to remove like status: ${response.statusMessage}');
-      }
-    } catch (e) {
-      print('Remove like status failed: $e');
-      throw Exception('Remove like status failed: $e');
-    }
-  }
+  // static Future<void> removeLikeStatus(int postId) async {
+  //   try {
+  //     final token = await storage.read(key: 'access_token');
+  //     final response = await dioClient.delete(
+  //       '/likes/$postId',
+  //       options: dio.Options(
+  //         headers: {
+  //           'Authorization': 'Bearer $token',
+  //         },
+  //       ),
+  //     );
+  //     if (response.statusCode != 200) {
+  //       throw Exception('Failed to remove like status: ${response.statusMessage}');
+  //     }
+  //   } catch (e) {
+  //     print('Remove like status failed: $e');
+  //     throw Exception('Remove like status failed: $e');
+  //   }
+  // }
 
   static Future<void> updateLikeStatus(int postId) async {
     try {
@@ -483,6 +483,29 @@ class RestAPI {
     } catch (e) {
       print('Update like status failed: $e');
       throw Exception('Update like status failed: $e');
+    }
+  }
+
+  static Future<void> deletePost(int postId) async {
+    final requestBody = jsonEncode({'postId': postId});
+    try {
+      final token = await storage.read(key: 'access_token');
+      final response = await dioClient.delete(
+        '/posts/me',
+        data: requestBody,
+        options: dio.Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+          },
+
+        ),
+      );
+      if (response.statusCode != 200) {
+        throw Exception('Failed to delete post: ${response.statusMessage}');
+      }
+    } catch (e) {
+      print('Delete post failed: $e');
+      throw Exception('Delete post failed: $e');
     }
   }
 }

@@ -13,8 +13,8 @@ class AiData with _$AiData {
     required List<SkinType> expertSkin,
     required List<String> nutrNames,
     required List<String> nutrPaths,
-    required String simpleSkin,
     required String resultImage,
+    required String simpleSkin,
   }) = _AiData;
 
   factory AiData.fromJson(Map<String, dynamic> json) => _$AiDataFromJson(json);

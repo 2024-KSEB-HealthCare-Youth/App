@@ -45,4 +45,8 @@ class PostService{
       throw Exception('Failed to fetch posts: $e');
     }
   }
+
+  Future<void> deletePost(int postId) async {
+    RestAPI.deletePost(postId);
+  }
 }
