@@ -25,7 +25,6 @@ mixin _$AiData {
   List<String> get nutrNames => throw _privateConstructorUsedError;
   List<String> get nutrPaths => throw _privateConstructorUsedError;
   String get simpleSkin => throw _privateConstructorUsedError;
-  @SkinTypeListConverter()
   List<SkinType>? get expertSkin => throw _privateConstructorUsedError;
   String get resultImage => throw _privateConstructorUsedError;
 
@@ -45,7 +44,7 @@ abstract class $AiDataCopyWith<$Res> {
       List<String> nutrNames,
       List<String> nutrPaths,
       String simpleSkin,
-      @SkinTypeListConverter() List<SkinType>? expertSkin,
+      List<SkinType>? expertSkin,
       String resultImage});
 }
 
@@ -116,7 +115,7 @@ abstract class _$$AiDataImplCopyWith<$Res> implements $AiDataCopyWith<$Res> {
       List<String> nutrNames,
       List<String> nutrPaths,
       String simpleSkin,
-      @SkinTypeListConverter() List<SkinType>? expertSkin,
+      List<SkinType>? expertSkin,
       String resultImage});
 }
 
@@ -181,7 +180,7 @@ class _$AiDataImpl implements _AiData {
       required final List<String> nutrNames,
       required final List<String> nutrPaths,
       required this.simpleSkin,
-      @SkinTypeListConverter() final List<SkinType>? expertSkin,
+      final List<SkinType>? expertSkin,
       required this.resultImage})
       : _cosNames = cosNames,
         _cosPaths = cosPaths,
@@ -228,7 +227,6 @@ class _$AiDataImpl implements _AiData {
   final String simpleSkin;
   final List<SkinType>? _expertSkin;
   @override
-  @SkinTypeListConverter()
   List<SkinType>? get expertSkin {
     final value = _expertSkin;
     if (value == null) return null;
@@ -297,7 +295,7 @@ abstract class _AiData implements AiData {
       required final List<String> nutrNames,
       required final List<String> nutrPaths,
       required final String simpleSkin,
-      @SkinTypeListConverter() final List<SkinType>? expertSkin,
+      final List<SkinType>? expertSkin,
       required final String resultImage}) = _$AiDataImpl;
 
   factory _AiData.fromJson(Map<String, dynamic> json) = _$AiDataImpl.fromJson;
@@ -313,7 +311,6 @@ abstract class _AiData implements AiData {
   @override
   String get simpleSkin;
   @override
-  @SkinTypeListConverter()
   List<SkinType>? get expertSkin;
   @override
   String get resultImage;
