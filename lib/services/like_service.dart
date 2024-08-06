@@ -9,7 +9,7 @@ class LikeService extends ChangeNotifier {
   Future<void> toggleLike(int postId, int currentLikeCount) async {
     if (_likedPosts.contains(postId)) {
       _likedPosts.remove(postId);
-      await RestAPI.removeLikeStatus(postId); // DELETE request
+      await RestAPI.updateLikeStatus(postId); // DELETE request
     } else {
       _likedPosts.add(postId);
       await RestAPI.updateLikeStatus(postId); // PUT request
