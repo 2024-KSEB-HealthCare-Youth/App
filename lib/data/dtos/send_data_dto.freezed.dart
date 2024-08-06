@@ -28,7 +28,7 @@ mixin _$SendDataDTO {
   String get phoneNumber => throw _privateConstructorUsedError;
   String get resultImage => throw _privateConstructorUsedError;
   String? get resultDetails => throw _privateConstructorUsedError;
-  skinType get advancedSkinType => throw _privateConstructorUsedError;
+  List<skinType>? get advancedSkinType => throw _privateConstructorUsedError;
   String get basicSkinType => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -52,7 +52,7 @@ abstract class $SendDataDTOCopyWith<$Res> {
       String phoneNumber,
       String resultImage,
       String? resultDetails,
-      skinType advancedSkinType,
+      List<skinType>? advancedSkinType,
       String basicSkinType});
 }
 
@@ -77,7 +77,7 @@ class _$SendDataDTOCopyWithImpl<$Res, $Val extends SendDataDTO>
     Object? phoneNumber = null,
     Object? resultImage = null,
     Object? resultDetails = freezed,
-    Object? advancedSkinType = null,
+    Object? advancedSkinType = freezed,
     Object? basicSkinType = null,
   }) {
     return _then(_value.copyWith(
@@ -113,10 +113,10 @@ class _$SendDataDTOCopyWithImpl<$Res, $Val extends SendDataDTO>
           ? _value.resultDetails
           : resultDetails // ignore: cast_nullable_to_non_nullable
               as String?,
-      advancedSkinType: null == advancedSkinType
+      advancedSkinType: freezed == advancedSkinType
           ? _value.advancedSkinType
           : advancedSkinType // ignore: cast_nullable_to_non_nullable
-              as skinType,
+              as List<skinType>?,
       basicSkinType: null == basicSkinType
           ? _value.basicSkinType
           : basicSkinType // ignore: cast_nullable_to_non_nullable
@@ -142,7 +142,7 @@ abstract class _$$SendDataDTOImplCopyWith<$Res>
       String phoneNumber,
       String resultImage,
       String? resultDetails,
-      skinType advancedSkinType,
+      List<skinType>? advancedSkinType,
       String basicSkinType});
 }
 
@@ -165,7 +165,7 @@ class __$$SendDataDTOImplCopyWithImpl<$Res>
     Object? phoneNumber = null,
     Object? resultImage = null,
     Object? resultDetails = freezed,
-    Object? advancedSkinType = null,
+    Object? advancedSkinType = freezed,
     Object? basicSkinType = null,
   }) {
     return _then(_$SendDataDTOImpl(
@@ -201,10 +201,10 @@ class __$$SendDataDTOImplCopyWithImpl<$Res>
           ? _value.resultDetails
           : resultDetails // ignore: cast_nullable_to_non_nullable
               as String?,
-      advancedSkinType: null == advancedSkinType
-          ? _value.advancedSkinType
+      advancedSkinType: freezed == advancedSkinType
+          ? _value._advancedSkinType
           : advancedSkinType // ignore: cast_nullable_to_non_nullable
-              as skinType,
+              as List<skinType>?,
       basicSkinType: null == basicSkinType
           ? _value.basicSkinType
           : basicSkinType // ignore: cast_nullable_to_non_nullable
@@ -225,8 +225,9 @@ class _$SendDataDTOImpl implements _SendDataDTO {
       required this.phoneNumber,
       required this.resultImage,
       this.resultDetails,
-      required this.advancedSkinType,
-      required this.basicSkinType});
+      final List<skinType>? advancedSkinType,
+      required this.basicSkinType})
+      : _advancedSkinType = advancedSkinType;
 
   factory _$SendDataDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$SendDataDTOImplFromJson(json);
@@ -247,8 +248,17 @@ class _$SendDataDTOImpl implements _SendDataDTO {
   final String resultImage;
   @override
   final String? resultDetails;
+  final List<skinType>? _advancedSkinType;
   @override
-  final skinType advancedSkinType;
+  List<skinType>? get advancedSkinType {
+    final value = _advancedSkinType;
+    if (value == null) return null;
+    if (_advancedSkinType is EqualUnmodifiableListView)
+      return _advancedSkinType;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   final String basicSkinType;
 
@@ -274,8 +284,8 @@ class _$SendDataDTOImpl implements _SendDataDTO {
                 other.resultImage == resultImage) &&
             (identical(other.resultDetails, resultDetails) ||
                 other.resultDetails == resultDetails) &&
-            (identical(other.advancedSkinType, advancedSkinType) ||
-                other.advancedSkinType == advancedSkinType) &&
+            const DeepCollectionEquality()
+                .equals(other._advancedSkinType, _advancedSkinType) &&
             (identical(other.basicSkinType, basicSkinType) ||
                 other.basicSkinType == basicSkinType));
   }
@@ -292,7 +302,7 @@ class _$SendDataDTOImpl implements _SendDataDTO {
       phoneNumber,
       resultImage,
       resultDetails,
-      advancedSkinType,
+      const DeepCollectionEquality().hash(_advancedSkinType),
       basicSkinType);
 
   @JsonKey(ignore: true)
@@ -319,7 +329,7 @@ abstract class _SendDataDTO implements SendDataDTO {
       required final String phoneNumber,
       required final String resultImage,
       final String? resultDetails,
-      required final skinType advancedSkinType,
+      final List<skinType>? advancedSkinType,
       required final String basicSkinType}) = _$SendDataDTOImpl;
 
   factory _SendDataDTO.fromJson(Map<String, dynamic> json) =
@@ -342,7 +352,7 @@ abstract class _SendDataDTO implements SendDataDTO {
   @override
   String? get resultDetails;
   @override
-  skinType get advancedSkinType;
+  List<skinType>? get advancedSkinType;
   @override
   String get basicSkinType;
   @override
