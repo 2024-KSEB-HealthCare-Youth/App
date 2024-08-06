@@ -16,7 +16,7 @@ class SendDataDTO with _$SendDataDTO {
     required String phoneNumber,
     required String resultImage,
     String? resultDetails,
-    required skinType advancedSkinType,
+    List<skinType>? advancedSkinType,
     required String basicSkinType,
   }) = _SendDataDTO;
 

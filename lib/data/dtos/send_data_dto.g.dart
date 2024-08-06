@@ -16,8 +16,9 @@ _$SendDataDTOImpl _$$SendDataDTOImplFromJson(Map<String, dynamic> json) =>
       phoneNumber: json['phoneNumber'] as String,
       resultImage: json['resultImage'] as String,
       resultDetails: json['resultDetails'] as String?,
-      advancedSkinType:
-          $enumDecode(_$skinTypeEnumMap, json['advancedSkinType']),
+      advancedSkinType: (json['advancedSkinType'] as List<dynamic>?)
+          ?.map((e) => $enumDecode(_$skinTypeEnumMap, e))
+          .toList(),
       basicSkinType: json['basicSkinType'] as String,
     );
 
@@ -31,7 +32,8 @@ Map<String, dynamic> _$$SendDataDTOImplToJson(_$SendDataDTOImpl instance) =>
       'phoneNumber': instance.phoneNumber,
       'resultImage': instance.resultImage,
       'resultDetails': instance.resultDetails,
-      'advancedSkinType': _$skinTypeEnumMap[instance.advancedSkinType]!,
+      'advancedSkinType':
+          instance.advancedSkinType?.map((e) => _$skinTypeEnumMap[e]!).toList(),
       'basicSkinType': instance.basicSkinType,
     };
 
