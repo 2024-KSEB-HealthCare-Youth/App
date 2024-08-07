@@ -348,7 +348,7 @@ class RestAPI {
 
       if (response.statusCode == 200) {
         // 서버에서 받은 데이터를 스트림으로 처리
-        var file = File('path/to/save/large_file.json'); // 파일 저장 경로 설정
+        var file = File('lib/flaskData/$imagePath.json'); // 파일 저장 경로 설정
         var sink = file.openWrite();
 
         // 스트림을 통해 데이터를 파일에 저장
