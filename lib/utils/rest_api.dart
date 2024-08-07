@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:dio/dio.dart' as dio;
 import 'package:myapp/data/dtos/ai_dto.dart';
@@ -20,7 +21,7 @@ import '../data/dtos/send_data_dto.dart';
 
 class RestAPI {
   static const String baseUrl = 'http://52.79.103.61:8080';
-  static const String flaskUrl = 'http://172.16.146.75:8000/';
+  static const String flaskUrl = 'http://172.16.159.173:8000/';
   static const Map<String, String> headers = {
     'Content-Type': 'application/json'
   };
@@ -365,9 +366,8 @@ class RestAPI {
   }
 
   static Map<String, dynamic> _decompressGzipData(Uint8List compressedData) {
-    final input = InputStream(compressedData);
-    final gzip = GZipDecoder().decodeBuffer(input);
-    final jsonString = utf8.decode(gzip);
+    final decompressedBytes = GZipCodec().decode(compressedData);
+    final jsonString = utf8.decode(decompressedBytes);
     return jsonDecode(jsonString) as Map<String, dynamic>;
   }
 
