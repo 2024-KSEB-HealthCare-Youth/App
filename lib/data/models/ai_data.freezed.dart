@@ -24,7 +24,7 @@ mixin _$AiData {
   List<String> get cosPaths => throw _privateConstructorUsedError;
   List<String> get nutrNames => throw _privateConstructorUsedError;
   List<String> get nutrPaths => throw _privateConstructorUsedError;
-  String get simpleSkin => throw _privateConstructorUsedError;
+  BasicType get simpleSkin => throw _privateConstructorUsedError;
   List<SkinType>? get expertSkin => throw _privateConstructorUsedError;
   String get resultImage => throw _privateConstructorUsedError;
 
@@ -43,7 +43,7 @@ abstract class $AiDataCopyWith<$Res> {
       List<String> cosPaths,
       List<String> nutrNames,
       List<String> nutrPaths,
-      String simpleSkin,
+      BasicType simpleSkin,
       List<SkinType>? expertSkin,
       String resultImage});
 }
@@ -89,7 +89,7 @@ class _$AiDataCopyWithImpl<$Res, $Val extends AiData>
       simpleSkin: null == simpleSkin
           ? _value.simpleSkin
           : simpleSkin // ignore: cast_nullable_to_non_nullable
-              as String,
+              as BasicType,
       expertSkin: freezed == expertSkin
           ? _value.expertSkin
           : expertSkin // ignore: cast_nullable_to_non_nullable
@@ -114,7 +114,7 @@ abstract class _$$AiDataImplCopyWith<$Res> implements $AiDataCopyWith<$Res> {
       List<String> cosPaths,
       List<String> nutrNames,
       List<String> nutrPaths,
-      String simpleSkin,
+      BasicType simpleSkin,
       List<SkinType>? expertSkin,
       String resultImage});
 }
@@ -158,7 +158,7 @@ class __$$AiDataImplCopyWithImpl<$Res>
       simpleSkin: null == simpleSkin
           ? _value.simpleSkin
           : simpleSkin // ignore: cast_nullable_to_non_nullable
-              as String,
+              as BasicType,
       expertSkin: freezed == expertSkin
           ? _value._expertSkin
           : expertSkin // ignore: cast_nullable_to_non_nullable
@@ -224,7 +224,7 @@ class _$AiDataImpl implements _AiData {
   }
 
   @override
-  final String simpleSkin;
+  final BasicType simpleSkin;
   final List<SkinType>? _expertSkin;
   @override
   List<SkinType>? get expertSkin {
@@ -294,7 +294,7 @@ abstract class _AiData implements AiData {
       required final List<String> cosPaths,
       required final List<String> nutrNames,
       required final List<String> nutrPaths,
-      required final String simpleSkin,
+      required final BasicType simpleSkin,
       final List<SkinType>? expertSkin,
       required final String resultImage}) = _$AiDataImpl;
 
@@ -309,7 +309,7 @@ abstract class _AiData implements AiData {
   @override
   List<String> get nutrPaths;
   @override
-  String get simpleSkin;
+  BasicType get simpleSkin;
   @override
   List<SkinType>? get expertSkin;
   @override

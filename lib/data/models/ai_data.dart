@@ -5,6 +5,8 @@ part 'ai_data.g.dart';
 
 enum SkinType { acne, wrinkle, atophy }
 
+enum BasicType { OILY, DRY, COMBINATION }
+
 @freezed
 class AiData with _$AiData {
   const factory AiData({
@@ -12,7 +14,7 @@ class AiData with _$AiData {
     required List<String> cosPaths,
     required List<String> nutrNames,
     required List<String> nutrPaths,
-    required String simpleSkin,
+    required BasicType simpleSkin,
     List<SkinType>? expertSkin,
     required String resultImage,
   }) = _AiData;
