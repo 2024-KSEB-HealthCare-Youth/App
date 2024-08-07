@@ -35,7 +35,7 @@ class UserService {
       resultImage: aiData.resultImage,
       resultDetails: '',
       faceImage: imagePath,
-      basicSkinType: aiData.simpleSkin,
+      basicSkinType: _convertBasicType(aiData.simpleSkin),
       advancedSkinType: _convertSkinTypeList(aiData.expertSkin),
       cosNames: aiData.cosNames,
       cosPaths: aiData.cosPaths,
@@ -57,6 +57,17 @@ class UserService {
         return dto.SkinType.WRINKLE;
       case model.SkinType.atophy:
         return dto.SkinType.ATOPHY;
+    }
+  }
+
+  dto.BaseType _convertBasicType(model.BasicType Type) {
+    switch (Type) {
+      case model.BasicType.OILY:
+        return dto.BaseType.OILY;
+      case model.BasicType.DRY:
+        return dto.BaseType.DRY;
+      case model.BasicType.COMBINATION:
+        return dto.BaseType.COMBINATION;
     }
   }
 

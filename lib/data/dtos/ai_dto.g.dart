@@ -8,9 +8,9 @@ part of 'ai_dto.dart';
 
 _$AiDTOImpl _$$AiDTOImplFromJson(Map<String, dynamic> json) => _$AiDTOImpl(
       resultImage: json['resultImage'] as String,
-      resultDetails: json['resultDetails'] as String?,
+      resultDetails: json['resultDetails'] as String,
       faceImage: json['faceImage'] as String,
-      basicSkinType: json['basicSkinType'] as String,
+      basicSkinType: $enumDecode(_$BaseTypeEnumMap, json['basicSkinType']),
       advancedSkinType: (json['advancedSkinType'] as List<dynamic>?)
           ?.map((e) => $enumDecode(_$SkinTypeEnumMap, e))
           .toList(),
@@ -29,7 +29,7 @@ Map<String, dynamic> _$$AiDTOImplToJson(_$AiDTOImpl instance) =>
       'resultImage': instance.resultImage,
       'resultDetails': instance.resultDetails,
       'faceImage': instance.faceImage,
-      'basicSkinType': instance.basicSkinType,
+      'basicSkinType': _$BaseTypeEnumMap[instance.basicSkinType]!,
       'advancedSkinType':
           instance.advancedSkinType?.map((e) => _$SkinTypeEnumMap[e]!).toList(),
       'cosNames': instance.cosNames,
@@ -37,6 +37,12 @@ Map<String, dynamic> _$$AiDTOImplToJson(_$AiDTOImpl instance) =>
       'nutrNames': instance.nutrNames,
       'nutrPaths': instance.nutrPaths,
     };
+
+const _$BaseTypeEnumMap = {
+  BaseType.OILY: 'OILY',
+  BaseType.DRY: 'DRY',
+  BaseType.COMBINATION: 'COMBINATION',
+};
 
 const _$SkinTypeEnumMap = {
   SkinType.ACNE: 'ACNE',

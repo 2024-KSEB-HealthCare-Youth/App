@@ -21,9 +21,9 @@ AiDTO _$AiDTOFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$AiDTO {
   String get resultImage => throw _privateConstructorUsedError;
-  String? get resultDetails => throw _privateConstructorUsedError;
+  String get resultDetails => throw _privateConstructorUsedError;
   String get faceImage => throw _privateConstructorUsedError;
-  String get basicSkinType => throw _privateConstructorUsedError;
+  BaseType get basicSkinType => throw _privateConstructorUsedError;
   List<SkinType>? get advancedSkinType => throw _privateConstructorUsedError;
   List<String> get cosNames => throw _privateConstructorUsedError;
   List<String> get cosPaths => throw _privateConstructorUsedError;
@@ -42,9 +42,9 @@ abstract class $AiDTOCopyWith<$Res> {
   @useResult
   $Res call(
       {String resultImage,
-      String? resultDetails,
+      String resultDetails,
       String faceImage,
-      String basicSkinType,
+      BaseType basicSkinType,
       List<SkinType>? advancedSkinType,
       List<String> cosNames,
       List<String> cosPaths,
@@ -66,7 +66,7 @@ class _$AiDTOCopyWithImpl<$Res, $Val extends AiDTO>
   @override
   $Res call({
     Object? resultImage = null,
-    Object? resultDetails = freezed,
+    Object? resultDetails = null,
     Object? faceImage = null,
     Object? basicSkinType = null,
     Object? advancedSkinType = freezed,
@@ -80,10 +80,10 @@ class _$AiDTOCopyWithImpl<$Res, $Val extends AiDTO>
           ? _value.resultImage
           : resultImage // ignore: cast_nullable_to_non_nullable
               as String,
-      resultDetails: freezed == resultDetails
+      resultDetails: null == resultDetails
           ? _value.resultDetails
           : resultDetails // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       faceImage: null == faceImage
           ? _value.faceImage
           : faceImage // ignore: cast_nullable_to_non_nullable
@@ -91,7 +91,7 @@ class _$AiDTOCopyWithImpl<$Res, $Val extends AiDTO>
       basicSkinType: null == basicSkinType
           ? _value.basicSkinType
           : basicSkinType // ignore: cast_nullable_to_non_nullable
-              as String,
+              as BaseType,
       advancedSkinType: freezed == advancedSkinType
           ? _value.advancedSkinType
           : advancedSkinType // ignore: cast_nullable_to_non_nullable
@@ -125,9 +125,9 @@ abstract class _$$AiDTOImplCopyWith<$Res> implements $AiDTOCopyWith<$Res> {
   @useResult
   $Res call(
       {String resultImage,
-      String? resultDetails,
+      String resultDetails,
       String faceImage,
-      String basicSkinType,
+      BaseType basicSkinType,
       List<SkinType>? advancedSkinType,
       List<String> cosNames,
       List<String> cosPaths,
@@ -147,7 +147,7 @@ class __$$AiDTOImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? resultImage = null,
-    Object? resultDetails = freezed,
+    Object? resultDetails = null,
     Object? faceImage = null,
     Object? basicSkinType = null,
     Object? advancedSkinType = freezed,
@@ -161,10 +161,10 @@ class __$$AiDTOImplCopyWithImpl<$Res>
           ? _value.resultImage
           : resultImage // ignore: cast_nullable_to_non_nullable
               as String,
-      resultDetails: freezed == resultDetails
+      resultDetails: null == resultDetails
           ? _value.resultDetails
           : resultDetails // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       faceImage: null == faceImage
           ? _value.faceImage
           : faceImage // ignore: cast_nullable_to_non_nullable
@@ -172,7 +172,7 @@ class __$$AiDTOImplCopyWithImpl<$Res>
       basicSkinType: null == basicSkinType
           ? _value.basicSkinType
           : basicSkinType // ignore: cast_nullable_to_non_nullable
-              as String,
+              as BaseType,
       advancedSkinType: freezed == advancedSkinType
           ? _value._advancedSkinType
           : advancedSkinType // ignore: cast_nullable_to_non_nullable
@@ -202,7 +202,7 @@ class __$$AiDTOImplCopyWithImpl<$Res>
 class _$AiDTOImpl implements _AiDTO {
   const _$AiDTOImpl(
       {required this.resultImage,
-      this.resultDetails,
+      required this.resultDetails,
       required this.faceImage,
       required this.basicSkinType,
       final List<SkinType>? advancedSkinType,
@@ -222,11 +222,11 @@ class _$AiDTOImpl implements _AiDTO {
   @override
   final String resultImage;
   @override
-  final String? resultDetails;
+  final String resultDetails;
   @override
   final String faceImage;
   @override
-  final String basicSkinType;
+  final BaseType basicSkinType;
   final List<SkinType>? _advancedSkinType;
   @override
   List<SkinType>? get advancedSkinType {
@@ -329,9 +329,9 @@ class _$AiDTOImpl implements _AiDTO {
 abstract class _AiDTO implements AiDTO {
   const factory _AiDTO(
       {required final String resultImage,
-      final String? resultDetails,
+      required final String resultDetails,
       required final String faceImage,
-      required final String basicSkinType,
+      required final BaseType basicSkinType,
       final List<SkinType>? advancedSkinType,
       required final List<String> cosNames,
       required final List<String> cosPaths,
@@ -343,11 +343,11 @@ abstract class _AiDTO implements AiDTO {
   @override
   String get resultImage;
   @override
-  String? get resultDetails;
+  String get resultDetails;
   @override
   String get faceImage;
   @override
-  String get basicSkinType;
+  BaseType get basicSkinType;
   @override
   List<SkinType>? get advancedSkinType;
   @override

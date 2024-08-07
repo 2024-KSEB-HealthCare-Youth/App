@@ -5,13 +5,15 @@ part 'ai_dto.g.dart';
 
 enum SkinType { ACNE, WRINKLE, ATOPHY }
 
+enum BaseType { OILY, DRY, COMBINATION }
+
 @freezed
 class AiDTO with _$AiDTO {
   const factory AiDTO({
     required String resultImage,
-    String? resultDetails,
+    required String resultDetails,
     required String faceImage,
-    required String basicSkinType,
+    required BaseType basicSkinType,
     List<SkinType>? advancedSkinType,
     required List<String> cosNames,
     required List<String> cosPaths,
