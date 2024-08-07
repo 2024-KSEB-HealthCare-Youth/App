@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:path_provider/path_provider.dart';
 import '../data/models/user_data.dart';
 import '../data/models/result_data.dart';
 import '../data/models/ai_data.dart';
@@ -347,14 +348,14 @@ class RestAPI {
       );
 
       if (response.statusCode == 200) {
-        // 서버에서 받은 데이터를 스트림으로 처리
-        var file = File('lib/flaskData/$imagePath.json'); // 파일 저장 경로 설정
+        final directory = await getApplicationDocumentsDirectory();
+        final file = File('${directory.path}/${imagePath.split('/').last}.json'); // 파일 저장 경로 설정
         var sink = file.openWrite();
 
-        // 스트림을 통해 데이터를 파일에 저장
         Completer<AiData> completer = Completer<AiData>();
+
         await response.data.stream.listen(
-          (data) {
+              (data) {
             sink.add(data);
           },
           onDone: () async {
