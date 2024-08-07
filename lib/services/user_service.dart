@@ -5,16 +5,13 @@ import '../data/dtos/recommend_dto.dart';
 import '../data/dtos/my_page_dto.dart';
 import '../data/dtos/edit_user_dto.dart';
 import '../data/dtos/send_data_dto.dart';
-import '../../data/models/ai_data.dart';
+import '../../data/models/ai_data.dart' as model;
+import '../data/dtos/ai_dto.dart' as dto;
 
 class UserService {
-
   Future<MyPageDTO> uploadImageAndFetchData(String imagePath) async {
-
-    final RestAPI _restAPI = RestAPI();
-
-    AiData aiData = await RestAPI.uploadImage(imagePath);
-    SendDataDTO sendData = await _restAPI.sendDataToServer(aiData);
+    model.AiData aiData = await RestAPI.uploadImage(imagePath);
+    SendDataDTO sendData = await sendDataToServer(aiData, imagePath);
     final userData = await RestAPI.fetchUserData();
 
     // Convert SendDataDTO to MyPageDTO
@@ -30,6 +27,37 @@ class UserService {
       profileImage: userData.profileImage,
       loginId: userData.loginId,
     );
+  }
+
+  Future<SendDataDTO> sendDataToServer(model.AiData aiData, String imagePath) {
+    final _RestAPI = RestAPI();
+    dto.AiDTO data = dto.AiDTO(
+      resultImage: aiData.resultImage,
+      resultDetails: '',
+      faceImage: imagePath,
+      basicSkinType: aiData.simpleSkin,
+      advancedSkinType: _convertSkinTypeList(aiData.expertSkin),
+      cosNames: aiData.cosNames,
+      cosPaths: aiData.cosPaths,
+      nutrNames: aiData.nutrNames,
+      nutrPaths: aiData.nutrPaths,
+    );
+    return _RestAPI.sendDataToServer(data);
+  }
+
+  List<dto.SkinType>? _convertSkinTypeList(List<model.SkinType>? skinTypes) {
+    return skinTypes?.map((type) => _convertSkinType(type)).toList();
+  }
+
+  dto.SkinType _convertSkinType(model.SkinType skinType) {
+    switch (skinType) {
+      case model.SkinType.acne:
+        return dto.SkinType.ACNE;
+      case model.SkinType.wrinkle:
+        return dto.SkinType.WRINKLE;
+      case model.SkinType.atophy:
+        return dto.SkinType.ATOPHY;
+    }
   }
 
   // Fetch user data to be edited

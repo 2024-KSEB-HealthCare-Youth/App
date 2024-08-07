@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart' as dio;
 import 'package:http/http.dart';
+import 'package:myapp/data/dtos/ai_dto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -76,9 +77,11 @@ class RestAPI {
 
         final setCookieHeader = response.headers['set-cookie']?.first;
         if (setCookieHeader != null) {
-          final refreshToken = setCookieHeader.split(';').firstWhere(
-                  (part) => part.trim().startsWith('refresh='),
-              orElse: () => '').replaceFirst('refresh=', '');
+          final refreshToken = setCookieHeader
+              .split(';')
+              .firstWhere((part) => part.trim().startsWith('refresh='),
+                  orElse: () => '')
+              .replaceFirst('refresh=', '');
           if (refreshToken.isNotEmpty) {
             await storage.write(key: 'refresh_token', value: refreshToken);
           }
@@ -143,11 +146,9 @@ class RestAPI {
       }
       final response = await dioClient.get(
         '/results/$resultId',
-        options: dio.Options(
-            headers: {
-              'Authorization': 'Bearer $token',
-            }
-        ),
+        options: dio.Options(headers: {
+          'Authorization': 'Bearer $token',
+        }),
       );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.data}');
@@ -197,11 +198,9 @@ class RestAPI {
       final response = await dioClient.put(
         '/members/me',
         data: requestBody,
-        options: dio.Options(
-            headers: {
-              'Authorization': 'Bearer $token',
-            }
-        ),
+        options: dio.Options(headers: {
+          'Authorization': 'Bearer $token',
+        }),
       );
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.data}');
@@ -247,7 +246,8 @@ class RestAPI {
   Future<OnepostdetailDTO> fetchPostById(int postId) async {
     try {
       final token = await storage.read(key: 'access_token');
-      final response = await dioClient.get('/posts/$postId',
+      final response = await dioClient.get(
+        '/posts/$postId',
         options: dio.Options(
           headers: {
             'Authorization': 'Bearer $token',
@@ -286,13 +286,14 @@ class RestAPI {
             response.data['results'] is List) {
           List<dynamic> jsonData = response.data['results'];
           List<PostGetDTO> posts =
-          jsonData.map((json) => PostGetDTO.fromJson(json)).toList();
+              jsonData.map((json) => PostGetDTO.fromJson(json)).toList();
           return posts;
         } else {
           throw Exception('Unexpected response format');
         }
       } else {
-        throw Exception('Failed to load PostGet data: ${response.statusMessage}');
+        throw Exception(
+            'Failed to load PostGet data: ${response.statusMessage}');
       }
     } catch (e) {
       print('Fetch PostGet data failed: $e');
@@ -306,13 +307,11 @@ class RestAPI {
 
     try {
       final token = await storage.read(key: 'access_token');
-      final response = await dioClient.post(
-          '/posts',
+      final response = await dioClient.post('/posts',
           data: requestBody,
-          options: dio.Options(
-              headers: {'Authorization': 'Bearer $token',}
-          )
-      );
+          options: dio.Options(headers: {
+            'Authorization': 'Bearer $token',
+          }));
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.data}');
 
@@ -351,7 +350,7 @@ class RestAPI {
     }
   }
 
-  Future<SendDataDTO> sendDataToServer(AiData aiData) async {
+  Future<SendDataDTO> sendDataToServer(AiDTO aiData) async {
     try {
       final token = await storage.read(key: 'access_token');
       final response = await dioClient.post(
@@ -365,7 +364,8 @@ class RestAPI {
       if (response.statusCode == 200) {
         print('Data sent successfully.');
 
-        if (response.data is Map<String, dynamic> && response.data['results'] is List) {
+        if (response.data is Map<String, dynamic> &&
+            response.data['results'] is List) {
           List<dynamic> jsonData = response.data['results'];
           if (jsonData.isNotEmpty) {
             SendDataDTO data = SendDataDTO.fromJson(jsonData[0]);
@@ -385,7 +385,6 @@ class RestAPI {
       throw Exception('Data sending failed: $e');
     }
   }
-
 
   static Future<RecommendDTO> fetchRecommendData() async {
     try {
@@ -409,15 +408,14 @@ class RestAPI {
           throw Exception('Unexpected response format');
         }
       } else {
-        throw Exception('Failed to load RecommendDTO data: ${response.statusMessage}');
+        throw Exception(
+            'Failed to load RecommendDTO data: ${response.statusMessage}');
       }
     } catch (e) {
       print('Data fetching failed: $e');
       throw Exception('Data fetching failed: $e');
     }
   }
-
-
 
   static Future<bool> addCommentToPost(int postId, CommentDTO comment) async {
     final requestBody = jsonEncode(comment.toJson());
@@ -478,7 +476,8 @@ class RestAPI {
         ),
       );
       if (response.statusCode != 200) {
-        throw Exception('Failed to update like status: ${response.statusMessage}');
+        throw Exception(
+            'Failed to update like status: ${response.statusMessage}');
       }
     } catch (e) {
       print('Update like status failed: $e');
@@ -497,7 +496,6 @@ class RestAPI {
           headers: {
             'Authorization': 'Bearer $token',
           },
-
         ),
       );
       if (response.statusCode != 200) {
