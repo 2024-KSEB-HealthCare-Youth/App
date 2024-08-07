@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:dio/dio.dart' as dio;
-import 'package:http/http.dart';
 import 'package:myapp/data/dtos/ai_dto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -15,7 +14,6 @@ import '../data/dtos/login_dto.dart';
 import '../data/dtos/recommend_dto.dart';
 import '../data/dtos/post_get_dto.dart';
 import '../data/dtos/onePostdetail_dto.dart';
-import '../data/dtos/my_page_dto.dart';
 import '../data/dtos/send_data_dto.dart';
 
 class RestAPI {
@@ -29,12 +27,16 @@ class RestAPI {
   static final dio.Dio dioClient = dio.Dio(dio.BaseOptions(
     baseUrl: baseUrl,
     headers: headers,
+    connectTimeout: Duration(seconds: 30),
+    receiveTimeout: Duration(seconds: 30),
   ))
     ..interceptors.add(CookieManager(cookieJar));
 
   static final dio.Dio flaskDio = dio.Dio(dio.BaseOptions(
     baseUrl: flaskUrl,
     headers: headers,
+    connectTimeout: Duration(seconds: 30),
+    receiveTimeout: Duration(seconds: 30),
   ));
 
   static Future<void> saveLoginId(String loginId) async {
