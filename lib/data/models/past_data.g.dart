@@ -6,19 +6,26 @@ part of 'past_data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+_$ResultItemImpl _$$ResultItemImplFromJson(Map<String, dynamic> json) =>
+    _$ResultItemImpl(
+      resultId: (json['resultId'] as num).toInt(),
+      resultDate: DateTime.parse(json['resultDate'] as String),
+    );
+
+Map<String, dynamic> _$$ResultItemImplToJson(_$ResultItemImpl instance) =>
+    <String, dynamic>{
+      'resultId': instance.resultId,
+      'resultDate': instance.resultDate.toIso8601String(),
+    };
+
 _$PastDataImpl _$$PastDataImplFromJson(Map<String, dynamic> json) =>
     _$PastDataImpl(
-      resultId: (json['resultId'] as List<dynamic>)
-          .map((e) => (e as num).toInt())
-          .toList(),
-      resultDate: (json['resultDate'] as List<dynamic>)
-          .map((e) => DateTime.parse(e as String))
+      results: (json['results'] as List<dynamic>)
+          .map((e) => ResultItem.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$$PastDataImplToJson(_$PastDataImpl instance) =>
     <String, dynamic>{
-      'resultId': instance.resultId,
-      'resultDate':
-          instance.resultDate.map((e) => e.toIso8601String()).toList(),
+      'results': instance.results,
     };

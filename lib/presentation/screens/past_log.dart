@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../data/models/past_data.dart';
 import 'result_detail_screen.dart';
+import '../../services/user_service.dart';
 
 class PastResultsScreen extends StatefulWidget {
   const PastResultsScreen({Key? key}) : super(key: key);
@@ -11,34 +12,56 @@ class PastResultsScreen extends StatefulWidget {
 
 class _PastResultsScreenState extends State<PastResultsScreen> {
   int? _selectedIndex;
-  late PastData _pastData;
+  PastData? _pastData;
+  bool _isLoading = true;
+  String? _errorMessage;
+
+  final UserService userService = UserService();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _pastData = ModalRoute.of(context)!.settings.arguments as PastData;
+    _fetchPastData();
+  }
+
+  Future<void> _fetchPastData() async {
+    try {
+      _pastData = await userService.fetchPastData();
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+        _errorMessage = 'Failed to load data: ${e.toString()}';
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(context),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: _pastData.resultDate.length,
-                itemBuilder: (context, index) {
-                  return _buildDateItem(context, index);
-                },
-              ),
-            ),
-            _buildConfirmButton(),
-          ],
-        ),
-      ),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : _pastData == null
+              ? Center(child: Text(_errorMessage ?? 'Failed to load data'))
+              : Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: _pastData!.results.length,
+                          itemBuilder: (context, index) {
+                            return _buildDateItem(context, index);
+                          },
+                        ),
+                      ),
+                      _buildConfirmButton(),
+                    ],
+                  ),
+                ),
     );
   }
 
@@ -65,6 +88,7 @@ class _PastResultsScreenState extends State<PastResultsScreen> {
   }
 
   Widget _buildDateItem(BuildContext context, int index) {
+    final resultItem = _pastData!.results[index];
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Container(
@@ -86,7 +110,7 @@ class _PastResultsScreenState extends State<PastResultsScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              '${_pastData.resultDate[index].toLocal().toString().split(' ')[0]} (${_pastData.resultDate[index].toLocal().toString().split(' ')[1].substring(0, 5)})',
+              '${resultItem.resultDate.toLocal().toString().split(' ')[0]} (${resultItem.resultDate.toLocal().toString().split(' ')[1].substring(0, 5)})',
               style: TextStyle(fontSize: 16),
             ),
           ],
@@ -104,15 +128,13 @@ class _PastResultsScreenState extends State<PastResultsScreen> {
       onPressed: _selectedIndex == null
           ? null
           : () {
-              final selectedResultId = _pastData.resultId[_selectedIndex!];
-              final selectedResultDate = _pastData.resultDate[_selectedIndex!];
-              // ResultDetailScreen으로 resultId와 resultDate를 전달합니다.
+              final selectedResult = _pastData!.results[_selectedIndex!];
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => ResultDetailScreen(
-                    resultId: selectedResultId,
-                    resultDate: selectedResultDate,
+                    resultId: selectedResult.resultId,
+                    resultDate: selectedResult.resultDate,
                   ),
                 ),
               );

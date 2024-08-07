@@ -1,7 +1,6 @@
 // widgets/menu.dart
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../services/user_service.dart';
 
 class Menu extends StatelessWidget {
@@ -30,25 +29,14 @@ class Menu extends StatelessWidget {
             },
           ),
           _buildMenuItem(
-            key: Key('과거 진단 결과 조회'),
-            title: '과거 진단 결과 조회',
-            onTap: () async {
-              final userService = UserService();
-                try {
-                  final pastData = await userService.fetchPastData();
-                  Navigator.pushNamed(
-                    context,
-                    '/past_log',
-                    arguments: pastData,
-                  );
-                } catch (e) {
-                  // Handle error
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Failed to load past data')),
-                  );
-                }
-            },
-          ),
+              key: Key('과거 진단 결과 조회'),
+              title: '과거 진단 결과 조회',
+              onTap: () async {
+                Navigator.pushNamed(
+                  context,
+                  '/past_log',
+                );
+              }),
           _buildMenuItem(
             key: Key('My Page'),
             title: 'My Page',
