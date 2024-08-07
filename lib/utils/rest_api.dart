@@ -390,7 +390,7 @@ class RestAPI {
     try {
       final token = await storage.read(key: 'access_token');
       final response = await dioClient.get(
-        'path', // 서버의 경로를 입력하세요.
+        '/items', // 서버의 경로를 입력하세요.
         options: dio.Options(
           headers: {'Authorization': 'Bearer $token'},
         ),

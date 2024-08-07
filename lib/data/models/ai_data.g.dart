@@ -35,9 +35,9 @@ Map<String, dynamic> _$$AiDataImplToJson(_$AiDataImpl instance) =>
     };
 
 const _$BasicTypeEnumMap = {
-  BasicType.OILY: 'OILY',
-  BasicType.DRY: 'DRY',
-  BasicType.COMBINATION: 'COMBINATION',
+  BasicType.oily: 'oily',
+  BasicType.dry: 'dry',
+  BasicType.combination: 'combination',
 };
 
 const _$SkinTypeEnumMap = {

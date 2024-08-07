@@ -5,7 +5,7 @@ part 'ai_data.g.dart';
 
 enum SkinType { acne, wrinkle, atophy }
 
-enum BasicType { OILY, DRY, COMBINATION }
+enum BasicType { oily, dry, combination }
 
 @freezed
 class AiData with _$AiData {
