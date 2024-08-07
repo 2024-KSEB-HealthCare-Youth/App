@@ -341,19 +341,18 @@ class RestAPI {
         '/upload',
         data: formData,
         options: dio.Options(
+          responseType: dio.ResponseType.bytes,
           sendTimeout: Duration(seconds: 30), // 30 seconds
           receiveTimeout: Duration(seconds: 30), // 30 seconds
         ),
       );
 
       if (response.statusCode == 200) {
-        // Decode and decompress the gzipped response data
-        final compressedResponseData = response.data;
-        final decompressedData = _decompressData(compressedResponseData);
-
+        // 서버에서 받은 압축된 데이터를 해제합니다.
+        final compressedResponseData = response.data as Uint8List;
+        final decompressedData = _decompressGzipData(compressedResponseData);
         print('Image uploaded successfully.');
         print('Response data: ${decompressedData.toString()}');
-
         return AiData.fromJson(decompressedData);
       } else {
         print('Image upload failed.');
@@ -365,16 +364,11 @@ class RestAPI {
     }
   }
 
-// Decompress gzip data
-  static Map<String, dynamic> _decompressData(Uint8List compressedData) {
-    // Use the archive package to decompress the gzipped data
-    List<int> decompressedBytes = GZipDecoder().decodeBytes(compressedData);
-
-    // Convert bytes to string
-    String jsonString = utf8.decode(decompressedBytes);
-
-    // Convert string to Map
-    return jsonDecode(jsonString);
+  static Map<String, dynamic> _decompressGzipData(Uint8List compressedData) {
+    final input = InputStream(compressedData);
+    final gzip = GZipDecoder().decodeBuffer(input);
+    final jsonString = utf8.decode(gzip);
+    return jsonDecode(jsonString) as Map<String, dynamic>;
   }
 
   Future<SendDataDTO> sendDataToServer(AiDTO aiData) async {
