@@ -1,4 +1,3 @@
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/models/past_data.dart';
 import '../utils/rest_api.dart';
 import '../data/dtos/recommend_dto.dart';
@@ -62,11 +61,11 @@ class UserService {
 
   dto.BaseType _convertBasicType(model.BasicType Type) {
     switch (Type) {
-      case model.BasicType.OILY:
+      case model.BasicType.oily:
         return dto.BaseType.OILY;
-      case model.BasicType.DRY:
+      case model.BasicType.dry:
         return dto.BaseType.DRY;
-      case model.BasicType.COMBINATION:
+      case model.BasicType.combination:
         return dto.BaseType.COMBINATION;
     }
   }
