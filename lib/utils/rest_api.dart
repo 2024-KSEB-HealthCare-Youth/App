@@ -1,13 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:dio/dio.dart' as dio;
 import 'package:myapp/data/dtos/ai_dto.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:archive/archive.dart';
 import '../data/models/user_data.dart';
 import '../data/models/result_data.dart';
 import '../data/models/ai_data.dart';
@@ -222,7 +221,7 @@ class RestAPI {
 
   static Future<PastData> fetchPastData() async {
     try {
-      final token = await storage.read(key: 'access_token');
+      final token = await storage.read(key: 'access-token');
       final response = await dioClient.get(
         '/results/lists',
         options: dio.Options(
@@ -332,29 +331,49 @@ class RestAPI {
   }
 
   static Future<AiData> uploadImage(String imagePath) async {
-    try {
-      // Create form data with the image file
-      var formData = dio.FormData.fromMap({
-        'file': await dio.MultipartFile.fromFile(imagePath),
-      });
+    var formData = dio.FormData.fromMap({
+      'file': await dio.MultipartFile.fromFile(imagePath),
+    });
 
+    try {
       final response = await flaskDio.post(
         '/upload',
         data: formData,
         options: dio.Options(
-          responseType: dio.ResponseType.bytes,
-          sendTimeout: Duration(seconds: 30), // 30 seconds
-          receiveTimeout: Duration(seconds: 30), // 30 seconds
+          responseType: dio.ResponseType.stream,
+          sendTimeout: Duration(seconds: 30),
+          receiveTimeout: Duration(seconds: 30),
         ),
       );
 
       if (response.statusCode == 200) {
-        // 서버에서 받은 압축된 데이터를 해제합니다.
-        final compressedResponseData = response.data as Uint8List;
-        final decompressedData = _decompressGzipData(compressedResponseData);
-        print('Image uploaded successfully.');
-        print('Response data: ${decompressedData.toString()}');
-        return AiData.fromJson(decompressedData);
+        // 서버에서 받은 데이터를 스트림으로 처리
+        var file = File('lib/flaskData/$imagePath.json'); // 파일 저장 경로 설정
+        var sink = file.openWrite();
+
+        // 스트림을 통해 데이터를 파일에 저장
+        Completer<AiData> completer = Completer<AiData>();
+        await response.data.stream.listen(
+          (data) {
+            sink.add(data);
+          },
+          onDone: () async {
+            await sink.close();
+            print('File downloaded and saved successfully.');
+
+            // 파일을 읽어와서 JSON 디코딩
+            var fileContent = await file.readAsString();
+            var decodedResponse = jsonDecode(fileContent);
+            var aiData = AiData.fromJson(decodedResponse);
+            completer.complete(aiData);
+          },
+          onError: (e) {
+            print('Error: $e');
+            throw Exception('Failed to upload image: $e');
+          },
+          cancelOnError: true,
+        ).asFuture();
+        return completer.future;
       } else {
         print('Image upload failed.');
         throw Exception('Failed to upload image: ${response.statusMessage}');
@@ -365,32 +384,16 @@ class RestAPI {
     }
   }
 
-  static Map<String, dynamic> _decompressGzipData(Uint8List compressedData) {
-    final decompressedBytes = GZipCodec().decode(compressedData);
-    final jsonString = utf8.decode(decompressedBytes);
-    return jsonDecode(jsonString) as Map<String, dynamic>;
-  }
-
   Future<SendDataDTO> sendDataToServer(AiDTO aiData) async {
     try {
       final token = await storage.read(key: 'access_token');
-      print('Token: $token');
-
-      final data = aiData.toJson();
-      print('Data to send: ${data.toString()}');
-
       final response = await dioClient.post(
         '/members/mypage',
-        data: data,
+        data: aiData.toJson(),
         options: dio.Options(
           headers: {'Authorization': 'Bearer $token'},
-          sendTimeout: Duration(seconds: 30), // 30 seconds
-          receiveTimeout: Duration(seconds: 30), // 30 seconds
         ),
       );
-
-      print('Response status: ${response.statusCode}');
-      print('Response data: ${response.data}');
 
       if (response.statusCode == 200) {
         print('Data sent successfully.');
@@ -415,20 +418,6 @@ class RestAPI {
       print('Data sending failed: $e');
       throw Exception('Data sending failed: $e');
     }
-  }
-
-  static Future<List<int>> _compressData(Map<String, dynamic> data) async {
-    final jsonData = jsonEncode(data);
-    final bytes = utf8.encode(jsonData);
-    final archiveFile = ArchiveFile('data.json', bytes.length, bytes);
-    final archive = Archive()..addFile(archiveFile);
-    final zippedData = ZipEncoder().encode(archive);
-
-    if (zippedData == null) {
-      throw Exception('Failed to compress data');
-    }
-
-    return zippedData;
   }
 
   static Future<RecommendDTO> fetchRecommendData() async {
@@ -488,6 +477,26 @@ class RestAPI {
       throw Exception('Add comment failed: $e');
     }
   }
+
+  // static Future<void> removeLikeStatus(int postId) async {
+  //   try {
+  //     final token = await storage.read(key: 'access_token');
+  //     final response = await dioClient.delete(
+  //       '/likes/$postId',
+  //       options: dio.Options(
+  //         headers: {
+  //           'Authorization': 'Bearer $token',
+  //         },
+  //       ),
+  //     );
+  //     if (response.statusCode != 200) {
+  //       throw Exception('Failed to remove like status: ${response.statusMessage}');
+  //     }
+  //   } catch (e) {
+  //     print('Remove like status failed: $e');
+  //     throw Exception('Remove like status failed: $e');
+  //   }
+  // }
 
   static Future<void> updateLikeStatus(int postId) async {
     try {
