@@ -331,11 +331,12 @@ class RestAPI {
   }
 
   static Future<AiData> uploadImage(String imagePath) async {
-    var formData = dio.FormData.fromMap({
-      'file': await dio.MultipartFile.fromFile(imagePath),
-    });
-
     try {
+      // Create form data with the image file
+      var formData = dio.FormData.fromMap({
+        'file': await dio.MultipartFile.fromFile(imagePath),
+      });
+
       final response = await flaskDio.post(
         '/upload',
         data: formData,
@@ -344,11 +345,15 @@ class RestAPI {
           receiveTimeout: Duration(seconds: 30), // 30 seconds
         ),
       );
+
       if (response.statusCode == 200) {
+        // Decode and decompress the gzipped response data
         final compressedResponseData = response.data;
         final decompressedData = _decompressData(compressedResponseData);
+
         print('Image uploaded successfully.');
         print('Response data: ${decompressedData.toString()}');
+
         return AiData.fromJson(decompressedData);
       } else {
         print('Image upload failed.');
@@ -360,11 +365,16 @@ class RestAPI {
     }
   }
 
+// Decompress gzip data
   static Map<String, dynamic> _decompressData(Uint8List compressedData) {
-    final archive = ZipDecoder().decodeBytes(compressedData);
-    final decompressedJsonBytes = archive.first.content as List<int>;
-    final jsonString = utf8.decode(decompressedJsonBytes);
-    return jsonDecode(jsonString) as Map<String, dynamic>;
+    // Use the archive package to decompress the gzipped data
+    List<int> decompressedBytes = GZipDecoder().decodeBytes(compressedData);
+
+    // Convert bytes to string
+    String jsonString = utf8.decode(decompressedBytes);
+
+    // Convert string to Map
+    return jsonDecode(jsonString);
   }
 
   Future<SendDataDTO> sendDataToServer(AiDTO aiData) async {
