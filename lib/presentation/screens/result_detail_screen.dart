@@ -100,7 +100,7 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
                       ),
                     ),
                     child: Text(
-                      resultDetail.resultDetails,
+                      resultDetail.details ?? '',
                       style: const TextStyle(fontSize: 16),
                     ),
                   ),

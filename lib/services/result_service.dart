@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import '../data/dtos/result_detail_dto.dart';
 import '../utils/rest_api.dart';
 
@@ -10,9 +9,11 @@ class ResultService {
 
       // 필요한 데이터를 추출하여 ResultDetailDTO를 생성합니다.
       final resultDetail = ResultDetailDTO(
-        resultDetails: resultData.resultDetails,
+        memberId: userId,
+        details: resultData.resultDetails,
         resultImage: resultData.resultImage,
         faceImage: resultData.faceImage,
+        resultDate: resultData.resultDate,
       );
 
       return resultDetail;

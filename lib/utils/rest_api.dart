@@ -221,8 +221,8 @@ class RestAPI {
   }
 
   static Future<PastData> fetchPastData() async {
+    final token = await storage.read(key: 'access_token');
     try {
-      final token = await storage.read(key: 'access-token');
       final response = await dioClient.get(
         '/results/lists',
         options: dio.Options(
@@ -234,8 +234,8 @@ class RestAPI {
         if (response.data is Map<String, dynamic> &&
             response.data['results'] is List &&
             response.data['results'].isNotEmpty) {
-          final Map<String, dynamic> pastDataJson = response.data['results'][0];
-          return PastData.fromJson(pastDataJson);
+          final pastData = PastData.fromJson(response.data);
+          return pastData;
         } else {
           throw Exception('Unexpected response format or empty results');
         }
@@ -349,13 +349,14 @@ class RestAPI {
 
       if (response.statusCode == 200) {
         final directory = await getApplicationDocumentsDirectory();
-        final file = File('${directory.path}/${imagePath.split('/').last}.json'); // 파일 저장 경로 설정
+        final file = File(
+            '${directory.path}/${imagePath.split('/').last}.json'); // 파일 저장 경로 설정
         var sink = file.openWrite();
 
         Completer<AiData> completer = Completer<AiData>();
 
         await response.data.stream.listen(
-              (data) {
+          (data) {
             sink.add(data);
           },
           onDone: () async {

@@ -1,7 +1,6 @@
 // widgets/menu.dart
 
 import 'package:flutter/material.dart';
-import '../../services/user_service.dart';
 
 class Menu extends StatelessWidget {
   @override
