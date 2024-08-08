@@ -24,20 +24,20 @@ class PolygonPentagon extends StatelessWidget {
         radarBackgroundColor: Colors.transparent,
         gridBorderData: BorderSide(color: Colors.grey, width: 2),
         titleTextStyle: TextStyle(color: Colors.black, fontSize: 14),
-        getTitle: (index) {
+        getTitle: (index, angle) {
           switch (index) {
             case 0:
-              return 'DRY';
+              return RadarChartTitle(text: 'DRY');
             case 1:
-              return 'COMBINATION';
+              return RadarChartTitle(text: 'COMBINATION');
             case 2:
-              return 'OILY';
+              return RadarChartTitle(text: 'OILY');
             case 3:
-              return 'ACNE';
+              return RadarChartTitle(text: 'ACNE');
             case 4:
-              return 'WRINKLES';
+              return RadarChartTitle(text: 'WRINKLES');
             default:
-              return '';
+              return const RadarChartTitle(text: '');
           }
         },
       ),
