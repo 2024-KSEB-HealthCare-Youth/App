@@ -13,6 +13,7 @@ class ResultData with _$ResultData {
     required String faceImage,
     required String resultDetails,
     required DateTime resultDate,
+    required Map<String, double> probabilities,
   }) = _ResultData;
 
   factory ResultData.fromJson(Map<String, dynamic> json) =>

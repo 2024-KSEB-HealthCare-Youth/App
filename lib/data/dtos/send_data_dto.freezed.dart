@@ -26,10 +26,10 @@ mixin _$SendDataDTO {
   int get age => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   String get phoneNumber => throw _privateConstructorUsedError;
-  String get resultImage => throw _privateConstructorUsedError;
   String? get resultDetails => throw _privateConstructorUsedError;
   List<skinType>? get advancedSkinType => throw _privateConstructorUsedError;
-  String get basicSkinType => throw _privateConstructorUsedError;
+  Type get basicSkinType => throw _privateConstructorUsedError;
+  Map<String, double> get probabilities => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -50,10 +50,10 @@ abstract class $SendDataDTOCopyWith<$Res> {
       int age,
       String? email,
       String phoneNumber,
-      String resultImage,
       String? resultDetails,
       List<skinType>? advancedSkinType,
-      String basicSkinType});
+      Type basicSkinType,
+      Map<String, double> probabilities});
 }
 
 /// @nodoc
@@ -75,10 +75,10 @@ class _$SendDataDTOCopyWithImpl<$Res, $Val extends SendDataDTO>
     Object? age = null,
     Object? email = freezed,
     Object? phoneNumber = null,
-    Object? resultImage = null,
     Object? resultDetails = freezed,
     Object? advancedSkinType = freezed,
     Object? basicSkinType = null,
+    Object? probabilities = null,
   }) {
     return _then(_value.copyWith(
       name: null == name
@@ -105,10 +105,6 @@ class _$SendDataDTOCopyWithImpl<$Res, $Val extends SendDataDTO>
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String,
-      resultImage: null == resultImage
-          ? _value.resultImage
-          : resultImage // ignore: cast_nullable_to_non_nullable
-              as String,
       resultDetails: freezed == resultDetails
           ? _value.resultDetails
           : resultDetails // ignore: cast_nullable_to_non_nullable
@@ -120,7 +116,11 @@ class _$SendDataDTOCopyWithImpl<$Res, $Val extends SendDataDTO>
       basicSkinType: null == basicSkinType
           ? _value.basicSkinType
           : basicSkinType // ignore: cast_nullable_to_non_nullable
-              as String,
+              as Type,
+      probabilities: null == probabilities
+          ? _value.probabilities
+          : probabilities // ignore: cast_nullable_to_non_nullable
+              as Map<String, double>,
     ) as $Val);
   }
 }
@@ -140,10 +140,10 @@ abstract class _$$SendDataDTOImplCopyWith<$Res>
       int age,
       String? email,
       String phoneNumber,
-      String resultImage,
       String? resultDetails,
       List<skinType>? advancedSkinType,
-      String basicSkinType});
+      Type basicSkinType,
+      Map<String, double> probabilities});
 }
 
 /// @nodoc
@@ -163,10 +163,10 @@ class __$$SendDataDTOImplCopyWithImpl<$Res>
     Object? age = null,
     Object? email = freezed,
     Object? phoneNumber = null,
-    Object? resultImage = null,
     Object? resultDetails = freezed,
     Object? advancedSkinType = freezed,
     Object? basicSkinType = null,
+    Object? probabilities = null,
   }) {
     return _then(_$SendDataDTOImpl(
       name: null == name
@@ -193,10 +193,6 @@ class __$$SendDataDTOImplCopyWithImpl<$Res>
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
               as String,
-      resultImage: null == resultImage
-          ? _value.resultImage
-          : resultImage // ignore: cast_nullable_to_non_nullable
-              as String,
       resultDetails: freezed == resultDetails
           ? _value.resultDetails
           : resultDetails // ignore: cast_nullable_to_non_nullable
@@ -208,7 +204,11 @@ class __$$SendDataDTOImplCopyWithImpl<$Res>
       basicSkinType: null == basicSkinType
           ? _value.basicSkinType
           : basicSkinType // ignore: cast_nullable_to_non_nullable
-              as String,
+              as Type,
+      probabilities: null == probabilities
+          ? _value._probabilities
+          : probabilities // ignore: cast_nullable_to_non_nullable
+              as Map<String, double>,
     ));
   }
 }
@@ -223,11 +223,12 @@ class _$SendDataDTOImpl implements _SendDataDTO {
       required this.age,
       this.email,
       required this.phoneNumber,
-      required this.resultImage,
       this.resultDetails,
       final List<skinType>? advancedSkinType,
-      required this.basicSkinType})
-      : _advancedSkinType = advancedSkinType;
+      required this.basicSkinType,
+      required final Map<String, double> probabilities})
+      : _advancedSkinType = advancedSkinType,
+        _probabilities = probabilities;
 
   factory _$SendDataDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$SendDataDTOImplFromJson(json);
@@ -245,8 +246,6 @@ class _$SendDataDTOImpl implements _SendDataDTO {
   @override
   final String phoneNumber;
   @override
-  final String resultImage;
-  @override
   final String? resultDetails;
   final List<skinType>? _advancedSkinType;
   @override
@@ -260,11 +259,18 @@ class _$SendDataDTOImpl implements _SendDataDTO {
   }
 
   @override
-  final String basicSkinType;
+  final Type basicSkinType;
+  final Map<String, double> _probabilities;
+  @override
+  Map<String, double> get probabilities {
+    if (_probabilities is EqualUnmodifiableMapView) return _probabilities;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_probabilities);
+  }
 
   @override
   String toString() {
-    return 'SendDataDTO(name: $name, nickname: $nickname, gender: $gender, age: $age, email: $email, phoneNumber: $phoneNumber, resultImage: $resultImage, resultDetails: $resultDetails, advancedSkinType: $advancedSkinType, basicSkinType: $basicSkinType)';
+    return 'SendDataDTO(name: $name, nickname: $nickname, gender: $gender, age: $age, email: $email, phoneNumber: $phoneNumber, resultDetails: $resultDetails, advancedSkinType: $advancedSkinType, basicSkinType: $basicSkinType, probabilities: $probabilities)';
   }
 
   @override
@@ -280,14 +286,14 @@ class _$SendDataDTOImpl implements _SendDataDTO {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.phoneNumber, phoneNumber) ||
                 other.phoneNumber == phoneNumber) &&
-            (identical(other.resultImage, resultImage) ||
-                other.resultImage == resultImage) &&
             (identical(other.resultDetails, resultDetails) ||
                 other.resultDetails == resultDetails) &&
             const DeepCollectionEquality()
                 .equals(other._advancedSkinType, _advancedSkinType) &&
             (identical(other.basicSkinType, basicSkinType) ||
-                other.basicSkinType == basicSkinType));
+                other.basicSkinType == basicSkinType) &&
+            const DeepCollectionEquality()
+                .equals(other._probabilities, _probabilities));
   }
 
   @JsonKey(ignore: true)
@@ -300,10 +306,10 @@ class _$SendDataDTOImpl implements _SendDataDTO {
       age,
       email,
       phoneNumber,
-      resultImage,
       resultDetails,
       const DeepCollectionEquality().hash(_advancedSkinType),
-      basicSkinType);
+      basicSkinType,
+      const DeepCollectionEquality().hash(_probabilities));
 
   @JsonKey(ignore: true)
   @override
@@ -327,10 +333,10 @@ abstract class _SendDataDTO implements SendDataDTO {
       required final int age,
       final String? email,
       required final String phoneNumber,
-      required final String resultImage,
       final String? resultDetails,
       final List<skinType>? advancedSkinType,
-      required final String basicSkinType}) = _$SendDataDTOImpl;
+      required final Type basicSkinType,
+      required final Map<String, double> probabilities}) = _$SendDataDTOImpl;
 
   factory _SendDataDTO.fromJson(Map<String, dynamic> json) =
       _$SendDataDTOImpl.fromJson;
@@ -348,13 +354,13 @@ abstract class _SendDataDTO implements SendDataDTO {
   @override
   String get phoneNumber;
   @override
-  String get resultImage;
-  @override
   String? get resultDetails;
   @override
   List<skinType>? get advancedSkinType;
   @override
-  String get basicSkinType;
+  Type get basicSkinType;
+  @override
+  Map<String, double> get probabilities;
   @override
   @JsonKey(ignore: true)
   _$$SendDataDTOImplCopyWith<_$SendDataDTOImpl> get copyWith =>

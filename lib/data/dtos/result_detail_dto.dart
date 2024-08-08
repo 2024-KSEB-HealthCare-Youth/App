@@ -6,9 +6,12 @@ part 'result_detail_dto.g.dart';
 @freezed
 class ResultDetailDTO with _$ResultDetailDTO {
   const factory ResultDetailDTO({
-    required String resultDetails,
+    required int memberId,
     required String resultImage,
     required String faceImage,
+    String? details,
+    required DateTime resultDate,
+    required Map<String, double> probabilities,
   }) = _ResultDetailDTO;
 
   factory ResultDetailDTO.fromJson(Map<String, dynamic> json) =>

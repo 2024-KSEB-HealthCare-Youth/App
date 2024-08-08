@@ -1,18 +1,18 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'ai_dto.dart';
+part of 'send_ai_dto.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$AiDTOImpl _$$AiDTOImplFromJson(Map<String, dynamic> json) => _$AiDTOImpl(
-      resultImage: json['resultImage'] as String,
-      resultDetails: json['resultDetails'] as String,
+_$SendAiDTOImpl _$$SendAiDTOImplFromJson(Map<String, dynamic> json) =>
+    _$SendAiDTOImpl(
+      resultDetails: json['resultDetails'] as String?,
       faceImage: json['faceImage'] as String,
-      basicSkinType: $enumDecode(_$BaseTypeEnumMap, json['basicSkinType']),
+      basicSkinType: $enumDecode(_$typeEnumMap, json['basicSkinType']),
       advancedSkinType: (json['advancedSkinType'] as List<dynamic>?)
-          ?.map((e) => $enumDecode(_$SkinTypeEnumMap, e))
+          ?.map((e) => $enumDecode(_$skintypeEnumMap, e))
           .toList(),
       cosNames:
           (json['cosNames'] as List<dynamic>).map((e) => e as String).toList(),
@@ -22,30 +22,33 @@ _$AiDTOImpl _$$AiDTOImplFromJson(Map<String, dynamic> json) => _$AiDTOImpl(
           (json['nutrNames'] as List<dynamic>).map((e) => e as String).toList(),
       nutrPaths:
           (json['nutrPaths'] as List<dynamic>).map((e) => e as String).toList(),
+      probabilities: (json['probabilities'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(k, (e as num).toDouble()),
+      ),
     );
 
-Map<String, dynamic> _$$AiDTOImplToJson(_$AiDTOImpl instance) =>
+Map<String, dynamic> _$$SendAiDTOImplToJson(_$SendAiDTOImpl instance) =>
     <String, dynamic>{
-      'resultImage': instance.resultImage,
       'resultDetails': instance.resultDetails,
       'faceImage': instance.faceImage,
-      'basicSkinType': _$BaseTypeEnumMap[instance.basicSkinType]!,
+      'basicSkinType': _$typeEnumMap[instance.basicSkinType]!,
       'advancedSkinType':
-          instance.advancedSkinType?.map((e) => _$SkinTypeEnumMap[e]!).toList(),
+          instance.advancedSkinType?.map((e) => _$skintypeEnumMap[e]!).toList(),
       'cosNames': instance.cosNames,
       'cosPaths': instance.cosPaths,
       'nutrNames': instance.nutrNames,
       'nutrPaths': instance.nutrPaths,
+      'probabilities': instance.probabilities,
     };
 
-const _$BaseTypeEnumMap = {
-  BaseType.OILY: 'OILY',
-  BaseType.DRY: 'DRY',
-  BaseType.COMBINATION: 'COMBINATION',
+const _$typeEnumMap = {
+  type.DRY: 'DRY',
+  type.OILY: 'OILY',
+  type.COMBINATION: 'COMBINATION',
 };
 
-const _$SkinTypeEnumMap = {
-  SkinType.ACNE: 'ACNE',
-  SkinType.WRINKLE: 'WRINKLE',
-  SkinType.ATOPHY: 'ATOPHY',
+const _$skintypeEnumMap = {
+  skintype.ACNE: 'ACNE',
+  skintype.WRINKLES: 'WRINKLES',
+  skintype.ATOPHY: 'ATOPHY',
 };

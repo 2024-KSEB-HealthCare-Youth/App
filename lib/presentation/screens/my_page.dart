@@ -1,24 +1,25 @@
-import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import '../../data/dtos/my_page_dto.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/profile_detail.dart';
+import '../widgets/polygon_pentagon_widgets.dart';
 
 class MyPage extends StatelessWidget {
   const MyPage({super.key});
 
-  Uint8List decodeBase64Image(String base64String) {
-    return base64Decode(base64String);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final MyPageDTO myPageData = ModalRoute.of(context)!.settings.arguments as MyPageDTO;
-    Uint8List? decodedImage;
-    if (myPageData.resultPath != null && myPageData.resultPath.isNotEmpty) {
-      decodedImage = decodeBase64Image(myPageData.resultPath);
-    }
+    final MyPageDTO myPageData =
+        ModalRoute.of(context)!.settings.arguments as MyPageDTO;
+
+    // Ensure we are extracting the correct values in a specific order
+    List<double> polygonValues = [
+      myPageData.probabilities['DRY'] ?? 0.0,
+      myPageData.probabilities['COMBINATION'] ?? 0.0,
+      myPageData.probabilities['OILY'] ?? 0.0,
+      myPageData.probabilities['ACNE'] ?? 0.0,
+      myPageData.probabilities['WRINKLES'] ?? 0.0,
+    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -56,10 +57,11 @@ class MyPage extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 36,
-                    backgroundImage: myPageData.resultPath.isNotEmpty
-                        ? NetworkImage(myPageData.resultPath)
-                        : const AssetImage(
-                        'assets/images/default_profile.png') as ImageProvider,
+                    backgroundImage: (myPageData.profileImage != null &&
+                            myPageData.profileImage!.isNotEmpty)
+                        ? NetworkImage(myPageData.profileImage!)
+                        : const AssetImage('assets/images/default_profile.png')
+                            as ImageProvider,
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -68,15 +70,20 @@ class MyPage extends StatelessWidget {
                       children: [
                         ProfileDetail(label: 'Name', value: myPageData.name),
                         const SizedBox(height: 8),
-                        ProfileDetail(label: 'Gender', value: myPageData.gender),
+                        ProfileDetail(
+                            label: 'Gender', value: myPageData.gender),
                         const SizedBox(height: 8),
-                        ProfileDetail(label: 'Age', value: myPageData.age.toString()),
+                        ProfileDetail(
+                            label: 'Age', value: myPageData.age.toString()),
                         const SizedBox(height: 8),
-                        ProfileDetail(label: 'Email', value: myPageData.email ?? 'N/A'),
+                        ProfileDetail(
+                            label: 'Email', value: myPageData.email ?? 'N/A'),
                         const SizedBox(height: 8),
-                        ProfileDetail(label: 'Phone', value: myPageData.phoneNumber),
+                        ProfileDetail(
+                            label: 'Phone', value: myPageData.phoneNumber),
                         const SizedBox(height: 8),
-                        ProfileDetail(label: 'Skin Type', value: myPageData.simpleSkin),
+                        ProfileDetail(
+                            label: 'Skin Type', value: myPageData.simpleSkin),
                       ],
                     ),
                   ),
@@ -107,18 +114,17 @@ class MyPage extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Center(
-                child: Container(
-                  width: 183,
-                  height: 183,
-                  decoration: ShapeDecoration(
-                    color: const Color(0xFFD9D9D9),
-                    shape: StarBorder.polygon(sides: 6),
-                  ),
-                  child: decodedImage != null
-                      ? Image.memory(decodedImage)
-                      : const Icon(Icons.image_not_supported),
+                  child: Container(
+                width: 183,
+                height: 183,
+                decoration: ShapeDecoration(
+                  color: const Color(0xFFD9D9D9),
+                  shape: StarBorder.polygon(sides: 6),
                 ),
-              ),
+                child: PolygonPentagon(
+                  values: polygonValues,
+                ),
+              )),
               const SizedBox(height: 16),
               Container(
                 padding: const EdgeInsets.all(16.0),

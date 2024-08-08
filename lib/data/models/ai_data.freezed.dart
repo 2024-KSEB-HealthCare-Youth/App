@@ -24,9 +24,9 @@ mixin _$AiData {
   List<String> get cosPaths => throw _privateConstructorUsedError;
   List<String> get nutrNames => throw _privateConstructorUsedError;
   List<String> get nutrPaths => throw _privateConstructorUsedError;
-  BasicType get simpleSkin => throw _privateConstructorUsedError;
+  BaseType get simpleSkin => throw _privateConstructorUsedError;
   List<SkinType>? get expertSkin => throw _privateConstructorUsedError;
-  String get resultImage => throw _privateConstructorUsedError;
+  Map<String, double> get probabilities => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,9 +43,9 @@ abstract class $AiDataCopyWith<$Res> {
       List<String> cosPaths,
       List<String> nutrNames,
       List<String> nutrPaths,
-      BasicType simpleSkin,
+      BaseType simpleSkin,
       List<SkinType>? expertSkin,
-      String resultImage});
+      Map<String, double> probabilities});
 }
 
 /// @nodoc
@@ -67,7 +67,7 @@ class _$AiDataCopyWithImpl<$Res, $Val extends AiData>
     Object? nutrPaths = null,
     Object? simpleSkin = null,
     Object? expertSkin = freezed,
-    Object? resultImage = null,
+    Object? probabilities = null,
   }) {
     return _then(_value.copyWith(
       cosNames: null == cosNames
@@ -89,15 +89,15 @@ class _$AiDataCopyWithImpl<$Res, $Val extends AiData>
       simpleSkin: null == simpleSkin
           ? _value.simpleSkin
           : simpleSkin // ignore: cast_nullable_to_non_nullable
-              as BasicType,
+              as BaseType,
       expertSkin: freezed == expertSkin
           ? _value.expertSkin
           : expertSkin // ignore: cast_nullable_to_non_nullable
               as List<SkinType>?,
-      resultImage: null == resultImage
-          ? _value.resultImage
-          : resultImage // ignore: cast_nullable_to_non_nullable
-              as String,
+      probabilities: null == probabilities
+          ? _value.probabilities
+          : probabilities // ignore: cast_nullable_to_non_nullable
+              as Map<String, double>,
     ) as $Val);
   }
 }
@@ -114,9 +114,9 @@ abstract class _$$AiDataImplCopyWith<$Res> implements $AiDataCopyWith<$Res> {
       List<String> cosPaths,
       List<String> nutrNames,
       List<String> nutrPaths,
-      BasicType simpleSkin,
+      BaseType simpleSkin,
       List<SkinType>? expertSkin,
-      String resultImage});
+      Map<String, double> probabilities});
 }
 
 /// @nodoc
@@ -136,7 +136,7 @@ class __$$AiDataImplCopyWithImpl<$Res>
     Object? nutrPaths = null,
     Object? simpleSkin = null,
     Object? expertSkin = freezed,
-    Object? resultImage = null,
+    Object? probabilities = null,
   }) {
     return _then(_$AiDataImpl(
       cosNames: null == cosNames
@@ -158,15 +158,15 @@ class __$$AiDataImplCopyWithImpl<$Res>
       simpleSkin: null == simpleSkin
           ? _value.simpleSkin
           : simpleSkin // ignore: cast_nullable_to_non_nullable
-              as BasicType,
+              as BaseType,
       expertSkin: freezed == expertSkin
           ? _value._expertSkin
           : expertSkin // ignore: cast_nullable_to_non_nullable
               as List<SkinType>?,
-      resultImage: null == resultImage
-          ? _value.resultImage
-          : resultImage // ignore: cast_nullable_to_non_nullable
-              as String,
+      probabilities: null == probabilities
+          ? _value._probabilities
+          : probabilities // ignore: cast_nullable_to_non_nullable
+              as Map<String, double>,
     ));
   }
 }
@@ -180,13 +180,14 @@ class _$AiDataImpl implements _AiData {
       required final List<String> nutrNames,
       required final List<String> nutrPaths,
       required this.simpleSkin,
-      final List<SkinType>? expertSkin,
-      required this.resultImage})
+      required final List<SkinType>? expertSkin,
+      required final Map<String, double> probabilities})
       : _cosNames = cosNames,
         _cosPaths = cosPaths,
         _nutrNames = nutrNames,
         _nutrPaths = nutrPaths,
-        _expertSkin = expertSkin;
+        _expertSkin = expertSkin,
+        _probabilities = probabilities;
 
   factory _$AiDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$AiDataImplFromJson(json);
@@ -224,7 +225,7 @@ class _$AiDataImpl implements _AiData {
   }
 
   @override
-  final BasicType simpleSkin;
+  final BaseType simpleSkin;
   final List<SkinType>? _expertSkin;
   @override
   List<SkinType>? get expertSkin {
@@ -235,12 +236,17 @@ class _$AiDataImpl implements _AiData {
     return EqualUnmodifiableListView(value);
   }
 
+  final Map<String, double> _probabilities;
   @override
-  final String resultImage;
+  Map<String, double> get probabilities {
+    if (_probabilities is EqualUnmodifiableMapView) return _probabilities;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_probabilities);
+  }
 
   @override
   String toString() {
-    return 'AiData(cosNames: $cosNames, cosPaths: $cosPaths, nutrNames: $nutrNames, nutrPaths: $nutrPaths, simpleSkin: $simpleSkin, expertSkin: $expertSkin, resultImage: $resultImage)';
+    return 'AiData(cosNames: $cosNames, cosPaths: $cosPaths, nutrNames: $nutrNames, nutrPaths: $nutrPaths, simpleSkin: $simpleSkin, expertSkin: $expertSkin, probabilities: $probabilities)';
   }
 
   @override
@@ -258,8 +264,8 @@ class _$AiDataImpl implements _AiData {
                 other.simpleSkin == simpleSkin) &&
             const DeepCollectionEquality()
                 .equals(other._expertSkin, _expertSkin) &&
-            (identical(other.resultImage, resultImage) ||
-                other.resultImage == resultImage));
+            const DeepCollectionEquality()
+                .equals(other._probabilities, _probabilities));
   }
 
   @JsonKey(ignore: true)
@@ -272,7 +278,7 @@ class _$AiDataImpl implements _AiData {
       const DeepCollectionEquality().hash(_nutrPaths),
       simpleSkin,
       const DeepCollectionEquality().hash(_expertSkin),
-      resultImage);
+      const DeepCollectionEquality().hash(_probabilities));
 
   @JsonKey(ignore: true)
   @override
@@ -294,9 +300,9 @@ abstract class _AiData implements AiData {
       required final List<String> cosPaths,
       required final List<String> nutrNames,
       required final List<String> nutrPaths,
-      required final BasicType simpleSkin,
-      final List<SkinType>? expertSkin,
-      required final String resultImage}) = _$AiDataImpl;
+      required final BaseType simpleSkin,
+      required final List<SkinType>? expertSkin,
+      required final Map<String, double> probabilities}) = _$AiDataImpl;
 
   factory _AiData.fromJson(Map<String, dynamic> json) = _$AiDataImpl.fromJson;
 
@@ -309,11 +315,11 @@ abstract class _AiData implements AiData {
   @override
   List<String> get nutrPaths;
   @override
-  BasicType get simpleSkin;
+  BaseType get simpleSkin;
   @override
   List<SkinType>? get expertSkin;
   @override
-  String get resultImage;
+  Map<String, double> get probabilities;
   @override
   @JsonKey(ignore: true)
   _$$AiDataImplCopyWith<_$AiDataImpl> get copyWith =>

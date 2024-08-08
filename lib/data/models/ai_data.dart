@@ -3,9 +3,9 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'ai_data.freezed.dart';
 part 'ai_data.g.dart';
 
-enum SkinType { acne, wrinkle, atophy }
+enum SkinType { ACNE, WRINKLES }
 
-enum BasicType { oily, dry, combination }
+enum BaseType { COMBINATION, OILY, DRY }
 
 @freezed
 class AiData with _$AiData {
@@ -14,9 +14,9 @@ class AiData with _$AiData {
     required List<String> cosPaths,
     required List<String> nutrNames,
     required List<String> nutrPaths,
-    required BasicType simpleSkin,
-    List<SkinType>? expertSkin,
-    required String resultImage,
+    required BaseType simpleSkin,
+    required List<SkinType>? expertSkin,
+    required Map<String, double> probabilities,
   }) = _AiData;
 
   factory AiData.fromJson(Map<String, dynamic> json) => _$AiDataFromJson(json);

@@ -1,72 +1,70 @@
 import '../../data/models/past_data.dart';
+import '../data/models/ai_data.dart' as model;
 import '../utils/rest_api.dart';
 import '../data/dtos/recommend_dto.dart';
 import '../data/dtos/my_page_dto.dart';
 import '../data/dtos/edit_user_dto.dart';
-import '../data/dtos/send_data_dto.dart';
-import '../../data/models/ai_data.dart' as model;
-import '../data/dtos/ai_dto.dart' as dto;
+import '../data/dtos/send_ai_dto.dart' as dto;
 
 class UserService {
   Future<MyPageDTO> uploadImageAndFetchData(String imagePath) async {
-    model.AiData aiData = await RestAPI.uploadImage(imagePath);
-    SendDataDTO sendData = await sendDataToServer(aiData, imagePath);
+    final aidata = await RestAPI.uploadImage(imagePath);
+    final sendAiDTO = dataForm(aidata, imagePath);
+    final data = await RestAPI.SendDataToServer(sendAiDTO);
     final userData = await RestAPI.fetchUserData();
 
     // Convert SendDataDTO to MyPageDTO
     return MyPageDTO(
-      age: sendData.age,
-      name: sendData.name,
-      gender: sendData.gender,
-      email: sendData.email,
-      phoneNumber: sendData.phoneNumber,
-      resultPath: sendData.resultImage,
-      resultDetails: sendData.resultDetails ?? '',
-      simpleSkin: sendData.basicSkinType,
+      age: data.age,
+      name: data.name,
+      gender: data.gender,
+      email: data.email,
+      phoneNumber: data.phoneNumber,
+      resultDetails: data.resultDetails ?? '',
+      simpleSkin: data.basicSkinType.toString(),
       profileImage: userData.profileImage,
       loginId: userData.loginId,
+      probabilities: data.probabilities,
     );
   }
 
-  Future<SendDataDTO> sendDataToServer(model.AiData aiData, String imagePath) {
-    final _RestAPI = RestAPI();
-    dto.AiDTO data = dto.AiDTO(
-      resultImage: aiData.resultImage,
+  dto.SendAiDTO dataForm(model.AiData aiData, String imagePath) {
+    return dto.SendAiDTO(
       resultDetails: '',
       faceImage: imagePath,
-      basicSkinType: _convertBasicType(aiData.simpleSkin),
-      advancedSkinType: _convertSkinTypeList(aiData.expertSkin),
+      basicSkinType: _convertBasicType(
+          aiData.simpleSkin), // Example value, adjust as needed
+      advancedSkinType:
+          _convertSkinTypeList(aiData.expertSkin), // Example values
       cosNames: aiData.cosNames,
       cosPaths: aiData.cosPaths,
       nutrNames: aiData.nutrNames,
       nutrPaths: aiData.nutrPaths,
+      probabilities: aiData.probabilities,
     );
-    return _RestAPI.sendDataToServer(data);
   }
 
-  List<dto.SkinType>? _convertSkinTypeList(List<model.SkinType>? skinTypes) {
-    return skinTypes?.map((type) => _convertSkinType(type)).toList();
-  }
-
-  dto.SkinType _convertSkinType(model.SkinType skinType) {
-    switch (skinType) {
-      case model.SkinType.acne:
-        return dto.SkinType.ACNE;
-      case model.SkinType.wrinkle:
-        return dto.SkinType.WRINKLE;
-      case model.SkinType.atophy:
-        return dto.SkinType.ATOPHY;
+  dto.type _convertBasicType(model.BaseType Type) {
+    switch (Type) {
+      case model.BaseType.OILY:
+        return dto.type.OILY;
+      case model.BaseType.DRY:
+        return dto.type.DRY;
+      case model.BaseType.COMBINATION:
+        return dto.type.COMBINATION;
     }
   }
 
-  dto.BaseType _convertBasicType(model.BasicType Type) {
-    switch (Type) {
-      case model.BasicType.oily:
-        return dto.BaseType.OILY;
-      case model.BasicType.dry:
-        return dto.BaseType.DRY;
-      case model.BasicType.combination:
-        return dto.BaseType.COMBINATION;
+  List<dto.skintype>? _convertSkinTypeList(List<model.SkinType>? skinTypes) {
+    return skinTypes?.map((type) => _convertSkinType(type)).toList();
+  }
+
+  dto.skintype _convertSkinType(model.SkinType skinType) {
+    switch (skinType) {
+      case model.SkinType.ACNE:
+        return dto.skintype.ACNE;
+      case model.SkinType.WRINKLES:
+        return dto.skintype.WRINKLES;
     }
   }
 

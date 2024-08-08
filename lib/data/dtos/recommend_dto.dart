@@ -1,9 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../data/models/ai_data.dart';
-import '../../data/models/user_data.dart';
 
 part 'recommend_dto.freezed.dart';
 part 'recommend_dto.g.dart';
+
+enum SkinType { ACNE, WRINKLE, ATOPHY }
+
+enum Type { DRY, OILY, COMBINATION }
 
 @freezed
 class RecommendDTO with _$RecommendDTO {
@@ -13,7 +15,7 @@ class RecommendDTO with _$RecommendDTO {
     required List<String> cosPaths,
     required List<String> nutrNames,
     required List<String> nutrPaths,
-    required String simpleSkin,
+    required Type simpleSkin,
     required List<SkinType> expertSkin,
   }) = _RecommendDTO;
 

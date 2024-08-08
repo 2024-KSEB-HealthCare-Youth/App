@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/result_service.dart';
 import '../../data/dtos/result_detail_dto.dart';
+import '../widgets/polygon_pentagon_widgets.dart';
 
 class ResultDetailScreen extends StatefulWidget {
   final int resultId;
@@ -24,6 +25,16 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
   void initState() {
     super.initState();
     _resultDetailDTO = _resultService.fetchResultDetail(widget.resultId);
+  }
+
+  List<double> getPolygonValues(Map<String, double> probabilities) {
+    return [
+      probabilities['DRY'] ?? 0.0,
+      probabilities['COMBINATION'] ?? 0.0,
+      probabilities['OILY'] ?? 0.0,
+      probabilities['ACNE'] ?? 0.0,
+      probabilities['WRINKLES'] ?? 0.0,
+    ];
   }
 
   @override
@@ -53,6 +64,7 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
             return const Center(child: Text('No result data found'));
           } else {
             final resultDetail = snapshot.data!;
+            final polygonValues = getPolygonValues(resultDetail.probabilities);
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -85,9 +97,9 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
                       color: const Color(0xFFD9D9D9),
                       shape: StarBorder.polygon(sides: 6),
                     ),
-                    child: resultDetail.resultImage.isNotEmpty
-                        ? Image.network(resultDetail.resultImage)
-                        : const Icon(Icons.image_not_supported),
+                    child: PolygonPentagon(
+                      values: polygonValues,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   Container(
@@ -100,7 +112,7 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
                       ),
                     ),
                     child: Text(
-                      resultDetail.resultDetails,
+                      resultDetail.details ?? '',
                       style: const TextStyle(fontSize: 16),
                     ),
                   ),

@@ -15,11 +15,13 @@ _$AiDataImpl _$$AiDataImplFromJson(Map<String, dynamic> json) => _$AiDataImpl(
           (json['nutrNames'] as List<dynamic>).map((e) => e as String).toList(),
       nutrPaths:
           (json['nutrPaths'] as List<dynamic>).map((e) => e as String).toList(),
-      simpleSkin: $enumDecode(_$BasicTypeEnumMap, json['simpleSkin']),
+      simpleSkin: $enumDecode(_$BaseTypeEnumMap, json['simpleSkin']),
       expertSkin: (json['expertSkin'] as List<dynamic>?)
           ?.map((e) => $enumDecode(_$SkinTypeEnumMap, e))
           .toList(),
-      resultImage: json['resultImage'] as String,
+      probabilities: (json['probabilities'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(k, (e as num).toDouble()),
+      ),
     );
 
 Map<String, dynamic> _$$AiDataImplToJson(_$AiDataImpl instance) =>
@@ -28,20 +30,19 @@ Map<String, dynamic> _$$AiDataImplToJson(_$AiDataImpl instance) =>
       'cosPaths': instance.cosPaths,
       'nutrNames': instance.nutrNames,
       'nutrPaths': instance.nutrPaths,
-      'simpleSkin': _$BasicTypeEnumMap[instance.simpleSkin]!,
+      'simpleSkin': _$BaseTypeEnumMap[instance.simpleSkin]!,
       'expertSkin':
           instance.expertSkin?.map((e) => _$SkinTypeEnumMap[e]!).toList(),
-      'resultImage': instance.resultImage,
+      'probabilities': instance.probabilities,
     };
 
-const _$BasicTypeEnumMap = {
-  BasicType.oily: 'oily',
-  BasicType.dry: 'dry',
-  BasicType.combination: 'combination',
+const _$BaseTypeEnumMap = {
+  BaseType.COMBINATION: 'COMBINATION',
+  BaseType.OILY: 'OILY',
+  BaseType.DRY: 'DRY',
 };
 
 const _$SkinTypeEnumMap = {
-  SkinType.acne: 'acne',
-  SkinType.wrinkle: 'wrinkle',
-  SkinType.atophy: 'atophy',
+  SkinType.ACNE: 'ACNE',
+  SkinType.WRINKLES: 'WRINKLES',
 };

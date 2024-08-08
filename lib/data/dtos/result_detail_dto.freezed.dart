@@ -20,9 +20,12 @@ ResultDetailDTO _$ResultDetailDTOFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ResultDetailDTO {
-  String get resultDetails => throw _privateConstructorUsedError;
+  int get memberId => throw _privateConstructorUsedError;
   String get resultImage => throw _privateConstructorUsedError;
   String get faceImage => throw _privateConstructorUsedError;
+  String? get details => throw _privateConstructorUsedError;
+  DateTime get resultDate => throw _privateConstructorUsedError;
+  Map<String, double> get probabilities => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +39,13 @@ abstract class $ResultDetailDTOCopyWith<$Res> {
           ResultDetailDTO value, $Res Function(ResultDetailDTO) then) =
       _$ResultDetailDTOCopyWithImpl<$Res, ResultDetailDTO>;
   @useResult
-  $Res call({String resultDetails, String resultImage, String faceImage});
+  $Res call(
+      {int memberId,
+      String resultImage,
+      String faceImage,
+      String? details,
+      DateTime resultDate,
+      Map<String, double> probabilities});
 }
 
 /// @nodoc
@@ -52,15 +61,18 @@ class _$ResultDetailDTOCopyWithImpl<$Res, $Val extends ResultDetailDTO>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? resultDetails = null,
+    Object? memberId = null,
     Object? resultImage = null,
     Object? faceImage = null,
+    Object? details = freezed,
+    Object? resultDate = null,
+    Object? probabilities = null,
   }) {
     return _then(_value.copyWith(
-      resultDetails: null == resultDetails
-          ? _value.resultDetails
-          : resultDetails // ignore: cast_nullable_to_non_nullable
-              as String,
+      memberId: null == memberId
+          ? _value.memberId
+          : memberId // ignore: cast_nullable_to_non_nullable
+              as int,
       resultImage: null == resultImage
           ? _value.resultImage
           : resultImage // ignore: cast_nullable_to_non_nullable
@@ -69,6 +81,18 @@ class _$ResultDetailDTOCopyWithImpl<$Res, $Val extends ResultDetailDTO>
           ? _value.faceImage
           : faceImage // ignore: cast_nullable_to_non_nullable
               as String,
+      details: freezed == details
+          ? _value.details
+          : details // ignore: cast_nullable_to_non_nullable
+              as String?,
+      resultDate: null == resultDate
+          ? _value.resultDate
+          : resultDate // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      probabilities: null == probabilities
+          ? _value.probabilities
+          : probabilities // ignore: cast_nullable_to_non_nullable
+              as Map<String, double>,
     ) as $Val);
   }
 }
@@ -81,7 +105,13 @@ abstract class _$$ResultDetailDTOImplCopyWith<$Res>
       __$$ResultDetailDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String resultDetails, String resultImage, String faceImage});
+  $Res call(
+      {int memberId,
+      String resultImage,
+      String faceImage,
+      String? details,
+      DateTime resultDate,
+      Map<String, double> probabilities});
 }
 
 /// @nodoc
@@ -95,15 +125,18 @@ class __$$ResultDetailDTOImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? resultDetails = null,
+    Object? memberId = null,
     Object? resultImage = null,
     Object? faceImage = null,
+    Object? details = freezed,
+    Object? resultDate = null,
+    Object? probabilities = null,
   }) {
     return _then(_$ResultDetailDTOImpl(
-      resultDetails: null == resultDetails
-          ? _value.resultDetails
-          : resultDetails // ignore: cast_nullable_to_non_nullable
-              as String,
+      memberId: null == memberId
+          ? _value.memberId
+          : memberId // ignore: cast_nullable_to_non_nullable
+              as int,
       resultImage: null == resultImage
           ? _value.resultImage
           : resultImage // ignore: cast_nullable_to_non_nullable
@@ -112,6 +145,18 @@ class __$$ResultDetailDTOImplCopyWithImpl<$Res>
           ? _value.faceImage
           : faceImage // ignore: cast_nullable_to_non_nullable
               as String,
+      details: freezed == details
+          ? _value.details
+          : details // ignore: cast_nullable_to_non_nullable
+              as String?,
+      resultDate: null == resultDate
+          ? _value.resultDate
+          : resultDate // ignore: cast_nullable_to_non_nullable
+              as DateTime,
+      probabilities: null == probabilities
+          ? _value._probabilities
+          : probabilities // ignore: cast_nullable_to_non_nullable
+              as Map<String, double>,
     ));
   }
 }
@@ -120,23 +165,38 @@ class __$$ResultDetailDTOImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ResultDetailDTOImpl implements _ResultDetailDTO {
   const _$ResultDetailDTOImpl(
-      {required this.resultDetails,
+      {required this.memberId,
       required this.resultImage,
-      required this.faceImage});
+      required this.faceImage,
+      this.details,
+      required this.resultDate,
+      required final Map<String, double> probabilities})
+      : _probabilities = probabilities;
 
   factory _$ResultDetailDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$ResultDetailDTOImplFromJson(json);
 
   @override
-  final String resultDetails;
+  final int memberId;
   @override
   final String resultImage;
   @override
   final String faceImage;
+  @override
+  final String? details;
+  @override
+  final DateTime resultDate;
+  final Map<String, double> _probabilities;
+  @override
+  Map<String, double> get probabilities {
+    if (_probabilities is EqualUnmodifiableMapView) return _probabilities;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_probabilities);
+  }
 
   @override
   String toString() {
-    return 'ResultDetailDTO(resultDetails: $resultDetails, resultImage: $resultImage, faceImage: $faceImage)';
+    return 'ResultDetailDTO(memberId: $memberId, resultImage: $resultImage, faceImage: $faceImage, details: $details, resultDate: $resultDate, probabilities: $probabilities)';
   }
 
   @override
@@ -144,18 +204,23 @@ class _$ResultDetailDTOImpl implements _ResultDetailDTO {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ResultDetailDTOImpl &&
-            (identical(other.resultDetails, resultDetails) ||
-                other.resultDetails == resultDetails) &&
+            (identical(other.memberId, memberId) ||
+                other.memberId == memberId) &&
             (identical(other.resultImage, resultImage) ||
                 other.resultImage == resultImage) &&
             (identical(other.faceImage, faceImage) ||
-                other.faceImage == faceImage));
+                other.faceImage == faceImage) &&
+            (identical(other.details, details) || other.details == details) &&
+            (identical(other.resultDate, resultDate) ||
+                other.resultDate == resultDate) &&
+            const DeepCollectionEquality()
+                .equals(other._probabilities, _probabilities));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, resultDetails, resultImage, faceImage);
+  int get hashCode => Object.hash(runtimeType, memberId, resultImage, faceImage,
+      details, resultDate, const DeepCollectionEquality().hash(_probabilities));
 
   @JsonKey(ignore: true)
   @override
@@ -174,19 +239,29 @@ class _$ResultDetailDTOImpl implements _ResultDetailDTO {
 
 abstract class _ResultDetailDTO implements ResultDetailDTO {
   const factory _ResultDetailDTO(
-      {required final String resultDetails,
-      required final String resultImage,
-      required final String faceImage}) = _$ResultDetailDTOImpl;
+          {required final int memberId,
+          required final String resultImage,
+          required final String faceImage,
+          final String? details,
+          required final DateTime resultDate,
+          required final Map<String, double> probabilities}) =
+      _$ResultDetailDTOImpl;
 
   factory _ResultDetailDTO.fromJson(Map<String, dynamic> json) =
       _$ResultDetailDTOImpl.fromJson;
 
   @override
-  String get resultDetails;
+  int get memberId;
   @override
   String get resultImage;
   @override
   String get faceImage;
+  @override
+  String? get details;
+  @override
+  DateTime get resultDate;
+  @override
+  Map<String, double> get probabilities;
   @override
   @JsonKey(ignore: true)
   _$$ResultDetailDTOImplCopyWith<_$ResultDetailDTOImpl> get copyWith =>

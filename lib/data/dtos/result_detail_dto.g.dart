@@ -9,15 +9,23 @@ part of 'result_detail_dto.dart';
 _$ResultDetailDTOImpl _$$ResultDetailDTOImplFromJson(
         Map<String, dynamic> json) =>
     _$ResultDetailDTOImpl(
-      resultDetails: json['resultDetails'] as String,
+      memberId: (json['memberId'] as num).toInt(),
       resultImage: json['resultImage'] as String,
       faceImage: json['faceImage'] as String,
+      details: json['details'] as String?,
+      resultDate: DateTime.parse(json['resultDate'] as String),
+      probabilities: (json['probabilities'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(k, (e as num).toDouble()),
+      ),
     );
 
 Map<String, dynamic> _$$ResultDetailDTOImplToJson(
         _$ResultDetailDTOImpl instance) =>
     <String, dynamic>{
-      'resultDetails': instance.resultDetails,
+      'memberId': instance.memberId,
       'resultImage': instance.resultImage,
       'faceImage': instance.faceImage,
+      'details': instance.details,
+      'resultDate': instance.resultDate.toIso8601String(),
+      'probabilities': instance.probabilities,
     };

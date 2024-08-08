@@ -17,7 +17,7 @@ _$RecommendDTOImpl _$$RecommendDTOImplFromJson(Map<String, dynamic> json) =>
           (json['nutrNames'] as List<dynamic>).map((e) => e as String).toList(),
       nutrPaths:
           (json['nutrPaths'] as List<dynamic>).map((e) => e as String).toList(),
-      simpleSkin: json['simpleSkin'] as String,
+      simpleSkin: $enumDecode(_$TypeEnumMap, json['simpleSkin']),
       expertSkin: (json['expertSkin'] as List<dynamic>)
           .map((e) => $enumDecode(_$SkinTypeEnumMap, e))
           .toList(),
@@ -30,13 +30,19 @@ Map<String, dynamic> _$$RecommendDTOImplToJson(_$RecommendDTOImpl instance) =>
       'cosPaths': instance.cosPaths,
       'nutrNames': instance.nutrNames,
       'nutrPaths': instance.nutrPaths,
-      'simpleSkin': instance.simpleSkin,
+      'simpleSkin': _$TypeEnumMap[instance.simpleSkin]!,
       'expertSkin':
           instance.expertSkin.map((e) => _$SkinTypeEnumMap[e]!).toList(),
     };
 
+const _$TypeEnumMap = {
+  Type.DRY: 'DRY',
+  Type.OILY: 'OILY',
+  Type.COMBINATION: 'COMBINATION',
+};
+
 const _$SkinTypeEnumMap = {
-  SkinType.acne: 'acne',
-  SkinType.wrinkle: 'wrinkle',
-  SkinType.atophy: 'atophy',
+  SkinType.ACNE: 'ACNE',
+  SkinType.WRINKLE: 'WRINKLE',
+  SkinType.ATOPHY: 'ATOPHY',
 };
