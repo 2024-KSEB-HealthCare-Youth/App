@@ -14,6 +14,7 @@ class ResultService {
         resultImage: resultData.resultImage,
         faceImage: resultData.faceImage,
         resultDate: resultData.resultDate,
+        probabilities: resultData.probabilities,
       );
 
       return resultDetail;

@@ -16,8 +16,10 @@ _$MyPageDTOImpl _$$MyPageDTOImplFromJson(Map<String, dynamic> json) =>
       phoneNumber: json['phoneNumber'] as String,
       loginId: json['loginId'] as String,
       simpleSkin: json['simpleSkin'] as String,
-      resultPath: json['resultPath'] as String,
       resultDetails: json['resultDetails'] as String,
+      probabilities: (json['probabilities'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(k, (e as num).toDouble()),
+      ),
     );
 
 Map<String, dynamic> _$$MyPageDTOImplToJson(_$MyPageDTOImpl instance) =>
@@ -30,6 +32,6 @@ Map<String, dynamic> _$$MyPageDTOImplToJson(_$MyPageDTOImpl instance) =>
       'phoneNumber': instance.phoneNumber,
       'loginId': instance.loginId,
       'simpleSkin': instance.simpleSkin,
-      'resultPath': instance.resultPath,
       'resultDetails': instance.resultDetails,
+      'probabilities': instance.probabilities,
     };

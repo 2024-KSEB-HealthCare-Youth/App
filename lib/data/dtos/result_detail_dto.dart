@@ -11,6 +11,7 @@ class ResultDetailDTO with _$ResultDetailDTO {
     required String faceImage,
     String? details,
     required DateTime resultDate,
+    required Map<String, double> probabilities,
   }) = _ResultDetailDTO;
 
   factory ResultDetailDTO.fromJson(Map<String, dynamic> json) =>

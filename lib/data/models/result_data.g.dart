@@ -15,6 +15,9 @@ _$ResultDataImpl _$$ResultDataImplFromJson(Map<String, dynamic> json) =>
       faceImage: json['faceImage'] as String,
       resultDetails: json['resultDetails'] as String,
       resultDate: DateTime.parse(json['resultDate'] as String),
+      probabilities: (json['probabilities'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(k, (e as num).toDouble()),
+      ),
     );
 
 Map<String, dynamic> _$$ResultDataImplToJson(_$ResultDataImpl instance) =>
@@ -26,4 +29,5 @@ Map<String, dynamic> _$$ResultDataImplToJson(_$ResultDataImpl instance) =>
       'faceImage': instance.faceImage,
       'resultDetails': instance.resultDetails,
       'resultDate': instance.resultDate.toIso8601String(),
+      'probabilities': instance.probabilities,
     };

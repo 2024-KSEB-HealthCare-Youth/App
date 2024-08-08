@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'ai_dto.dart';
+part of 'send_ai_dto.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,48 +14,49 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-AiDTO _$AiDTOFromJson(Map<String, dynamic> json) {
-  return _AiDTO.fromJson(json);
+SendAiDTO _$SendAiDTOFromJson(Map<String, dynamic> json) {
+  return _SendAiDTO.fromJson(json);
 }
 
 /// @nodoc
-mixin _$AiDTO {
-  String get resultImage => throw _privateConstructorUsedError;
-  String get resultDetails => throw _privateConstructorUsedError;
+mixin _$SendAiDTO {
+  String? get resultDetails => throw _privateConstructorUsedError;
   String get faceImage => throw _privateConstructorUsedError;
-  BaseType get basicSkinType => throw _privateConstructorUsedError;
-  List<SkinType>? get advancedSkinType => throw _privateConstructorUsedError;
+  type get basicSkinType => throw _privateConstructorUsedError;
+  List<skintype>? get advancedSkinType => throw _privateConstructorUsedError;
   List<String> get cosNames => throw _privateConstructorUsedError;
   List<String> get cosPaths => throw _privateConstructorUsedError;
   List<String> get nutrNames => throw _privateConstructorUsedError;
   List<String> get nutrPaths => throw _privateConstructorUsedError;
+  Map<String, double> get probabilities => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $AiDTOCopyWith<AiDTO> get copyWith => throw _privateConstructorUsedError;
+  $SendAiDTOCopyWith<SendAiDTO> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $AiDTOCopyWith<$Res> {
-  factory $AiDTOCopyWith(AiDTO value, $Res Function(AiDTO) then) =
-      _$AiDTOCopyWithImpl<$Res, AiDTO>;
+abstract class $SendAiDTOCopyWith<$Res> {
+  factory $SendAiDTOCopyWith(SendAiDTO value, $Res Function(SendAiDTO) then) =
+      _$SendAiDTOCopyWithImpl<$Res, SendAiDTO>;
   @useResult
   $Res call(
-      {String resultImage,
-      String resultDetails,
+      {String? resultDetails,
       String faceImage,
-      BaseType basicSkinType,
-      List<SkinType>? advancedSkinType,
+      type basicSkinType,
+      List<skintype>? advancedSkinType,
       List<String> cosNames,
       List<String> cosPaths,
       List<String> nutrNames,
-      List<String> nutrPaths});
+      List<String> nutrPaths,
+      Map<String, double> probabilities});
 }
 
 /// @nodoc
-class _$AiDTOCopyWithImpl<$Res, $Val extends AiDTO>
-    implements $AiDTOCopyWith<$Res> {
-  _$AiDTOCopyWithImpl(this._value, this._then);
+class _$SendAiDTOCopyWithImpl<$Res, $Val extends SendAiDTO>
+    implements $SendAiDTOCopyWith<$Res> {
+  _$SendAiDTOCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -65,8 +66,7 @@ class _$AiDTOCopyWithImpl<$Res, $Val extends AiDTO>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? resultImage = null,
-    Object? resultDetails = null,
+    Object? resultDetails = freezed,
     Object? faceImage = null,
     Object? basicSkinType = null,
     Object? advancedSkinType = freezed,
@@ -74,16 +74,13 @@ class _$AiDTOCopyWithImpl<$Res, $Val extends AiDTO>
     Object? cosPaths = null,
     Object? nutrNames = null,
     Object? nutrPaths = null,
+    Object? probabilities = null,
   }) {
     return _then(_value.copyWith(
-      resultImage: null == resultImage
-          ? _value.resultImage
-          : resultImage // ignore: cast_nullable_to_non_nullable
-              as String,
-      resultDetails: null == resultDetails
+      resultDetails: freezed == resultDetails
           ? _value.resultDetails
           : resultDetails // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       faceImage: null == faceImage
           ? _value.faceImage
           : faceImage // ignore: cast_nullable_to_non_nullable
@@ -91,11 +88,11 @@ class _$AiDTOCopyWithImpl<$Res, $Val extends AiDTO>
       basicSkinType: null == basicSkinType
           ? _value.basicSkinType
           : basicSkinType // ignore: cast_nullable_to_non_nullable
-              as BaseType,
+              as type,
       advancedSkinType: freezed == advancedSkinType
           ? _value.advancedSkinType
           : advancedSkinType // ignore: cast_nullable_to_non_nullable
-              as List<SkinType>?,
+              as List<skintype>?,
       cosNames: null == cosNames
           ? _value.cosNames
           : cosNames // ignore: cast_nullable_to_non_nullable
@@ -112,42 +109,46 @@ class _$AiDTOCopyWithImpl<$Res, $Val extends AiDTO>
           ? _value.nutrPaths
           : nutrPaths // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      probabilities: null == probabilities
+          ? _value.probabilities
+          : probabilities // ignore: cast_nullable_to_non_nullable
+              as Map<String, double>,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$AiDTOImplCopyWith<$Res> implements $AiDTOCopyWith<$Res> {
-  factory _$$AiDTOImplCopyWith(
-          _$AiDTOImpl value, $Res Function(_$AiDTOImpl) then) =
-      __$$AiDTOImplCopyWithImpl<$Res>;
+abstract class _$$SendAiDTOImplCopyWith<$Res>
+    implements $SendAiDTOCopyWith<$Res> {
+  factory _$$SendAiDTOImplCopyWith(
+          _$SendAiDTOImpl value, $Res Function(_$SendAiDTOImpl) then) =
+      __$$SendAiDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
-      {String resultImage,
-      String resultDetails,
+      {String? resultDetails,
       String faceImage,
-      BaseType basicSkinType,
-      List<SkinType>? advancedSkinType,
+      type basicSkinType,
+      List<skintype>? advancedSkinType,
       List<String> cosNames,
       List<String> cosPaths,
       List<String> nutrNames,
-      List<String> nutrPaths});
+      List<String> nutrPaths,
+      Map<String, double> probabilities});
 }
 
 /// @nodoc
-class __$$AiDTOImplCopyWithImpl<$Res>
-    extends _$AiDTOCopyWithImpl<$Res, _$AiDTOImpl>
-    implements _$$AiDTOImplCopyWith<$Res> {
-  __$$AiDTOImplCopyWithImpl(
-      _$AiDTOImpl _value, $Res Function(_$AiDTOImpl) _then)
+class __$$SendAiDTOImplCopyWithImpl<$Res>
+    extends _$SendAiDTOCopyWithImpl<$Res, _$SendAiDTOImpl>
+    implements _$$SendAiDTOImplCopyWith<$Res> {
+  __$$SendAiDTOImplCopyWithImpl(
+      _$SendAiDTOImpl _value, $Res Function(_$SendAiDTOImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? resultImage = null,
-    Object? resultDetails = null,
+    Object? resultDetails = freezed,
     Object? faceImage = null,
     Object? basicSkinType = null,
     Object? advancedSkinType = freezed,
@@ -155,16 +156,13 @@ class __$$AiDTOImplCopyWithImpl<$Res>
     Object? cosPaths = null,
     Object? nutrNames = null,
     Object? nutrPaths = null,
+    Object? probabilities = null,
   }) {
-    return _then(_$AiDTOImpl(
-      resultImage: null == resultImage
-          ? _value.resultImage
-          : resultImage // ignore: cast_nullable_to_non_nullable
-              as String,
-      resultDetails: null == resultDetails
+    return _then(_$SendAiDTOImpl(
+      resultDetails: freezed == resultDetails
           ? _value.resultDetails
           : resultDetails // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       faceImage: null == faceImage
           ? _value.faceImage
           : faceImage // ignore: cast_nullable_to_non_nullable
@@ -172,11 +170,11 @@ class __$$AiDTOImplCopyWithImpl<$Res>
       basicSkinType: null == basicSkinType
           ? _value.basicSkinType
           : basicSkinType // ignore: cast_nullable_to_non_nullable
-              as BaseType,
+              as type,
       advancedSkinType: freezed == advancedSkinType
           ? _value._advancedSkinType
           : advancedSkinType // ignore: cast_nullable_to_non_nullable
-              as List<SkinType>?,
+              as List<skintype>?,
       cosNames: null == cosNames
           ? _value._cosNames
           : cosNames // ignore: cast_nullable_to_non_nullable
@@ -193,43 +191,46 @@ class __$$AiDTOImplCopyWithImpl<$Res>
           ? _value._nutrPaths
           : nutrPaths // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      probabilities: null == probabilities
+          ? _value._probabilities
+          : probabilities // ignore: cast_nullable_to_non_nullable
+              as Map<String, double>,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$AiDTOImpl implements _AiDTO {
-  const _$AiDTOImpl(
-      {required this.resultImage,
-      required this.resultDetails,
+class _$SendAiDTOImpl implements _SendAiDTO {
+  const _$SendAiDTOImpl(
+      {this.resultDetails,
       required this.faceImage,
       required this.basicSkinType,
-      final List<SkinType>? advancedSkinType,
+      final List<skintype>? advancedSkinType,
       required final List<String> cosNames,
       required final List<String> cosPaths,
       required final List<String> nutrNames,
-      required final List<String> nutrPaths})
+      required final List<String> nutrPaths,
+      required final Map<String, double> probabilities})
       : _advancedSkinType = advancedSkinType,
         _cosNames = cosNames,
         _cosPaths = cosPaths,
         _nutrNames = nutrNames,
-        _nutrPaths = nutrPaths;
+        _nutrPaths = nutrPaths,
+        _probabilities = probabilities;
 
-  factory _$AiDTOImpl.fromJson(Map<String, dynamic> json) =>
-      _$$AiDTOImplFromJson(json);
+  factory _$SendAiDTOImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SendAiDTOImplFromJson(json);
 
   @override
-  final String resultImage;
-  @override
-  final String resultDetails;
+  final String? resultDetails;
   @override
   final String faceImage;
   @override
-  final BaseType basicSkinType;
-  final List<SkinType>? _advancedSkinType;
+  final type basicSkinType;
+  final List<skintype>? _advancedSkinType;
   @override
-  List<SkinType>? get advancedSkinType {
+  List<skintype>? get advancedSkinType {
     final value = _advancedSkinType;
     if (value == null) return null;
     if (_advancedSkinType is EqualUnmodifiableListView)
@@ -270,18 +271,24 @@ class _$AiDTOImpl implements _AiDTO {
     return EqualUnmodifiableListView(_nutrPaths);
   }
 
+  final Map<String, double> _probabilities;
+  @override
+  Map<String, double> get probabilities {
+    if (_probabilities is EqualUnmodifiableMapView) return _probabilities;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_probabilities);
+  }
+
   @override
   String toString() {
-    return 'AiDTO(resultImage: $resultImage, resultDetails: $resultDetails, faceImage: $faceImage, basicSkinType: $basicSkinType, advancedSkinType: $advancedSkinType, cosNames: $cosNames, cosPaths: $cosPaths, nutrNames: $nutrNames, nutrPaths: $nutrPaths)';
+    return 'SendAiDTO(resultDetails: $resultDetails, faceImage: $faceImage, basicSkinType: $basicSkinType, advancedSkinType: $advancedSkinType, cosNames: $cosNames, cosPaths: $cosPaths, nutrNames: $nutrNames, nutrPaths: $nutrPaths, probabilities: $probabilities)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AiDTOImpl &&
-            (identical(other.resultImage, resultImage) ||
-                other.resultImage == resultImage) &&
+            other is _$SendAiDTOImpl &&
             (identical(other.resultDetails, resultDetails) ||
                 other.resultDetails == resultDetails) &&
             (identical(other.faceImage, faceImage) ||
@@ -295,14 +302,15 @@ class _$AiDTOImpl implements _AiDTO {
             const DeepCollectionEquality()
                 .equals(other._nutrNames, _nutrNames) &&
             const DeepCollectionEquality()
-                .equals(other._nutrPaths, _nutrPaths));
+                .equals(other._nutrPaths, _nutrPaths) &&
+            const DeepCollectionEquality()
+                .equals(other._probabilities, _probabilities));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      resultImage,
       resultDetails,
       faceImage,
       basicSkinType,
@@ -310,46 +318,46 @@ class _$AiDTOImpl implements _AiDTO {
       const DeepCollectionEquality().hash(_cosNames),
       const DeepCollectionEquality().hash(_cosPaths),
       const DeepCollectionEquality().hash(_nutrNames),
-      const DeepCollectionEquality().hash(_nutrPaths));
+      const DeepCollectionEquality().hash(_nutrPaths),
+      const DeepCollectionEquality().hash(_probabilities));
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$AiDTOImplCopyWith<_$AiDTOImpl> get copyWith =>
-      __$$AiDTOImplCopyWithImpl<_$AiDTOImpl>(this, _$identity);
+  _$$SendAiDTOImplCopyWith<_$SendAiDTOImpl> get copyWith =>
+      __$$SendAiDTOImplCopyWithImpl<_$SendAiDTOImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$AiDTOImplToJson(
+    return _$$SendAiDTOImplToJson(
       this,
     );
   }
 }
 
-abstract class _AiDTO implements AiDTO {
-  const factory _AiDTO(
-      {required final String resultImage,
-      required final String resultDetails,
+abstract class _SendAiDTO implements SendAiDTO {
+  const factory _SendAiDTO(
+      {final String? resultDetails,
       required final String faceImage,
-      required final BaseType basicSkinType,
-      final List<SkinType>? advancedSkinType,
+      required final type basicSkinType,
+      final List<skintype>? advancedSkinType,
       required final List<String> cosNames,
       required final List<String> cosPaths,
       required final List<String> nutrNames,
-      required final List<String> nutrPaths}) = _$AiDTOImpl;
+      required final List<String> nutrPaths,
+      required final Map<String, double> probabilities}) = _$SendAiDTOImpl;
 
-  factory _AiDTO.fromJson(Map<String, dynamic> json) = _$AiDTOImpl.fromJson;
+  factory _SendAiDTO.fromJson(Map<String, dynamic> json) =
+      _$SendAiDTOImpl.fromJson;
 
   @override
-  String get resultImage;
-  @override
-  String get resultDetails;
+  String? get resultDetails;
   @override
   String get faceImage;
   @override
-  BaseType get basicSkinType;
+  type get basicSkinType;
   @override
-  List<SkinType>? get advancedSkinType;
+  List<skintype>? get advancedSkinType;
   @override
   List<String> get cosNames;
   @override
@@ -359,7 +367,9 @@ abstract class _AiDTO implements AiDTO {
   @override
   List<String> get nutrPaths;
   @override
+  Map<String, double> get probabilities;
+  @override
   @JsonKey(ignore: true)
-  _$$AiDTOImplCopyWith<_$AiDTOImpl> get copyWith =>
+  _$$SendAiDTOImplCopyWith<_$SendAiDTOImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

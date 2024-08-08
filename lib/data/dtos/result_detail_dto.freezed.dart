@@ -25,6 +25,7 @@ mixin _$ResultDetailDTO {
   String get faceImage => throw _privateConstructorUsedError;
   String? get details => throw _privateConstructorUsedError;
   DateTime get resultDate => throw _privateConstructorUsedError;
+  Map<String, double> get probabilities => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +44,8 @@ abstract class $ResultDetailDTOCopyWith<$Res> {
       String resultImage,
       String faceImage,
       String? details,
-      DateTime resultDate});
+      DateTime resultDate,
+      Map<String, double> probabilities});
 }
 
 /// @nodoc
@@ -64,6 +66,7 @@ class _$ResultDetailDTOCopyWithImpl<$Res, $Val extends ResultDetailDTO>
     Object? faceImage = null,
     Object? details = freezed,
     Object? resultDate = null,
+    Object? probabilities = null,
   }) {
     return _then(_value.copyWith(
       memberId: null == memberId
@@ -86,6 +89,10 @@ class _$ResultDetailDTOCopyWithImpl<$Res, $Val extends ResultDetailDTO>
           ? _value.resultDate
           : resultDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      probabilities: null == probabilities
+          ? _value.probabilities
+          : probabilities // ignore: cast_nullable_to_non_nullable
+              as Map<String, double>,
     ) as $Val);
   }
 }
@@ -103,7 +110,8 @@ abstract class _$$ResultDetailDTOImplCopyWith<$Res>
       String resultImage,
       String faceImage,
       String? details,
-      DateTime resultDate});
+      DateTime resultDate,
+      Map<String, double> probabilities});
 }
 
 /// @nodoc
@@ -122,6 +130,7 @@ class __$$ResultDetailDTOImplCopyWithImpl<$Res>
     Object? faceImage = null,
     Object? details = freezed,
     Object? resultDate = null,
+    Object? probabilities = null,
   }) {
     return _then(_$ResultDetailDTOImpl(
       memberId: null == memberId
@@ -144,6 +153,10 @@ class __$$ResultDetailDTOImplCopyWithImpl<$Res>
           ? _value.resultDate
           : resultDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      probabilities: null == probabilities
+          ? _value._probabilities
+          : probabilities // ignore: cast_nullable_to_non_nullable
+              as Map<String, double>,
     ));
   }
 }
@@ -156,7 +169,9 @@ class _$ResultDetailDTOImpl implements _ResultDetailDTO {
       required this.resultImage,
       required this.faceImage,
       this.details,
-      required this.resultDate});
+      required this.resultDate,
+      required final Map<String, double> probabilities})
+      : _probabilities = probabilities;
 
   factory _$ResultDetailDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$ResultDetailDTOImplFromJson(json);
@@ -171,10 +186,17 @@ class _$ResultDetailDTOImpl implements _ResultDetailDTO {
   final String? details;
   @override
   final DateTime resultDate;
+  final Map<String, double> _probabilities;
+  @override
+  Map<String, double> get probabilities {
+    if (_probabilities is EqualUnmodifiableMapView) return _probabilities;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_probabilities);
+  }
 
   @override
   String toString() {
-    return 'ResultDetailDTO(memberId: $memberId, resultImage: $resultImage, faceImage: $faceImage, details: $details, resultDate: $resultDate)';
+    return 'ResultDetailDTO(memberId: $memberId, resultImage: $resultImage, faceImage: $faceImage, details: $details, resultDate: $resultDate, probabilities: $probabilities)';
   }
 
   @override
@@ -190,13 +212,15 @@ class _$ResultDetailDTOImpl implements _ResultDetailDTO {
                 other.faceImage == faceImage) &&
             (identical(other.details, details) || other.details == details) &&
             (identical(other.resultDate, resultDate) ||
-                other.resultDate == resultDate));
+                other.resultDate == resultDate) &&
+            const DeepCollectionEquality()
+                .equals(other._probabilities, _probabilities));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, memberId, resultImage, faceImage, details, resultDate);
+  int get hashCode => Object.hash(runtimeType, memberId, resultImage, faceImage,
+      details, resultDate, const DeepCollectionEquality().hash(_probabilities));
 
   @JsonKey(ignore: true)
   @override
@@ -215,11 +239,13 @@ class _$ResultDetailDTOImpl implements _ResultDetailDTO {
 
 abstract class _ResultDetailDTO implements ResultDetailDTO {
   const factory _ResultDetailDTO(
-      {required final int memberId,
-      required final String resultImage,
-      required final String faceImage,
-      final String? details,
-      required final DateTime resultDate}) = _$ResultDetailDTOImpl;
+          {required final int memberId,
+          required final String resultImage,
+          required final String faceImage,
+          final String? details,
+          required final DateTime resultDate,
+          required final Map<String, double> probabilities}) =
+      _$ResultDetailDTOImpl;
 
   factory _ResultDetailDTO.fromJson(Map<String, dynamic> json) =
       _$ResultDetailDTOImpl.fromJson;
@@ -234,6 +260,8 @@ abstract class _ResultDetailDTO implements ResultDetailDTO {
   String? get details;
   @override
   DateTime get resultDate;
+  @override
+  Map<String, double> get probabilities;
   @override
   @JsonKey(ignore: true)
   _$$ResultDetailDTOImplCopyWith<_$ResultDetailDTOImpl> get copyWith =>

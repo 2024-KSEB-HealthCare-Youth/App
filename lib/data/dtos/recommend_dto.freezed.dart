@@ -25,7 +25,7 @@ mixin _$RecommendDTO {
   List<String> get cosPaths => throw _privateConstructorUsedError;
   List<String> get nutrNames => throw _privateConstructorUsedError;
   List<String> get nutrPaths => throw _privateConstructorUsedError;
-  String get simpleSkin => throw _privateConstructorUsedError;
+  Type get simpleSkin => throw _privateConstructorUsedError;
   List<SkinType> get expertSkin => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -46,7 +46,7 @@ abstract class $RecommendDTOCopyWith<$Res> {
       List<String> cosPaths,
       List<String> nutrNames,
       List<String> nutrPaths,
-      String simpleSkin,
+      Type simpleSkin,
       List<SkinType> expertSkin});
 }
 
@@ -95,7 +95,7 @@ class _$RecommendDTOCopyWithImpl<$Res, $Val extends RecommendDTO>
       simpleSkin: null == simpleSkin
           ? _value.simpleSkin
           : simpleSkin // ignore: cast_nullable_to_non_nullable
-              as String,
+              as Type,
       expertSkin: null == expertSkin
           ? _value.expertSkin
           : expertSkin // ignore: cast_nullable_to_non_nullable
@@ -118,7 +118,7 @@ abstract class _$$RecommendDTOImplCopyWith<$Res>
       List<String> cosPaths,
       List<String> nutrNames,
       List<String> nutrPaths,
-      String simpleSkin,
+      Type simpleSkin,
       List<SkinType> expertSkin});
 }
 
@@ -165,7 +165,7 @@ class __$$RecommendDTOImplCopyWithImpl<$Res>
       simpleSkin: null == simpleSkin
           ? _value.simpleSkin
           : simpleSkin // ignore: cast_nullable_to_non_nullable
-              as String,
+              as Type,
       expertSkin: null == expertSkin
           ? _value._expertSkin
           : expertSkin // ignore: cast_nullable_to_non_nullable
@@ -229,7 +229,7 @@ class _$RecommendDTOImpl implements _RecommendDTO {
   }
 
   @override
-  final String simpleSkin;
+  final Type simpleSkin;
   final List<SkinType> _expertSkin;
   @override
   List<SkinType> get expertSkin {
@@ -294,7 +294,7 @@ abstract class _RecommendDTO implements RecommendDTO {
       required final List<String> cosPaths,
       required final List<String> nutrNames,
       required final List<String> nutrPaths,
-      required final String simpleSkin,
+      required final Type simpleSkin,
       required final List<SkinType> expertSkin}) = _$RecommendDTOImpl;
 
   factory _RecommendDTO.fromJson(Map<String, dynamic> json) =
@@ -311,7 +311,7 @@ abstract class _RecommendDTO implements RecommendDTO {
   @override
   List<String> get nutrPaths;
   @override
-  String get simpleSkin;
+  Type get simpleSkin;
   @override
   List<SkinType> get expertSkin;
   @override

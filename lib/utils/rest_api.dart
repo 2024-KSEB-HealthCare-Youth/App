@@ -1,16 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'package:dio/dio.dart' as dio;
-import 'package:myapp/data/dtos/ai_dto.dart';
+import 'package:myapp/data/dtos/send_ai_dto.dart';
+import 'package:myapp/data/models/ai_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
-import 'package:path_provider/path_provider.dart';
 import '../data/models/user_data.dart';
 import '../data/models/result_data.dart';
-import '../data/models/ai_data.dart';
 import '../data/models/past_data.dart';
 import '../data/dtos/comment_dto.dart';
 import '../data/dtos/login_dto.dart';
@@ -340,42 +338,13 @@ class RestAPI {
       final response = await flaskDio.post(
         '/upload',
         data: formData,
-        options: dio.Options(
-          responseType: dio.ResponseType.stream,
-          sendTimeout: Duration(seconds: 30),
-          receiveTimeout: Duration(seconds: 30),
-        ),
       );
-
       if (response.statusCode == 200) {
-        final directory = await getApplicationDocumentsDirectory();
-        final file = File(
-            '${directory.path}/${imagePath.split('/').last}.json'); // 파일 저장 경로 설정
-        var sink = file.openWrite();
+        print('Image upload successful.');
 
-        Completer<AiData> completer = Completer<AiData>();
-
-        await response.data.stream.listen(
-          (data) {
-            sink.add(data);
-          },
-          onDone: () async {
-            await sink.close();
-            print('File downloaded and saved successfully.');
-
-            // 파일을 읽어와서 JSON 디코딩
-            var fileContent = await file.readAsString();
-            var decodedResponse = jsonDecode(fileContent);
-            var aiData = AiData.fromJson(decodedResponse);
-            completer.complete(aiData);
-          },
-          onError: (e) {
-            print('Error: $e');
-            throw Exception('Failed to upload image: $e');
-          },
-          cancelOnError: true,
-        ).asFuture();
-        return completer.future;
+        final aiData = AiData.fromJson(response.data);
+        print('Parsed AiData: $aiData');
+        return aiData;
       } else {
         print('Image upload failed.');
         throw Exception('Failed to upload image: ${response.statusMessage}');
@@ -386,26 +355,20 @@ class RestAPI {
     }
   }
 
-  Future<SendDataDTO> sendDataToServer(AiDTO aiData) async {
+  static Future<SendDataDTO> SendDataToServer(SendAiDTO aidto) async {
+    final token = await storage.read(key: 'access_token');
     try {
-      final token = await storage.read(key: 'access_token');
-      final response = await dioClient.post(
-        '/members/mypage',
-        data: aiData.toJson(),
-        options: dio.Options(
-          headers: {'Authorization': 'Bearer $token'},
-        ),
-      );
-
+      final response = await dioClient.post('members/mypage',
+          data: aidto.toJson(),
+          options: dio.Options(
+            headers: {'Authorization': 'Bearer $token'},
+          ));
       if (response.statusCode == 200) {
-        print('Data sent successfully.');
-
         if (response.data is Map<String, dynamic> &&
             response.data['results'] is List) {
           List<dynamic> jsonData = response.data['results'];
           if (jsonData.isNotEmpty) {
-            SendDataDTO data = SendDataDTO.fromJson(jsonData[0]);
-            return data;
+            return SendDataDTO.fromJson(jsonData[0]);
           } else {
             throw Exception('No data returned in response');
           }
@@ -413,12 +376,12 @@ class RestAPI {
           throw Exception('Unexpected response format');
         }
       } else {
-        print('Data sending failed.');
-        throw Exception('Failed to send data: ${response.statusMessage}');
+        throw Exception(
+            'Failed to load RecommendDTO data: ${response.statusMessage}');
       }
     } catch (e) {
-      print('Data sending failed: $e');
-      throw Exception('Data sending failed: $e');
+      print('Data fetching failed: $e');
+      throw Exception('Data fetching failed: $e');
     }
   }
 
@@ -479,26 +442,6 @@ class RestAPI {
       throw Exception('Add comment failed: $e');
     }
   }
-
-  // static Future<void> removeLikeStatus(int postId) async {
-  //   try {
-  //     final token = await storage.read(key: 'access_token');
-  //     final response = await dioClient.delete(
-  //       '/likes/$postId',
-  //       options: dio.Options(
-  //         headers: {
-  //           'Authorization': 'Bearer $token',
-  //         },
-  //       ),
-  //     );
-  //     if (response.statusCode != 200) {
-  //       throw Exception('Failed to remove like status: ${response.statusMessage}');
-  //     }
-  //   } catch (e) {
-  //     print('Remove like status failed: $e');
-  //     throw Exception('Remove like status failed: $e');
-  //   }
-  // }
 
   static Future<void> updateLikeStatus(int postId) async {
     try {

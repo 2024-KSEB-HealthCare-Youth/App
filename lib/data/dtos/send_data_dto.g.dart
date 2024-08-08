@@ -14,12 +14,14 @@ _$SendDataDTOImpl _$$SendDataDTOImplFromJson(Map<String, dynamic> json) =>
       age: (json['age'] as num).toInt(),
       email: json['email'] as String?,
       phoneNumber: json['phoneNumber'] as String,
-      resultImage: json['resultImage'] as String,
       resultDetails: json['resultDetails'] as String?,
       advancedSkinType: (json['advancedSkinType'] as List<dynamic>?)
           ?.map((e) => $enumDecode(_$skinTypeEnumMap, e))
           .toList(),
-      basicSkinType: json['basicSkinType'] as String,
+      basicSkinType: $enumDecode(_$TypeEnumMap, json['basicSkinType']),
+      probabilities: (json['probabilities'] as Map<String, dynamic>).map(
+        (k, e) => MapEntry(k, (e as num).toDouble()),
+      ),
     );
 
 Map<String, dynamic> _$$SendDataDTOImplToJson(_$SendDataDTOImpl instance) =>
@@ -30,15 +32,21 @@ Map<String, dynamic> _$$SendDataDTOImplToJson(_$SendDataDTOImpl instance) =>
       'age': instance.age,
       'email': instance.email,
       'phoneNumber': instance.phoneNumber,
-      'resultImage': instance.resultImage,
       'resultDetails': instance.resultDetails,
       'advancedSkinType':
           instance.advancedSkinType?.map((e) => _$skinTypeEnumMap[e]!).toList(),
-      'basicSkinType': instance.basicSkinType,
+      'basicSkinType': _$TypeEnumMap[instance.basicSkinType]!,
+      'probabilities': instance.probabilities,
     };
 
 const _$skinTypeEnumMap = {
   skinType.ACNE: 'ACNE',
   skinType.WRINKLE: 'WRINKLE',
   skinType.ATOPHY: 'ATOPHY',
+};
+
+const _$TypeEnumMap = {
+  Type.DRY: 'DRY',
+  Type.OILY: 'OILY',
+  Type.COMBINATION: 'COMBINATION',
 };

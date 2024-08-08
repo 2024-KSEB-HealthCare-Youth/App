@@ -5,6 +5,8 @@ part 'send_data_dto.g.dart';
 
 enum skinType { ACNE, WRINKLE, ATOPHY }
 
+enum Type { DRY, OILY, COMBINATION }
+
 @freezed
 class SendDataDTO with _$SendDataDTO {
   const factory SendDataDTO({
@@ -14,10 +16,10 @@ class SendDataDTO with _$SendDataDTO {
     required int age,
     String? email,
     required String phoneNumber,
-    required String resultImage,
     String? resultDetails,
     List<skinType>? advancedSkinType,
-    required String basicSkinType,
+    required Type basicSkinType,
+    required Map<String, double> probabilities,
   }) = _SendDataDTO;
 
   factory SendDataDTO.fromJson(Map<String, dynamic> json) =>

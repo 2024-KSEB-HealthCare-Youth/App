@@ -27,6 +27,7 @@ mixin _$ResultData {
   String get faceImage => throw _privateConstructorUsedError;
   String get resultDetails => throw _privateConstructorUsedError;
   DateTime get resultDate => throw _privateConstructorUsedError;
+  Map<String, double> get probabilities => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,7 +48,8 @@ abstract class $ResultDataCopyWith<$Res> {
       String resultImage,
       String faceImage,
       String resultDetails,
-      DateTime resultDate});
+      DateTime resultDate,
+      Map<String, double> probabilities});
 }
 
 /// @nodoc
@@ -70,6 +72,7 @@ class _$ResultDataCopyWithImpl<$Res, $Val extends ResultData>
     Object? faceImage = null,
     Object? resultDetails = null,
     Object? resultDate = null,
+    Object? probabilities = null,
   }) {
     return _then(_value.copyWith(
       skintype: freezed == skintype
@@ -100,6 +103,10 @@ class _$ResultDataCopyWithImpl<$Res, $Val extends ResultData>
           ? _value.resultDate
           : resultDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      probabilities: null == probabilities
+          ? _value.probabilities
+          : probabilities // ignore: cast_nullable_to_non_nullable
+              as Map<String, double>,
     ) as $Val);
   }
 }
@@ -119,7 +126,8 @@ abstract class _$$ResultDataImplCopyWith<$Res>
       String resultImage,
       String faceImage,
       String resultDetails,
-      DateTime resultDate});
+      DateTime resultDate,
+      Map<String, double> probabilities});
 }
 
 /// @nodoc
@@ -140,6 +148,7 @@ class __$$ResultDataImplCopyWithImpl<$Res>
     Object? faceImage = null,
     Object? resultDetails = null,
     Object? resultDate = null,
+    Object? probabilities = null,
   }) {
     return _then(_$ResultDataImpl(
       skintype: freezed == skintype
@@ -170,6 +179,10 @@ class __$$ResultDataImplCopyWithImpl<$Res>
           ? _value.resultDate
           : resultDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      probabilities: null == probabilities
+          ? _value._probabilities
+          : probabilities // ignore: cast_nullable_to_non_nullable
+              as Map<String, double>,
     ));
   }
 }
@@ -184,7 +197,9 @@ class _$ResultDataImpl implements _ResultData {
       required this.resultImage,
       required this.faceImage,
       required this.resultDetails,
-      required this.resultDate});
+      required this.resultDate,
+      required final Map<String, double> probabilities})
+      : _probabilities = probabilities;
 
   factory _$ResultDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$ResultDataImplFromJson(json);
@@ -203,10 +218,17 @@ class _$ResultDataImpl implements _ResultData {
   final String resultDetails;
   @override
   final DateTime resultDate;
+  final Map<String, double> _probabilities;
+  @override
+  Map<String, double> get probabilities {
+    if (_probabilities is EqualUnmodifiableMapView) return _probabilities;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_probabilities);
+  }
 
   @override
   String toString() {
-    return 'ResultData(skintype: $skintype, resultId: $resultId, memberId: $memberId, resultImage: $resultImage, faceImage: $faceImage, resultDetails: $resultDetails, resultDate: $resultDate)';
+    return 'ResultData(skintype: $skintype, resultId: $resultId, memberId: $memberId, resultImage: $resultImage, faceImage: $faceImage, resultDetails: $resultDetails, resultDate: $resultDate, probabilities: $probabilities)';
   }
 
   @override
@@ -227,13 +249,23 @@ class _$ResultDataImpl implements _ResultData {
             (identical(other.resultDetails, resultDetails) ||
                 other.resultDetails == resultDetails) &&
             (identical(other.resultDate, resultDate) ||
-                other.resultDate == resultDate));
+                other.resultDate == resultDate) &&
+            const DeepCollectionEquality()
+                .equals(other._probabilities, _probabilities));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, skintype, resultId, memberId,
-      resultImage, faceImage, resultDetails, resultDate);
+  int get hashCode => Object.hash(
+      runtimeType,
+      skintype,
+      resultId,
+      memberId,
+      resultImage,
+      faceImage,
+      resultDetails,
+      resultDate,
+      const DeepCollectionEquality().hash(_probabilities));
 
   @JsonKey(ignore: true)
   @override
@@ -257,7 +289,8 @@ abstract class _ResultData implements ResultData {
       required final String resultImage,
       required final String faceImage,
       required final String resultDetails,
-      required final DateTime resultDate}) = _$ResultDataImpl;
+      required final DateTime resultDate,
+      required final Map<String, double> probabilities}) = _$ResultDataImpl;
 
   factory _ResultData.fromJson(Map<String, dynamic> json) =
       _$ResultDataImpl.fromJson;
@@ -276,6 +309,8 @@ abstract class _ResultData implements ResultData {
   String get resultDetails;
   @override
   DateTime get resultDate;
+  @override
+  Map<String, double> get probabilities;
   @override
   @JsonKey(ignore: true)
   _$$ResultDataImplCopyWith<_$ResultDataImpl> get copyWith =>
