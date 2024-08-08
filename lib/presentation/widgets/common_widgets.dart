@@ -44,7 +44,7 @@ Widget buildCreatePostSection(VoidCallback onTap, UserData user) {
         ),
         const SizedBox(width: 10),
         Text(
-          user.nickName ?? user.loginId,
+          user.nickName,
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
         Expanded(

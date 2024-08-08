@@ -8,7 +8,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import '../data/models/user_data.dart';
-import '../data/models/result_data.dart';
+import '../data/dtos/result_detail_dto.dart';
 import '../data/models/past_data.dart';
 import '../data/dtos/comment_dto.dart';
 import '../data/dtos/login_dto.dart';
@@ -19,7 +19,7 @@ import '../data/dtos/send_data_dto.dart';
 
 class RestAPI {
   static const String baseUrl = 'http://52.79.103.61:8080';
-  static const String flaskUrl = 'http://172.16.159.173:8000/';
+  static const String flaskUrl = 'http://172.16.171.161:8000';
   static const Map<String, String> headers = {
     'Content-Type': 'application/json'
   };
@@ -36,8 +36,8 @@ class RestAPI {
   static final dio.Dio flaskDio = dio.Dio(dio.BaseOptions(
     baseUrl: flaskUrl,
     headers: headers,
-    connectTimeout: Duration(seconds: 30),
-    receiveTimeout: Duration(seconds: 30),
+    connectTimeout: Duration(seconds: 300),
+    receiveTimeout: Duration(seconds: 300),
   ));
 
   static Future<void> saveLoginId(String loginId) async {
@@ -141,7 +141,7 @@ class RestAPI {
     }
   }
 
-  static Future<ResultData> fetchResultData(int resultId) async {
+  static Future<ResultDetailDTO> fetchResultData(int resultId) async {
     try {
       final token = await storage.read(key: 'access_token');
       if (token == null) {
@@ -157,8 +157,14 @@ class RestAPI {
       print('Response body: ${response.data}');
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> responseData = response.data;
-        return ResultData.fromJson(responseData);
+        if (response.data is Map<String, dynamic> &&
+            response.data['results'] is List &&
+            response.data['results'].isNotEmpty) {
+          final Map<String, dynamic> responseData = response.data['results'][0];
+          return ResultDetailDTO.fromJson(responseData);
+        } else {
+          throw Exception('Invalid response format or no results found');
+        }
       } else {
         throw Exception(
             'Failed to fetch result data: ${response.statusMessage}');
@@ -358,7 +364,7 @@ class RestAPI {
   static Future<SendDataDTO> SendDataToServer(SendAiDTO aidto) async {
     final token = await storage.read(key: 'access_token');
     try {
-      final response = await dioClient.post('members/mypage',
+      final response = await dioClient.post('/members/mypage',
           data: aidto.toJson(),
           options: dio.Options(
             headers: {'Authorization': 'Bearer $token'},

@@ -7,7 +7,6 @@ part 'result_detail_dto.g.dart';
 class ResultDetailDTO with _$ResultDetailDTO {
   const factory ResultDetailDTO({
     required int memberId,
-    required String resultImage,
     required String faceImage,
     String? details,
     required DateTime resultDate,

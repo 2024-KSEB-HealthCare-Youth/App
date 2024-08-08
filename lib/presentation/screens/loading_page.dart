@@ -23,8 +23,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
   Future<void> _uploadImageAndFetchAiData() async {
     try {
       // Use UserService to upload image and fetch data
-      MyPageDTO myPageData = await _userService.uploadImageAndFetchData(widget.imagePath);
-
+      MyPageDTO myPageData =
+          await _userService.uploadImageAndFetchData(widget.imagePath);
+      if (myPageData == null) {
+        throw Exception('MyPageDTO is null');
+      }
       // Navigate to MyPage with the received AI data
       Navigator.of(context).pushReplacementNamed(
         '/my_page',
