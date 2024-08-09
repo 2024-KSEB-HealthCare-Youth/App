@@ -21,7 +21,6 @@ ResultDetailDTO _$ResultDetailDTOFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ResultDetailDTO {
   int get memberId => throw _privateConstructorUsedError;
-  String get resultImage => throw _privateConstructorUsedError;
   String get faceImage => throw _privateConstructorUsedError;
   String? get details => throw _privateConstructorUsedError;
   DateTime get resultDate => throw _privateConstructorUsedError;
@@ -41,7 +40,6 @@ abstract class $ResultDetailDTOCopyWith<$Res> {
   @useResult
   $Res call(
       {int memberId,
-      String resultImage,
       String faceImage,
       String? details,
       DateTime resultDate,
@@ -62,7 +60,6 @@ class _$ResultDetailDTOCopyWithImpl<$Res, $Val extends ResultDetailDTO>
   @override
   $Res call({
     Object? memberId = null,
-    Object? resultImage = null,
     Object? faceImage = null,
     Object? details = freezed,
     Object? resultDate = null,
@@ -73,10 +70,6 @@ class _$ResultDetailDTOCopyWithImpl<$Res, $Val extends ResultDetailDTO>
           ? _value.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
               as int,
-      resultImage: null == resultImage
-          ? _value.resultImage
-          : resultImage // ignore: cast_nullable_to_non_nullable
-              as String,
       faceImage: null == faceImage
           ? _value.faceImage
           : faceImage // ignore: cast_nullable_to_non_nullable
@@ -107,7 +100,6 @@ abstract class _$$ResultDetailDTOImplCopyWith<$Res>
   @useResult
   $Res call(
       {int memberId,
-      String resultImage,
       String faceImage,
       String? details,
       DateTime resultDate,
@@ -126,7 +118,6 @@ class __$$ResultDetailDTOImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? memberId = null,
-    Object? resultImage = null,
     Object? faceImage = null,
     Object? details = freezed,
     Object? resultDate = null,
@@ -137,10 +128,6 @@ class __$$ResultDetailDTOImplCopyWithImpl<$Res>
           ? _value.memberId
           : memberId // ignore: cast_nullable_to_non_nullable
               as int,
-      resultImage: null == resultImage
-          ? _value.resultImage
-          : resultImage // ignore: cast_nullable_to_non_nullable
-              as String,
       faceImage: null == faceImage
           ? _value.faceImage
           : faceImage // ignore: cast_nullable_to_non_nullable
@@ -166,7 +153,6 @@ class __$$ResultDetailDTOImplCopyWithImpl<$Res>
 class _$ResultDetailDTOImpl implements _ResultDetailDTO {
   const _$ResultDetailDTOImpl(
       {required this.memberId,
-      required this.resultImage,
       required this.faceImage,
       this.details,
       required this.resultDate,
@@ -178,8 +164,6 @@ class _$ResultDetailDTOImpl implements _ResultDetailDTO {
 
   @override
   final int memberId;
-  @override
-  final String resultImage;
   @override
   final String faceImage;
   @override
@@ -196,7 +180,7 @@ class _$ResultDetailDTOImpl implements _ResultDetailDTO {
 
   @override
   String toString() {
-    return 'ResultDetailDTO(memberId: $memberId, resultImage: $resultImage, faceImage: $faceImage, details: $details, resultDate: $resultDate, probabilities: $probabilities)';
+    return 'ResultDetailDTO(memberId: $memberId, faceImage: $faceImage, details: $details, resultDate: $resultDate, probabilities: $probabilities)';
   }
 
   @override
@@ -206,8 +190,6 @@ class _$ResultDetailDTOImpl implements _ResultDetailDTO {
             other is _$ResultDetailDTOImpl &&
             (identical(other.memberId, memberId) ||
                 other.memberId == memberId) &&
-            (identical(other.resultImage, resultImage) ||
-                other.resultImage == resultImage) &&
             (identical(other.faceImage, faceImage) ||
                 other.faceImage == faceImage) &&
             (identical(other.details, details) || other.details == details) &&
@@ -219,8 +201,8 @@ class _$ResultDetailDTOImpl implements _ResultDetailDTO {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, memberId, resultImage, faceImage,
-      details, resultDate, const DeepCollectionEquality().hash(_probabilities));
+  int get hashCode => Object.hash(runtimeType, memberId, faceImage, details,
+      resultDate, const DeepCollectionEquality().hash(_probabilities));
 
   @JsonKey(ignore: true)
   @override
@@ -240,7 +222,6 @@ class _$ResultDetailDTOImpl implements _ResultDetailDTO {
 abstract class _ResultDetailDTO implements ResultDetailDTO {
   const factory _ResultDetailDTO(
           {required final int memberId,
-          required final String resultImage,
           required final String faceImage,
           final String? details,
           required final DateTime resultDate,
@@ -252,8 +233,6 @@ abstract class _ResultDetailDTO implements ResultDetailDTO {
 
   @override
   int get memberId;
-  @override
-  String get resultImage;
   @override
   String get faceImage;
   @override

@@ -9,8 +9,42 @@ class MyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MyPageDTO myPageData =
-        ModalRoute.of(context)!.settings.arguments as MyPageDTO;
+    final myPageArguments = ModalRoute.of(context)!.settings.arguments;
+
+    // Check if arguments are null or not of the expected type
+    if (myPageArguments == null || myPageArguments is! MyPageDTO) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/main_page');
+            },
+            child: const Text(
+              'Youth',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 30,
+                fontFamily: 'Pacifico',
+              ),
+            ),
+          ),
+          centerTitle: true,
+        ),
+        body: Center(
+          child: Text('No data available or invalid data type'),
+        ),
+      );
+    }
+
+    final MyPageDTO myPageData = myPageArguments as MyPageDTO;
 
     // Ensure we are extracting the correct values in a specific order
     List<double> polygonValues = [

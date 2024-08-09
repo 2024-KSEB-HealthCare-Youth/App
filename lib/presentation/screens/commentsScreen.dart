@@ -3,7 +3,6 @@ import 'package:myapp/data/dtos/post_get_dto.dart';
 import 'package:myapp/services/post_service.dart';
 import '../../data/dtos/post_user_dto.dart';
 import 'package:provider/provider.dart';
-import '../../services/comment_service.dart';
 import '../screens/CreatePostScreen.dart';
 import '../screens/PostDetailScreen.dart';
 import '../widgets/post_card.dart';
@@ -46,20 +45,20 @@ class _CommentsScreenState extends State<CommentsScreen> {
   void _navigateToCreatePost() {
     Navigator.of(context)
         .push(
-      MaterialPageRoute(
-        builder: (context) => const CreatePostScreen(),
-      ),
-    )
+          MaterialPageRoute(
+            builder: (context) => const CreatePostScreen(),
+          ),
+        )
         .then((_) => _refreshPosts());
   }
 
   void _navigateToPostDetail(int postId) {
     Navigator.of(context)
         .push(
-      MaterialPageRoute(
-        builder: (context) => PostDetailScreen(postId: postId),
-      ),
-    )
+          MaterialPageRoute(
+            builder: (context) => PostDetailScreen(postId: postId),
+          ),
+        )
         .then((_) => _refreshPosts());
   }
 
@@ -68,13 +67,13 @@ class _CommentsScreenState extends State<CommentsScreen> {
       _posts = _posts.map((post) {
         if (post.postId == postId) {
           final newLikeCount = (post.likeCount ?? 0) + (isLiked ? 1 : -1);
-          return post.copyWith(likeCount: newLikeCount); // Assuming copyWith method exists
+          return post.copyWith(
+              likeCount: newLikeCount); // Assuming copyWith method exists
         }
         return post;
       }).toList();
     });
   }
-
 
   Widget _buildCreatePostSection(PostUserDTO user) {
     return Container(
@@ -195,7 +194,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                     post.likeCount ?? 0,
                                   );
                                   // Update the like count locally
-                                  _updateLikeCount(post.postId, likeService.isPostLiked(post.postId));
+                                  _updateLikeCount(post.postId,
+                                      likeService.isPostLiked(post.postId));
                                 },
                                 onTap: () {
                                   _navigateToPostDetail(post.postId);
