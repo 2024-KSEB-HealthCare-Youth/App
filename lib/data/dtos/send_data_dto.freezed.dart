@@ -20,8 +20,8 @@ SendDataDTO _$SendDataDTOFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$SendDataDTO {
-  String get name => throw _privateConstructorUsedError;
-  String get nickname => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
+  String? get nickname => throw _privateConstructorUsedError;
   String get gender => throw _privateConstructorUsedError;
   int get age => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
@@ -44,8 +44,8 @@ abstract class $SendDataDTOCopyWith<$Res> {
       _$SendDataDTOCopyWithImpl<$Res, SendDataDTO>;
   @useResult
   $Res call(
-      {String name,
-      String nickname,
+      {String? name,
+      String? nickname,
       String gender,
       int age,
       String? email,
@@ -69,8 +69,8 @@ class _$SendDataDTOCopyWithImpl<$Res, $Val extends SendDataDTO>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = null,
-    Object? nickname = null,
+    Object? name = freezed,
+    Object? nickname = freezed,
     Object? gender = null,
     Object? age = null,
     Object? email = freezed,
@@ -81,14 +81,14 @@ class _$SendDataDTOCopyWithImpl<$Res, $Val extends SendDataDTO>
     Object? probabilities = null,
   }) {
     return _then(_value.copyWith(
-      name: null == name
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      nickname: null == nickname
+              as String?,
+      nickname: freezed == nickname
           ? _value.nickname
           : nickname // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       gender: null == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
@@ -134,8 +134,8 @@ abstract class _$$SendDataDTOImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String name,
-      String nickname,
+      {String? name,
+      String? nickname,
       String gender,
       int age,
       String? email,
@@ -157,8 +157,8 @@ class __$$SendDataDTOImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = null,
-    Object? nickname = null,
+    Object? name = freezed,
+    Object? nickname = freezed,
     Object? gender = null,
     Object? age = null,
     Object? email = freezed,
@@ -169,14 +169,14 @@ class __$$SendDataDTOImplCopyWithImpl<$Res>
     Object? probabilities = null,
   }) {
     return _then(_$SendDataDTOImpl(
-      name: null == name
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      nickname: null == nickname
+              as String?,
+      nickname: freezed == nickname
           ? _value.nickname
           : nickname // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       gender: null == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
@@ -217,8 +217,8 @@ class __$$SendDataDTOImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$SendDataDTOImpl implements _SendDataDTO {
   const _$SendDataDTOImpl(
-      {required this.name,
-      required this.nickname,
+      {this.name,
+      this.nickname,
       required this.gender,
       required this.age,
       this.email,
@@ -234,9 +234,9 @@ class _$SendDataDTOImpl implements _SendDataDTO {
       _$$SendDataDTOImplFromJson(json);
 
   @override
-  final String name;
+  final String? name;
   @override
-  final String nickname;
+  final String? nickname;
   @override
   final String gender;
   @override
@@ -327,8 +327,8 @@ class _$SendDataDTOImpl implements _SendDataDTO {
 
 abstract class _SendDataDTO implements SendDataDTO {
   const factory _SendDataDTO(
-      {required final String name,
-      required final String nickname,
+      {final String? name,
+      final String? nickname,
       required final String gender,
       required final int age,
       final String? email,
@@ -342,9 +342,9 @@ abstract class _SendDataDTO implements SendDataDTO {
       _$SendDataDTOImpl.fromJson;
 
   @override
-  String get name;
+  String? get name;
   @override
-  String get nickname;
+  String? get nickname;
   @override
   String get gender;
   @override

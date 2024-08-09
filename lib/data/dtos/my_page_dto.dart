@@ -7,14 +7,14 @@ part 'my_page_dto.g.dart';
 class MyPageDTO with _$MyPageDTO {
   const factory MyPageDTO({
     String? profileImage,
-    required String name,
+    String? name,
     required String gender,
     required int age,
     String? email,
     required String phoneNumber,
     required String loginId,
     required String simpleSkin,
-    required String resultDetails,
+    String? resultDetails,
     required Map<String, double> probabilities,
   }) = _MyPageDTO;
 

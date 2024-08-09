@@ -9,7 +9,7 @@ part of 'comment_get_dto.dart';
 _$CommentGetDTOImpl _$$CommentGetDTOImplFromJson(Map<String, dynamic> json) =>
     _$CommentGetDTOImpl(
       postId: (json['postId'] as num).toInt(),
-      nickName: json['nickName'] as String,
+      nickName: json['nickName'] as String?,
       profileImage: json['profileImage'] as String?,
       content: json['content'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),

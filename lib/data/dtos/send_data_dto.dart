@@ -3,15 +3,15 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'send_data_dto.freezed.dart';
 part 'send_data_dto.g.dart';
 
-enum skinType { ACNE, WRINKLE}
+enum skinType { ACNE, WRINKLES }
 
 enum Type { DRY, OILY, COMBINATION }
 
 @freezed
 class SendDataDTO with _$SendDataDTO {
   const factory SendDataDTO({
-    required String name,
-    required String nickname,
+    String? name,
+    String? nickname,
     required String gender,
     required int age,
     String? email,

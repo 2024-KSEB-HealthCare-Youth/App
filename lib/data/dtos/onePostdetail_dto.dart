@@ -14,7 +14,7 @@ class OnepostdetailDTO with _$OnepostdetailDTO {
     required int likeCount,
     required Category category,
     String? profileImage,
-    required String nickName,
+    String? nickName,
     required String content,
     required List<CommentGetDTO> comments,
     required DateTime createdAt,
@@ -26,7 +26,8 @@ class OnepostdetailDTO with _$OnepostdetailDTO {
 
 // Custom JSON serialization for Category enum
 Category _categoryFromJson(String value) {
-  return Category.values.firstWhere((e) => e.toString().split('.').last == value);
+  return Category.values
+      .firstWhere((e) => e.toString().split('.').last == value);
 }
 
 String _categoryToJson(Category category) {

@@ -14,7 +14,7 @@ _$OnepostdetailDTOImpl _$$OnepostdetailDTOImplFromJson(
       likeCount: (json['likeCount'] as num).toInt(),
       category: $enumDecode(_$CategoryEnumMap, json['category']),
       profileImage: json['profileImage'] as String?,
-      nickName: json['nickName'] as String,
+      nickName: json['nickName'] as String?,
       content: json['content'] as String,
       comments: (json['comments'] as List<dynamic>)
           .map((e) => CommentGetDTO.fromJson(e as Map<String, dynamic>))

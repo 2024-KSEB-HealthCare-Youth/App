@@ -6,12 +6,10 @@ part 'edit_user_dto.g.dart';
 @freezed
 class EditUserDTO with _$EditUserDTO {
   factory EditUserDTO({
-    required String name,
+    String? name,
     String? nickName,
     String? email,
-    required String phoneNumber,
-    required int age,
-    required String gender,
+    String? phoneNumber,
     String? profileImage,
   }) = _EditUserDTO;
 

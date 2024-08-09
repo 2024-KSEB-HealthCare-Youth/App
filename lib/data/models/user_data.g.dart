@@ -10,8 +10,8 @@ _$UserDataImpl _$$UserDataImplFromJson(Map<String, dynamic> json) =>
     _$UserDataImpl(
       loginId: json['loginId'] as String,
       password: json['password'] as String?,
-      name: json['name'] as String,
-      nickName: json['nickName'] as String,
+      name: json['name'] as String?,
+      nickName: json['nickName'] as String?,
       gender: json['gender'] as String,
       age: (json['age'] as num).toInt(),
       phoneNumber: json['phoneNumber'] as String?,

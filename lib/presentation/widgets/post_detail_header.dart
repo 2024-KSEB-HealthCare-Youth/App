@@ -25,7 +25,8 @@ class PostDetailHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CircleAvatar(
-                backgroundImage: NetworkImage(post.profileImage ?? 'https://via.placeholder.com/150'),
+                backgroundImage: NetworkImage(
+                    post.profileImage ?? 'https://via.placeholder.com/150'),
                 radius: 20,
               ),
               const SizedBox(width: 10),
@@ -34,7 +35,7 @@ class PostDetailHeader extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      post.nickName,
+                      post.nickName ?? 'dummy',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -57,7 +58,8 @@ class PostDetailHeader extends StatelessWidget {
                       Provider.of<LikeService>(context).isPostLiked(post.postId)
                           ? Icons.favorite
                           : Icons.favorite_border,
-                      color: Provider.of<LikeService>(context).isPostLiked(post.postId)
+                      color: Provider.of<LikeService>(context)
+                              .isPostLiked(post.postId)
                           ? Colors.red
                           : Colors.grey,
                     ),

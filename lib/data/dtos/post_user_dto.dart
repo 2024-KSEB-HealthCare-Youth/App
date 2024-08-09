@@ -6,7 +6,6 @@ part 'post_user_dto.g.dart';
 @freezed
 class PostUserDTO with _$PostUserDTO {
   factory PostUserDTO({
-    required String loginId,
     String? profileImage,
     String? nickName,
   }) = _PostUserDTO;

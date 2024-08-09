@@ -93,7 +93,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
           ),
           const SizedBox(width: 10),
           Text(
-            user.nickName ?? user.loginId,
+            user.nickName ?? 'dummy',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
           Expanded(

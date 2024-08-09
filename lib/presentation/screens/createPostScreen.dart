@@ -106,7 +106,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    _currentUser!.nickName ?? _currentUser!.loginId,
+                    _currentUser!.nickName ?? 'dummy',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w500),
                   ),

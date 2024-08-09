@@ -21,14 +21,14 @@ MyPageDTO _$MyPageDTOFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$MyPageDTO {
   String? get profileImage => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
   String get gender => throw _privateConstructorUsedError;
   int get age => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   String get phoneNumber => throw _privateConstructorUsedError;
   String get loginId => throw _privateConstructorUsedError;
   String get simpleSkin => throw _privateConstructorUsedError;
-  String get resultDetails => throw _privateConstructorUsedError;
+  String? get resultDetails => throw _privateConstructorUsedError;
   Map<String, double> get probabilities => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -44,14 +44,14 @@ abstract class $MyPageDTOCopyWith<$Res> {
   @useResult
   $Res call(
       {String? profileImage,
-      String name,
+      String? name,
       String gender,
       int age,
       String? email,
       String phoneNumber,
       String loginId,
       String simpleSkin,
-      String resultDetails,
+      String? resultDetails,
       Map<String, double> probabilities});
 }
 
@@ -69,14 +69,14 @@ class _$MyPageDTOCopyWithImpl<$Res, $Val extends MyPageDTO>
   @override
   $Res call({
     Object? profileImage = freezed,
-    Object? name = null,
+    Object? name = freezed,
     Object? gender = null,
     Object? age = null,
     Object? email = freezed,
     Object? phoneNumber = null,
     Object? loginId = null,
     Object? simpleSkin = null,
-    Object? resultDetails = null,
+    Object? resultDetails = freezed,
     Object? probabilities = null,
   }) {
     return _then(_value.copyWith(
@@ -84,10 +84,10 @@ class _$MyPageDTOCopyWithImpl<$Res, $Val extends MyPageDTO>
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
               as String?,
-      name: null == name
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       gender: null == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
@@ -112,10 +112,10 @@ class _$MyPageDTOCopyWithImpl<$Res, $Val extends MyPageDTO>
           ? _value.simpleSkin
           : simpleSkin // ignore: cast_nullable_to_non_nullable
               as String,
-      resultDetails: null == resultDetails
+      resultDetails: freezed == resultDetails
           ? _value.resultDetails
           : resultDetails // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       probabilities: null == probabilities
           ? _value.probabilities
           : probabilities // ignore: cast_nullable_to_non_nullable
@@ -134,14 +134,14 @@ abstract class _$$MyPageDTOImplCopyWith<$Res>
   @useResult
   $Res call(
       {String? profileImage,
-      String name,
+      String? name,
       String gender,
       int age,
       String? email,
       String phoneNumber,
       String loginId,
       String simpleSkin,
-      String resultDetails,
+      String? resultDetails,
       Map<String, double> probabilities});
 }
 
@@ -157,14 +157,14 @@ class __$$MyPageDTOImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? profileImage = freezed,
-    Object? name = null,
+    Object? name = freezed,
     Object? gender = null,
     Object? age = null,
     Object? email = freezed,
     Object? phoneNumber = null,
     Object? loginId = null,
     Object? simpleSkin = null,
-    Object? resultDetails = null,
+    Object? resultDetails = freezed,
     Object? probabilities = null,
   }) {
     return _then(_$MyPageDTOImpl(
@@ -172,10 +172,10 @@ class __$$MyPageDTOImplCopyWithImpl<$Res>
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
               as String?,
-      name: null == name
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       gender: null == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
@@ -200,10 +200,10 @@ class __$$MyPageDTOImplCopyWithImpl<$Res>
           ? _value.simpleSkin
           : simpleSkin // ignore: cast_nullable_to_non_nullable
               as String,
-      resultDetails: null == resultDetails
+      resultDetails: freezed == resultDetails
           ? _value.resultDetails
           : resultDetails // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       probabilities: null == probabilities
           ? _value._probabilities
           : probabilities // ignore: cast_nullable_to_non_nullable
@@ -217,14 +217,14 @@ class __$$MyPageDTOImplCopyWithImpl<$Res>
 class _$MyPageDTOImpl implements _MyPageDTO {
   const _$MyPageDTOImpl(
       {this.profileImage,
-      required this.name,
+      this.name,
       required this.gender,
       required this.age,
       this.email,
       required this.phoneNumber,
       required this.loginId,
       required this.simpleSkin,
-      required this.resultDetails,
+      this.resultDetails,
       required final Map<String, double> probabilities})
       : _probabilities = probabilities;
 
@@ -234,7 +234,7 @@ class _$MyPageDTOImpl implements _MyPageDTO {
   @override
   final String? profileImage;
   @override
-  final String name;
+  final String? name;
   @override
   final String gender;
   @override
@@ -248,7 +248,7 @@ class _$MyPageDTOImpl implements _MyPageDTO {
   @override
   final String simpleSkin;
   @override
-  final String resultDetails;
+  final String? resultDetails;
   final Map<String, double> _probabilities;
   @override
   Map<String, double> get probabilities {
@@ -316,14 +316,14 @@ class _$MyPageDTOImpl implements _MyPageDTO {
 abstract class _MyPageDTO implements MyPageDTO {
   const factory _MyPageDTO(
       {final String? profileImage,
-      required final String name,
+      final String? name,
       required final String gender,
       required final int age,
       final String? email,
       required final String phoneNumber,
       required final String loginId,
       required final String simpleSkin,
-      required final String resultDetails,
+      final String? resultDetails,
       required final Map<String, double> probabilities}) = _$MyPageDTOImpl;
 
   factory _MyPageDTO.fromJson(Map<String, dynamic> json) =
@@ -332,7 +332,7 @@ abstract class _MyPageDTO implements MyPageDTO {
   @override
   String? get profileImage;
   @override
-  String get name;
+  String? get name;
   @override
   String get gender;
   @override
@@ -346,7 +346,7 @@ abstract class _MyPageDTO implements MyPageDTO {
   @override
   String get simpleSkin;
   @override
-  String get resultDetails;
+  String? get resultDetails;
   @override
   Map<String, double> get probabilities;
   @override

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:myapp/utils/rest_api.dart';
 import 'dart:io';
 import '../../data/dtos/edit_user_dto.dart';
 import '../../services/user_service.dart';
+import '../../data/models/user_data.dart';
 
 class EditAccountPage extends StatefulWidget {
   const EditAccountPage({Key? key}) : super(key: key);
@@ -20,7 +22,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
   late TextEditingController _genderController;
 
   File? _profileImage;
-  EditUserDTO? _userData;
+  UserData? _userData;
 
   @override
   void initState() {
@@ -47,13 +49,13 @@ class _EditAccountPageState extends State<EditAccountPage> {
 
   Future<void> _loadUserData() async {
     try {
-      final userData = await UserService().fetchEditUserData();
+      final userData = await RestAPI.fetchUserData();
       setState(() {
         _userData = userData;
-        _nameController.text = userData.name;
+        _nameController.text = userData.name ?? '';
         _nickNameController.text = userData.nickName ?? '';
         _emailController.text = userData.email ?? '';
-        _phoneController.text = userData.phoneNumber;
+        _phoneController.text = userData.phoneNumber ?? '';
         _ageController.text = userData.age.toString();
         _genderController.text = userData.gender;
       });
@@ -75,32 +77,57 @@ class _EditAccountPageState extends State<EditAccountPage> {
     }
   }
 
-  Future<void> _saveAccountInfo() async {
-    if (_userData == null) {
-      return;
-    }
-
-    try {
-      EditUserDTO updatedUserData = _userData!.copyWith(
-        name: _nameController.text,
-        nickName: _nickNameController.text,
-        phoneNumber: _phoneController.text,
-        email: _emailController.text,
-      );
-
-      await UserService().updateUserData(updatedUserData);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('User data updated successfully.')),
-      );
-
-      Navigator.pop(context);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save account info: $e')),
-      );
-    }
+Future<void> _saveAccountInfo() async {
+  if (_userData == null) {
+    return;
   }
+
+  try {
+    // Create a new EditUserDTO with the same values if no changes were made
+    EditUserDTO updatedUserData = EditUserDTO(
+      name: _nameController.text.isNotEmpty
+          ? _nameController.text
+          : _userData!.name,
+      nickName: _nickNameController.text.isNotEmpty
+          ? _nickNameController.text
+          : _userData!.nickName,
+      phoneNumber: _phoneController.text.isNotEmpty
+          ? _phoneController.text
+          : _userData!.phoneNumber,
+      email: _emailController.text.isNotEmpty
+          ? _emailController.text
+          : _userData!.email,
+      profileImage: _profileImage != null
+          ? _profileImage!.path
+          : _userData!.profileImage, // Use existing profile image if not changed
+    );
+
+    // Send the updated data to the server
+    await UserService().updateUserData(updatedUserData);
+
+    // Update _userData with the new values
+    setState(() {
+      _userData = _userData!.copyWith(
+        name: updatedUserData.name ?? _userData!.name,
+        nickName: updatedUserData.nickName ?? _userData!.nickName,
+        phoneNumber: updatedUserData.phoneNumber ?? _userData!.phoneNumber,
+        email: updatedUserData.email ?? _userData!.email,
+        profileImage: updatedUserData.profileImage ?? _userData!.profileImage,
+      });
+    });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('User data updated successfully.')),
+    );
+
+    // Return the updated user data back to the previous screen
+    Navigator.pop(context, _userData);
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to save account info: $e')),
+    );
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +157,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 20),
                   Center(
@@ -170,23 +197,34 @@ class _EditAccountPageState extends State<EditAccountPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
-                    'User Information',
-                    style: TextStyle(
-                      color: Color(0xFFE57373),
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'User Information',
+                      style: TextStyle(
+                        color: Color(0xFFE57373),
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  CustomTextFormField(
-                    controller: _nameController,
-                    labelText: 'Name',
-                  ),
-                  const SizedBox(height: 10),
-                  CustomTextFormField(
-                    controller: _nickNameController,
-                    labelText: 'Nickname',
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomTextFormField(
+                          controller: _nameController,
+                          labelText: 'Name',
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: CustomTextFormField(
+                          controller: _nickNameController,
+                          labelText: 'Nick Name',
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 10),
                   CustomTextFormField(
@@ -194,21 +232,29 @@ class _EditAccountPageState extends State<EditAccountPage> {
                     labelText: 'Email',
                   ),
                   const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomTextFormField(
+                          controller: _genderController,
+                          labelText: 'Gender',
+                          enabled: false,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: CustomTextFormField(
+                          controller: _ageController,
+                          labelText: 'Age',
+                          enabled: false,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
                   CustomTextFormField(
                     controller: _phoneController,
                     labelText: 'Phone',
-                  ),
-                  const SizedBox(height: 10),
-                  CustomTextFormField(
-                    controller: _ageController,
-                    labelText: 'Age',
-                    enabled: false, // Age is not editable
-                  ),
-                  const SizedBox(height: 10),
-                  CustomTextFormField(
-                    controller: _genderController,
-                    labelText: 'Gender',
-                    enabled: false, // Gender is not editable
                   ),
                   const SizedBox(height: 30),
                   Center(
@@ -252,21 +298,25 @@ class CustomTextFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      style: const TextStyle(
-        color: Colors.black,
-        fontWeight: FontWeight.bold,
-        fontFamily: 'Arial',
-      ),
-      decoration: InputDecoration(
-        labelText: labelText,
-        labelStyle: const TextStyle(
-          color: Colors.grey,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextFormField(
+        controller: controller,
+        style: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
           fontFamily: 'Arial',
         ),
+        decoration: InputDecoration(
+          labelText: labelText,
+          labelStyle: const TextStyle(
+            color: Colors.grey,
+            fontFamily: 'Arial',
+          ),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 12.0),
+        ),
+        enabled: enabled,
       ),
-      enabled: enabled,
     );
   }
 }
