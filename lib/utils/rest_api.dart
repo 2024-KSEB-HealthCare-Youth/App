@@ -19,7 +19,7 @@ import '../data/dtos/send_data_dto.dart';
 
 class RestAPI {
   static const String baseUrl = 'http://52.79.103.61:8080';
-  static const String flaskUrl = 'http://172.16.171.161:8000';
+  static const String flaskUrl = 'http://172.16.182.82:8000';
   static const Map<String, String> headers = {
     'Content-Type': 'application/json'
   };

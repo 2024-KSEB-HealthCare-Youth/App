@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'send_data_dto.freezed.dart';
 part 'send_data_dto.g.dart';
 
-enum skinType { ACNE, WRINKLE, ATOPHY }
+enum skinType { ACNE, WRINKLE}
 
 enum Type { DRY, OILY, COMBINATION }
 
