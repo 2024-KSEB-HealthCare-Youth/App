@@ -42,7 +42,6 @@ Map<String, dynamic> _$$SendDataDTOImplToJson(_$SendDataDTOImpl instance) =>
 const _$skinTypeEnumMap = {
   skinType.ACNE: 'ACNE',
   skinType.WRINKLE: 'WRINKLE',
-  skinType.ATOPHY: 'ATOPHY',
 };
 
 const _$TypeEnumMap = {

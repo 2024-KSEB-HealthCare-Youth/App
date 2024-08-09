@@ -50,5 +50,4 @@ const _$typeEnumMap = {
 const _$skintypeEnumMap = {
   skintype.ACNE: 'ACNE',
   skintype.WRINKLES: 'WRINKLES',
-  skintype.ATOPHY: 'ATOPHY',
 };
