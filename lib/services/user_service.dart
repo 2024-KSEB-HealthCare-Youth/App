@@ -8,34 +8,52 @@ import '../data/dtos/send_ai_dto.dart' as dto;
 
 class UserService {
   Future<MyPageDTO> uploadImageAndFetchData(String imagePath) async {
-    final aidata = await RestAPI.uploadImage(imagePath);
-    final sendAiDTO = dataForm(aidata, imagePath);
-    final data = await RestAPI.SendDataToServer(sendAiDTO);
-    final userData = await RestAPI.fetchUserData();
+    try {
+      final aidata = await RestAPI.uploadImage(imagePath);
+      final sendAiDTO = dataForm(aidata, imagePath);
+      final data = await RestAPI.SendDataToServer(sendAiDTO);
+      final userData = await RestAPI.fetchUserData();
 
-    // Convert SendDataDTO to MyPageDTO
+      return _createMyPageDTO(data, userData);
+    } catch (e) {
+      print('Failed to upload image and fetch data: $e');
+      throw Exception('Failed to upload image and fetch data: $e');
+    }
+  }
+
+  Future<MyPageDTO> getMypagedata() async {
+    try {
+      final data = await RestAPI.fetchMypageData();
+      final userData = await RestAPI.fetchUserData();
+
+      return _createMyPageDTO(data, userData);
+    } catch (e) {
+      print('Failed to fetch MyPage data: $e');
+      throw Exception('Failed to fetch MyPage data: $e');
+    }
+  }
+
+  MyPageDTO _createMyPageDTO(dynamic data, dynamic userData) {
     return MyPageDTO(
-      age: data.age,
-      name: data.name,
-      gender: data.gender,
-      email: data.email,
-      phoneNumber: data.phoneNumber,
-      resultDetails: data.resultDetails ?? '',
-      simpleSkin: data.basicSkinType.toString(),
-      profileImage: userData.profileImage,
-      loginId: userData.loginId,
-      probabilities: data.probabilities,
+      age: data.age ?? 0, // 기본값 설정
+      name: data.name ?? 'Unknown', // 기본값 설정
+      gender: data.gender ?? 'Unknown', // 기본값 설정
+      email: data.email ?? 'No email provided', // 기본값 설정
+      phoneNumber: data.phoneNumber ?? 'No phone number provided', // 기본값 설정
+      resultDetails: data.resultDetails ?? 'error',
+      simpleSkin: data.basicSkinType?.toString() ?? 'Unknown', // 기본값 설정
+      profileImage: userData.profileImage ?? 'No image', // 기본값 설정
+      loginId: userData.loginId ?? 'No ID', // 기본값 설정
+      probabilities: data.probabilities ?? [], // 기본값 설정
     );
   }
 
   dto.SendAiDTO dataForm(model.AiData aiData, String imagePath) {
     return dto.SendAiDTO(
-      resultDetails: '',
+      resultDetails: 'hi',
       faceImage: imagePath,
-      basicSkinType: _convertBasicType(
-          aiData.simpleSkin), // Example value, adjust as needed
-      advancedSkinType:
-          _convertSkinTypeList(aiData.expertSkin), // Example values
+      basicSkinType: _convertBasicType(aiData.simpleSkin),
+      advancedSkinType: _convertSkinTypeList(aiData.expertSkin),
       cosNames: aiData.cosNames,
       cosPaths: aiData.cosPaths,
       nutrNames: aiData.nutrNames,
@@ -52,6 +70,8 @@ class UserService {
         return dto.type.DRY;
       case model.BaseType.COMBINATION:
         return dto.type.COMBINATION;
+      default:
+        throw Exception('Unknown BaseType: $Type');
     }
   }
 
@@ -65,27 +85,14 @@ class UserService {
         return dto.skintype.ACNE;
       case model.SkinType.WRINKLES:
         return dto.skintype.WRINKLES;
+      default:
+        throw Exception('Unknown SkinType: $skinType');
     }
   }
 
-  // Fetch user data to be edited
-  Future<EditUserDTO> fetchEditUserData() async {
-    final userData = await RestAPI.fetchUserData();
-    return EditUserDTO(
-      name: userData.name,
-      nickName: userData.nickName,
-      email: userData.email,
-      phoneNumber: userData.phoneNumber ?? '',
-      age: userData.age,
-      gender: userData.gender,
-      profileImage: userData.profileImage,
-    );
-  }
-
-  // Update user data
   Future<void> updateUserData(EditUserDTO updatedUser) async {
     try {
-      await RestAPI.updateUserData(updatedUser.toJson());
+      await RestAPI.updateUserData(updatedUser);
     } catch (e) {
       print('Failed to update user data: $e');
       throw Exception('Failed to update user data: $e');
@@ -93,10 +100,20 @@ class UserService {
   }
 
   Future<PastData> fetchPastData() async {
-    return await RestAPI.fetchPastData();
+    try {
+      return await RestAPI.fetchPastData();
+    } catch (e) {
+      print('Failed to fetch past data: $e');
+      throw Exception('Failed to fetch past data: $e');
+    }
   }
 
   Future<RecommendDTO> fetchRecommendDTO() async {
-    return await RestAPI.fetchRecommendData();
+    try {
+      return await RestAPI.fetchRecommendData();
+    } catch (e) {
+      print('Failed to fetch recommend data: $e');
+      throw Exception('Failed to fetch recommend data: $e');
+    }
   }
 }

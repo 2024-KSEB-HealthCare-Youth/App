@@ -49,8 +49,14 @@ class Recommendation extends StatelessWidget {
             return const Center(child: Text('No data found'));
           } else {
             final recommendDTO = snapshot.data!;
-            final skinTypeDescription =
-                '${recommendDTO.simpleSkin}& ${recommendDTO.expertSkin.join(', ')}';
+            final skinTypeDescription;
+            if (recommendDTO.advancedSkinType != null &&
+                recommendDTO.advancedSkinType!.isNotEmpty) {
+              skinTypeDescription =
+                  '${recommendDTO.basicSkinType.name} & ${recommendDTO.advancedSkinType!.map((e) => e.name).join(', ')}';
+            } else {
+              skinTypeDescription = recommendDTO.basicSkinType.name;
+            }
 
             return Padding(
               padding: const EdgeInsets.all(16.0),
@@ -59,7 +65,7 @@ class Recommendation extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     _buildSkinTypeDescription(
-                        recommendDTO.name, skinTypeDescription),
+                        recommendDTO.name ?? 'dummy', skinTypeDescription),
                     const SizedBox(height: 33),
                     _buildSectionTitle('Youth’s recommended cosmetics'),
                     const SizedBox(height: 33),
@@ -82,13 +88,15 @@ class Recommendation extends StatelessWidget {
 
   Widget _buildSkinTypeDescription(String name, String skinTypeDescription) {
     return Container(
-      width: double.infinity,
+      width: double.infinity, // Ensures the container takes up the full width
+      alignment: Alignment.center, // Centers the content horizontally
       child: RichText(
+        textAlign: TextAlign.center, // Centers the text inside RichText
         text: TextSpan(
           text: '$name’s skin type\n',
           style: const TextStyle(
             color: Colors.black,
-            fontSize: 20,
+            fontSize: 25,
             fontFamily: 'Pacifico',
             fontWeight: FontWeight.w400,
           ),
@@ -127,16 +135,24 @@ class Recommendation extends StatelessWidget {
 
   Widget _buildProductRow(
       BuildContext context, List<String> names, List<String> paths) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(names.length, (index) {
-        return _buildProductCard(context, names[index], paths[index]);
-      }),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal, // Enable horizontal scrolling
+      child: Row(
+        children: List.generate(names.length, (index) {
+          return Padding(
+            padding: const EdgeInsets.only(
+                right: 16.0), // Add some spacing between cards
+            child: _buildProductCard(context, names[index], paths[index]),
+          );
+        }),
+      ),
     );
   }
 
   Widget _buildProductCard(
       BuildContext context, String name, String imagePath) {
+    bool isValidUrl = Uri.tryParse(imagePath)?.hasAbsolutePath ?? false;
+
     return Container(
       width: MediaQuery.of(context).size.width / 3 - 22,
       clipBehavior: Clip.antiAlias,
@@ -153,7 +169,10 @@ class Recommendation extends StatelessWidget {
             height: 110.80,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(imagePath),
+                image: isValidUrl
+                    ? NetworkImage(imagePath)
+                    : AssetImage('assets/images/default_profile_image.png')
+                        as ImageProvider,
                 fit: BoxFit.cover,
               ),
             ),

@@ -25,7 +25,7 @@ mixin _$OnepostdetailDTO {
   int get likeCount => throw _privateConstructorUsedError;
   Category get category => throw _privateConstructorUsedError;
   String? get profileImage => throw _privateConstructorUsedError;
-  String get nickName => throw _privateConstructorUsedError;
+  String? get nickName => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
   List<CommentGetDTO> get comments => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
@@ -48,7 +48,7 @@ abstract class $OnepostdetailDTOCopyWith<$Res> {
       int likeCount,
       Category category,
       String? profileImage,
-      String nickName,
+      String? nickName,
       String content,
       List<CommentGetDTO> comments,
       DateTime createdAt});
@@ -72,7 +72,7 @@ class _$OnepostdetailDTOCopyWithImpl<$Res, $Val extends OnepostdetailDTO>
     Object? likeCount = null,
     Object? category = null,
     Object? profileImage = freezed,
-    Object? nickName = null,
+    Object? nickName = freezed,
     Object? content = null,
     Object? comments = null,
     Object? createdAt = null,
@@ -98,10 +98,10 @@ class _$OnepostdetailDTOCopyWithImpl<$Res, $Val extends OnepostdetailDTO>
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
               as String?,
-      nickName: null == nickName
+      nickName: freezed == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
@@ -132,7 +132,7 @@ abstract class _$$OnepostdetailDTOImplCopyWith<$Res>
       int likeCount,
       Category category,
       String? profileImage,
-      String nickName,
+      String? nickName,
       String content,
       List<CommentGetDTO> comments,
       DateTime createdAt});
@@ -154,7 +154,7 @@ class __$$OnepostdetailDTOImplCopyWithImpl<$Res>
     Object? likeCount = null,
     Object? category = null,
     Object? profileImage = freezed,
-    Object? nickName = null,
+    Object? nickName = freezed,
     Object? content = null,
     Object? comments = null,
     Object? createdAt = null,
@@ -180,10 +180,10 @@ class __$$OnepostdetailDTOImplCopyWithImpl<$Res>
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
               as String?,
-      nickName: null == nickName
+      nickName: freezed == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
@@ -209,7 +209,7 @@ class _$OnepostdetailDTOImpl implements _OnepostdetailDTO {
       required this.likeCount,
       required this.category,
       this.profileImage,
-      required this.nickName,
+      this.nickName,
       required this.content,
       required final List<CommentGetDTO> comments,
       required this.createdAt})
@@ -229,7 +229,7 @@ class _$OnepostdetailDTOImpl implements _OnepostdetailDTO {
   @override
   final String? profileImage;
   @override
-  final String nickName;
+  final String? nickName;
   @override
   final String content;
   final List<CommentGetDTO> _comments;
@@ -305,7 +305,7 @@ abstract class _OnepostdetailDTO implements OnepostdetailDTO {
       required final int likeCount,
       required final Category category,
       final String? profileImage,
-      required final String nickName,
+      final String? nickName,
       required final String content,
       required final List<CommentGetDTO> comments,
       required final DateTime createdAt}) = _$OnepostdetailDTOImpl;
@@ -324,7 +324,7 @@ abstract class _OnepostdetailDTO implements OnepostdetailDTO {
   @override
   String? get profileImage;
   @override
-  String get nickName;
+  String? get nickName;
   @override
   String get content;
   @override

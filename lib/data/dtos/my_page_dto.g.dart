@@ -9,14 +9,14 @@ part of 'my_page_dto.dart';
 _$MyPageDTOImpl _$$MyPageDTOImplFromJson(Map<String, dynamic> json) =>
     _$MyPageDTOImpl(
       profileImage: json['profileImage'] as String?,
-      name: json['name'] as String,
+      name: json['name'] as String?,
       gender: json['gender'] as String,
       age: (json['age'] as num).toInt(),
       email: json['email'] as String?,
       phoneNumber: json['phoneNumber'] as String,
       loginId: json['loginId'] as String,
       simpleSkin: json['simpleSkin'] as String,
-      resultDetails: json['resultDetails'] as String,
+      resultDetails: json['resultDetails'] as String?,
       probabilities: (json['probabilities'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(k, (e as num).toDouble()),
       ),

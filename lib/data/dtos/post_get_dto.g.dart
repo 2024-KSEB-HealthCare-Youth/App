@@ -13,7 +13,7 @@ _$PostGetDTOImpl _$$PostGetDTOImplFromJson(Map<String, dynamic> json) =>
       likeCount: (json['likeCount'] as num?)?.toInt(),
       category: $enumDecode(_$CategoryEnumMap, json['category']),
       profileImage: json['profileImage'] as String?,
-      nickName: json['nickName'] as String,
+      nickName: json['nickName'] as String?,
       createdAt: DateTime.parse(json['createdAt'] as String),
     );
 

@@ -6,10 +6,11 @@ part 'comment_dto.g.dart';
 @freezed
 class CommentDTO with _$CommentDTO {
   const factory CommentDTO({
-    required String nickName,
+    String? nickName,
     String? profileImage,
     required String content,
   }) = _CommentDTO;
 
-  factory CommentDTO.fromJson(Map<String, dynamic> json) => _$CommentDTOFromJson(json);
+  factory CommentDTO.fromJson(Map<String, dynamic> json) =>
+      _$CommentDTOFromJson(json);
 }

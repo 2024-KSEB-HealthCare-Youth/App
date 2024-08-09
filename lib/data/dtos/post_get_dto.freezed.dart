@@ -26,7 +26,7 @@ mixin _$PostGetDTO {
       throw _privateConstructorUsedError; // likeCount can be null
   Category get category => throw _privateConstructorUsedError;
   String? get profileImage => throw _privateConstructorUsedError;
-  String get nickName => throw _privateConstructorUsedError;
+  String? get nickName => throw _privateConstructorUsedError;
   DateTime get createdAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,7 +47,7 @@ abstract class $PostGetDTOCopyWith<$Res> {
       int? likeCount,
       Category category,
       String? profileImage,
-      String nickName,
+      String? nickName,
       DateTime createdAt});
 }
 
@@ -69,7 +69,7 @@ class _$PostGetDTOCopyWithImpl<$Res, $Val extends PostGetDTO>
     Object? likeCount = freezed,
     Object? category = null,
     Object? profileImage = freezed,
-    Object? nickName = null,
+    Object? nickName = freezed,
     Object? createdAt = null,
   }) {
     return _then(_value.copyWith(
@@ -93,10 +93,10 @@ class _$PostGetDTOCopyWithImpl<$Res, $Val extends PostGetDTO>
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
               as String?,
-      nickName: null == nickName
+      nickName: freezed == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -119,7 +119,7 @@ abstract class _$$PostGetDTOImplCopyWith<$Res>
       int? likeCount,
       Category category,
       String? profileImage,
-      String nickName,
+      String? nickName,
       DateTime createdAt});
 }
 
@@ -139,7 +139,7 @@ class __$$PostGetDTOImplCopyWithImpl<$Res>
     Object? likeCount = freezed,
     Object? category = null,
     Object? profileImage = freezed,
-    Object? nickName = null,
+    Object? nickName = freezed,
     Object? createdAt = null,
   }) {
     return _then(_$PostGetDTOImpl(
@@ -163,10 +163,10 @@ class __$$PostGetDTOImplCopyWithImpl<$Res>
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
               as String?,
-      nickName: null == nickName
+      nickName: freezed == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       createdAt: null == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
@@ -184,7 +184,7 @@ class _$PostGetDTOImpl implements _PostGetDTO {
       this.likeCount,
       required this.category,
       this.profileImage,
-      required this.nickName,
+      this.nickName,
       required this.createdAt});
 
   factory _$PostGetDTOImpl.fromJson(Map<String, dynamic> json) =>
@@ -202,7 +202,7 @@ class _$PostGetDTOImpl implements _PostGetDTO {
   @override
   final String? profileImage;
   @override
-  final String nickName;
+  final String? nickName;
   @override
   final DateTime createdAt;
 
@@ -256,7 +256,7 @@ abstract class _PostGetDTO implements PostGetDTO {
       final int? likeCount,
       required final Category category,
       final String? profileImage,
-      required final String nickName,
+      final String? nickName,
       required final DateTime createdAt}) = _$PostGetDTOImpl;
 
   factory _PostGetDTO.fromJson(Map<String, dynamic> json) =
@@ -273,7 +273,7 @@ abstract class _PostGetDTO implements PostGetDTO {
   @override
   String? get profileImage;
   @override
-  String get nickName;
+  String? get nickName;
   @override
   DateTime get createdAt;
   @override

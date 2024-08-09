@@ -10,8 +10,8 @@ class UserData with _$UserData {
   const factory UserData({
     required String loginId,
     String? password, // Made nullable
-    required String name,
-    required String nickName,
+    String? name,
+    String? nickName,
     required String gender,
     required int age,
     String? phoneNumber,

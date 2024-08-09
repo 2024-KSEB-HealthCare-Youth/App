@@ -22,8 +22,8 @@ UserData _$UserDataFromJson(Map<String, dynamic> json) {
 mixin _$UserData {
   String get loginId => throw _privateConstructorUsedError;
   String? get password => throw _privateConstructorUsedError; // Made nullable
-  String get name => throw _privateConstructorUsedError;
-  String get nickName => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
+  String? get nickName => throw _privateConstructorUsedError;
   String get gender => throw _privateConstructorUsedError;
   int get age => throw _privateConstructorUsedError;
   String? get phoneNumber => throw _privateConstructorUsedError;
@@ -46,8 +46,8 @@ abstract class $UserDataCopyWith<$Res> {
   $Res call(
       {String loginId,
       String? password,
-      String name,
-      String nickName,
+      String? name,
+      String? nickName,
       String gender,
       int age,
       String? phoneNumber,
@@ -71,8 +71,8 @@ class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
   $Res call({
     Object? loginId = null,
     Object? password = freezed,
-    Object? name = null,
-    Object? nickName = null,
+    Object? name = freezed,
+    Object? nickName = freezed,
     Object? gender = null,
     Object? age = null,
     Object? phoneNumber = freezed,
@@ -89,14 +89,14 @@ class _$UserDataCopyWithImpl<$Res, $Val extends UserData>
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String?,
-      name: null == name
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      nickName: null == nickName
+              as String?,
+      nickName: freezed == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       gender: null == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
@@ -136,8 +136,8 @@ abstract class _$$UserDataImplCopyWith<$Res>
   $Res call(
       {String loginId,
       String? password,
-      String name,
-      String nickName,
+      String? name,
+      String? nickName,
       String gender,
       int age,
       String? phoneNumber,
@@ -159,8 +159,8 @@ class __$$UserDataImplCopyWithImpl<$Res>
   $Res call({
     Object? loginId = null,
     Object? password = freezed,
-    Object? name = null,
-    Object? nickName = null,
+    Object? name = freezed,
+    Object? nickName = freezed,
     Object? gender = null,
     Object? age = null,
     Object? phoneNumber = freezed,
@@ -177,14 +177,14 @@ class __$$UserDataImplCopyWithImpl<$Res>
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String?,
-      name: null == name
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
-      nickName: null == nickName
+              as String?,
+      nickName: freezed == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       gender: null == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
@@ -219,8 +219,8 @@ class _$UserDataImpl implements _UserData {
   const _$UserDataImpl(
       {required this.loginId,
       this.password,
-      required this.name,
-      required this.nickName,
+      this.name,
+      this.nickName,
       required this.gender,
       required this.age,
       this.phoneNumber,
@@ -237,9 +237,9 @@ class _$UserDataImpl implements _UserData {
   final String? password;
 // Made nullable
   @override
-  final String name;
+  final String? name;
   @override
-  final String nickName;
+  final String? nickName;
   @override
   final String gender;
   @override
@@ -303,8 +303,8 @@ abstract class _UserData implements UserData {
   const factory _UserData(
       {required final String loginId,
       final String? password,
-      required final String name,
-      required final String nickName,
+      final String? name,
+      final String? nickName,
       required final String gender,
       required final int age,
       final String? phoneNumber,
@@ -320,9 +320,9 @@ abstract class _UserData implements UserData {
   @override
   String? get password;
   @override // Made nullable
-  String get name;
+  String? get name;
   @override
-  String get nickName;
+  String? get nickName;
   @override
   String get gender;
   @override

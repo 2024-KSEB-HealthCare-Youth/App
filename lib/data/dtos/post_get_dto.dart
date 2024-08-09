@@ -13,7 +13,7 @@ class PostGetDTO with _$PostGetDTO {
     int? likeCount, // likeCount can be null
     required Category category,
     String? profileImage,
-    required String nickName,
+    String? nickName,
     required DateTime createdAt,
   }) = _PostGetDTO;
 

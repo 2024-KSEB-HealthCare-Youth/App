@@ -7,7 +7,7 @@ import 'presentation/screens/main_page.dart';
 import 'presentation/screens/camera_screen.dart';
 import 'presentation/screens/loading_page.dart';
 import 'presentation/screens/recommendation.dart';
-import 'presentation/screens/my_page.dart';
+
 import 'presentation/screens/menu.dart';
 import 'presentation/screens/past_log.dart';
 import 'presentation/screens/edit_account.dart';
@@ -121,8 +121,6 @@ class FigmaToCodeApp extends StatelessWidget {
             builder: (context) => LoadingScreen(imagePath: imagePath));
       case Routes.recommendationPage:
         return MaterialPageRoute(builder: (context) => Recommendation());
-      case Routes.myPage:
-        return MaterialPageRoute(builder: (context) => MyPage());
       case Routes.menu:
         return MaterialPageRoute(builder: (context) => Menu());
       case Routes.pastLog:
@@ -144,7 +142,6 @@ class Routes {
   static const String takePictureScreen = '/camera_screen';
   static const String loadingPage = '/loading_page';
   static const String recommendationPage = '/recommendation_page';
-  static const String myPage = '/my_page';
   static const String menu = '/menu';
   static const String pastLog = '/past_log';
   static const String editAccount = '/edit_account';

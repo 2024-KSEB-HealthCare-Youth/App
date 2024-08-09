@@ -8,7 +8,7 @@ part of 'comment_dto.dart';
 
 _$CommentDTOImpl _$$CommentDTOImplFromJson(Map<String, dynamic> json) =>
     _$CommentDTOImpl(
-      nickName: json['nickName'] as String,
+      nickName: json['nickName'] as String?,
       profileImage: json['profileImage'] as String?,
       content: json['content'] as String,
     );

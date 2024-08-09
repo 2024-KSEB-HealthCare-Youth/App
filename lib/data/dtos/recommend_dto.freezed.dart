@@ -20,13 +20,14 @@ RecommendDTO _$RecommendDTOFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$RecommendDTO {
-  String get name => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
+  SkinConditionType get basicSkinType =>
+      throw _privateConstructorUsedError; // Updated to use the new enum name
+  List<SkinType>? get advancedSkinType => throw _privateConstructorUsedError;
   List<String> get cosNames => throw _privateConstructorUsedError;
   List<String> get cosPaths => throw _privateConstructorUsedError;
   List<String> get nutrNames => throw _privateConstructorUsedError;
   List<String> get nutrPaths => throw _privateConstructorUsedError;
-  Type get simpleSkin => throw _privateConstructorUsedError;
-  List<SkinType> get expertSkin => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,13 +42,13 @@ abstract class $RecommendDTOCopyWith<$Res> {
       _$RecommendDTOCopyWithImpl<$Res, RecommendDTO>;
   @useResult
   $Res call(
-      {String name,
+      {String? name,
+      SkinConditionType basicSkinType,
+      List<SkinType>? advancedSkinType,
       List<String> cosNames,
       List<String> cosPaths,
       List<String> nutrNames,
-      List<String> nutrPaths,
-      Type simpleSkin,
-      List<SkinType> expertSkin});
+      List<String> nutrPaths});
 }
 
 /// @nodoc
@@ -63,19 +64,27 @@ class _$RecommendDTOCopyWithImpl<$Res, $Val extends RecommendDTO>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = null,
+    Object? name = freezed,
+    Object? basicSkinType = null,
+    Object? advancedSkinType = freezed,
     Object? cosNames = null,
     Object? cosPaths = null,
     Object? nutrNames = null,
     Object? nutrPaths = null,
-    Object? simpleSkin = null,
-    Object? expertSkin = null,
   }) {
     return _then(_value.copyWith(
-      name: null == name
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      basicSkinType: null == basicSkinType
+          ? _value.basicSkinType
+          : basicSkinType // ignore: cast_nullable_to_non_nullable
+              as SkinConditionType,
+      advancedSkinType: freezed == advancedSkinType
+          ? _value.advancedSkinType
+          : advancedSkinType // ignore: cast_nullable_to_non_nullable
+              as List<SkinType>?,
       cosNames: null == cosNames
           ? _value.cosNames
           : cosNames // ignore: cast_nullable_to_non_nullable
@@ -92,14 +101,6 @@ class _$RecommendDTOCopyWithImpl<$Res, $Val extends RecommendDTO>
           ? _value.nutrPaths
           : nutrPaths // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      simpleSkin: null == simpleSkin
-          ? _value.simpleSkin
-          : simpleSkin // ignore: cast_nullable_to_non_nullable
-              as Type,
-      expertSkin: null == expertSkin
-          ? _value.expertSkin
-          : expertSkin // ignore: cast_nullable_to_non_nullable
-              as List<SkinType>,
     ) as $Val);
   }
 }
@@ -113,13 +114,13 @@ abstract class _$$RecommendDTOImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String name,
+      {String? name,
+      SkinConditionType basicSkinType,
+      List<SkinType>? advancedSkinType,
       List<String> cosNames,
       List<String> cosPaths,
       List<String> nutrNames,
-      List<String> nutrPaths,
-      Type simpleSkin,
-      List<SkinType> expertSkin});
+      List<String> nutrPaths});
 }
 
 /// @nodoc
@@ -133,19 +134,27 @@ class __$$RecommendDTOImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = null,
+    Object? name = freezed,
+    Object? basicSkinType = null,
+    Object? advancedSkinType = freezed,
     Object? cosNames = null,
     Object? cosPaths = null,
     Object? nutrNames = null,
     Object? nutrPaths = null,
-    Object? simpleSkin = null,
-    Object? expertSkin = null,
   }) {
     return _then(_$RecommendDTOImpl(
-      name: null == name
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      basicSkinType: null == basicSkinType
+          ? _value.basicSkinType
+          : basicSkinType // ignore: cast_nullable_to_non_nullable
+              as SkinConditionType,
+      advancedSkinType: freezed == advancedSkinType
+          ? _value._advancedSkinType
+          : advancedSkinType // ignore: cast_nullable_to_non_nullable
+              as List<SkinType>?,
       cosNames: null == cosNames
           ? _value._cosNames
           : cosNames // ignore: cast_nullable_to_non_nullable
@@ -162,14 +171,6 @@ class __$$RecommendDTOImplCopyWithImpl<$Res>
           ? _value._nutrPaths
           : nutrPaths // ignore: cast_nullable_to_non_nullable
               as List<String>,
-      simpleSkin: null == simpleSkin
-          ? _value.simpleSkin
-          : simpleSkin // ignore: cast_nullable_to_non_nullable
-              as Type,
-      expertSkin: null == expertSkin
-          ? _value._expertSkin
-          : expertSkin // ignore: cast_nullable_to_non_nullable
-              as List<SkinType>,
     ));
   }
 }
@@ -178,24 +179,39 @@ class __$$RecommendDTOImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$RecommendDTOImpl implements _RecommendDTO {
   const _$RecommendDTOImpl(
-      {required this.name,
+      {this.name,
+      required this.basicSkinType,
+      required final List<SkinType>? advancedSkinType,
       required final List<String> cosNames,
       required final List<String> cosPaths,
       required final List<String> nutrNames,
-      required final List<String> nutrPaths,
-      required this.simpleSkin,
-      required final List<SkinType> expertSkin})
-      : _cosNames = cosNames,
+      required final List<String> nutrPaths})
+      : _advancedSkinType = advancedSkinType,
+        _cosNames = cosNames,
         _cosPaths = cosPaths,
         _nutrNames = nutrNames,
-        _nutrPaths = nutrPaths,
-        _expertSkin = expertSkin;
+        _nutrPaths = nutrPaths;
 
   factory _$RecommendDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$RecommendDTOImplFromJson(json);
 
   @override
-  final String name;
+  final String? name;
+  @override
+  final SkinConditionType basicSkinType;
+// Updated to use the new enum name
+  final List<SkinType>? _advancedSkinType;
+// Updated to use the new enum name
+  @override
+  List<SkinType>? get advancedSkinType {
+    final value = _advancedSkinType;
+    if (value == null) return null;
+    if (_advancedSkinType is EqualUnmodifiableListView)
+      return _advancedSkinType;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   final List<String> _cosNames;
   @override
   List<String> get cosNames {
@@ -229,18 +245,8 @@ class _$RecommendDTOImpl implements _RecommendDTO {
   }
 
   @override
-  final Type simpleSkin;
-  final List<SkinType> _expertSkin;
-  @override
-  List<SkinType> get expertSkin {
-    if (_expertSkin is EqualUnmodifiableListView) return _expertSkin;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_expertSkin);
-  }
-
-  @override
   String toString() {
-    return 'RecommendDTO(name: $name, cosNames: $cosNames, cosPaths: $cosPaths, nutrNames: $nutrNames, nutrPaths: $nutrPaths, simpleSkin: $simpleSkin, expertSkin: $expertSkin)';
+    return 'RecommendDTO(name: $name, basicSkinType: $basicSkinType, advancedSkinType: $advancedSkinType, cosNames: $cosNames, cosPaths: $cosPaths, nutrNames: $nutrNames, nutrPaths: $nutrPaths)';
   }
 
   @override
@@ -249,16 +255,16 @@ class _$RecommendDTOImpl implements _RecommendDTO {
         (other.runtimeType == runtimeType &&
             other is _$RecommendDTOImpl &&
             (identical(other.name, name) || other.name == name) &&
+            (identical(other.basicSkinType, basicSkinType) ||
+                other.basicSkinType == basicSkinType) &&
+            const DeepCollectionEquality()
+                .equals(other._advancedSkinType, _advancedSkinType) &&
             const DeepCollectionEquality().equals(other._cosNames, _cosNames) &&
             const DeepCollectionEquality().equals(other._cosPaths, _cosPaths) &&
             const DeepCollectionEquality()
                 .equals(other._nutrNames, _nutrNames) &&
             const DeepCollectionEquality()
-                .equals(other._nutrPaths, _nutrPaths) &&
-            (identical(other.simpleSkin, simpleSkin) ||
-                other.simpleSkin == simpleSkin) &&
-            const DeepCollectionEquality()
-                .equals(other._expertSkin, _expertSkin));
+                .equals(other._nutrPaths, _nutrPaths));
   }
 
   @JsonKey(ignore: true)
@@ -266,12 +272,12 @@ class _$RecommendDTOImpl implements _RecommendDTO {
   int get hashCode => Object.hash(
       runtimeType,
       name,
+      basicSkinType,
+      const DeepCollectionEquality().hash(_advancedSkinType),
       const DeepCollectionEquality().hash(_cosNames),
       const DeepCollectionEquality().hash(_cosPaths),
       const DeepCollectionEquality().hash(_nutrNames),
-      const DeepCollectionEquality().hash(_nutrPaths),
-      simpleSkin,
-      const DeepCollectionEquality().hash(_expertSkin));
+      const DeepCollectionEquality().hash(_nutrPaths));
 
   @JsonKey(ignore: true)
   @override
@@ -289,19 +295,23 @@ class _$RecommendDTOImpl implements _RecommendDTO {
 
 abstract class _RecommendDTO implements RecommendDTO {
   const factory _RecommendDTO(
-      {required final String name,
+      {final String? name,
+      required final SkinConditionType basicSkinType,
+      required final List<SkinType>? advancedSkinType,
       required final List<String> cosNames,
       required final List<String> cosPaths,
       required final List<String> nutrNames,
-      required final List<String> nutrPaths,
-      required final Type simpleSkin,
-      required final List<SkinType> expertSkin}) = _$RecommendDTOImpl;
+      required final List<String> nutrPaths}) = _$RecommendDTOImpl;
 
   factory _RecommendDTO.fromJson(Map<String, dynamic> json) =
       _$RecommendDTOImpl.fromJson;
 
   @override
-  String get name;
+  String? get name;
+  @override
+  SkinConditionType get basicSkinType;
+  @override // Updated to use the new enum name
+  List<SkinType>? get advancedSkinType;
   @override
   List<String> get cosNames;
   @override
@@ -310,10 +320,6 @@ abstract class _RecommendDTO implements RecommendDTO {
   List<String> get nutrNames;
   @override
   List<String> get nutrPaths;
-  @override
-  Type get simpleSkin;
-  @override
-  List<SkinType> get expertSkin;
   @override
   @JsonKey(ignore: true)
   _$$RecommendDTOImplCopyWith<_$RecommendDTOImpl> get copyWith =>

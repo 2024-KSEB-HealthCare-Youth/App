@@ -4,8 +4,7 @@ import '../data/dtos/onePostdetail_dto.dart';
 import '../data/dtos/post_get_dto.dart';
 import '../data/dtos/post_user_dto.dart';
 
-class PostService{
-
+class PostService {
   final RestAPI restAPI = RestAPI();
 
   Future<OnepostdetailDTO> fetchPostById(int postId) async {
@@ -30,9 +29,8 @@ class PostService{
   Future<PostUserDTO> fetchPostUserData() async {
     final userData = await RestAPI.fetchUserData();
     return PostUserDTO(
-      loginId: userData.loginId,
-      profileImage: userData.profileImage,
-      nickName: userData.nickName,
+      profileImage: userData.profileImage ?? '',
+      nickName: userData.nickName ?? '',
     );
   }
 

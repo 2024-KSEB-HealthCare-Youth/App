@@ -20,12 +20,10 @@ EditUserDTO _$EditUserDTOFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$EditUserDTO {
-  String get name => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
   String? get nickName => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
-  String get phoneNumber => throw _privateConstructorUsedError;
-  int get age => throw _privateConstructorUsedError;
-  String get gender => throw _privateConstructorUsedError;
+  String? get phoneNumber => throw _privateConstructorUsedError;
   String? get profileImage => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,12 +39,10 @@ abstract class $EditUserDTOCopyWith<$Res> {
       _$EditUserDTOCopyWithImpl<$Res, EditUserDTO>;
   @useResult
   $Res call(
-      {String name,
+      {String? name,
       String? nickName,
       String? email,
-      String phoneNumber,
-      int age,
-      String gender,
+      String? phoneNumber,
       String? profileImage});
 }
 
@@ -63,19 +59,17 @@ class _$EditUserDTOCopyWithImpl<$Res, $Val extends EditUserDTO>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = null,
+    Object? name = freezed,
     Object? nickName = freezed,
     Object? email = freezed,
-    Object? phoneNumber = null,
-    Object? age = null,
-    Object? gender = null,
+    Object? phoneNumber = freezed,
     Object? profileImage = freezed,
   }) {
     return _then(_value.copyWith(
-      name: null == name
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       nickName: freezed == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
@@ -84,18 +78,10 @@ class _$EditUserDTOCopyWithImpl<$Res, $Val extends EditUserDTO>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String?,
-      phoneNumber: null == phoneNumber
+      phoneNumber: freezed == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
-              as String,
-      age: null == age
-          ? _value.age
-          : age // ignore: cast_nullable_to_non_nullable
-              as int,
-      gender: null == gender
-          ? _value.gender
-          : gender // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       profileImage: freezed == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
@@ -113,12 +99,10 @@ abstract class _$$EditUserDTOImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String name,
+      {String? name,
       String? nickName,
       String? email,
-      String phoneNumber,
-      int age,
-      String gender,
+      String? phoneNumber,
       String? profileImage});
 }
 
@@ -133,19 +117,17 @@ class __$$EditUserDTOImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = null,
+    Object? name = freezed,
     Object? nickName = freezed,
     Object? email = freezed,
-    Object? phoneNumber = null,
-    Object? age = null,
-    Object? gender = null,
+    Object? phoneNumber = freezed,
     Object? profileImage = freezed,
   }) {
     return _then(_$EditUserDTOImpl(
-      name: null == name
+      name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       nickName: freezed == nickName
           ? _value.nickName
           : nickName // ignore: cast_nullable_to_non_nullable
@@ -154,18 +136,10 @@ class __$$EditUserDTOImplCopyWithImpl<$Res>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String?,
-      phoneNumber: null == phoneNumber
+      phoneNumber: freezed == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
-              as String,
-      age: null == age
-          ? _value.age
-          : age // ignore: cast_nullable_to_non_nullable
-              as int,
-      gender: null == gender
-          ? _value.gender
-          : gender // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       profileImage: freezed == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
@@ -178,35 +152,29 @@ class __$$EditUserDTOImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$EditUserDTOImpl implements _EditUserDTO {
   _$EditUserDTOImpl(
-      {required this.name,
+      {this.name,
       this.nickName,
       this.email,
-      required this.phoneNumber,
-      required this.age,
-      required this.gender,
+      this.phoneNumber,
       this.profileImage});
 
   factory _$EditUserDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$EditUserDTOImplFromJson(json);
 
   @override
-  final String name;
+  final String? name;
   @override
   final String? nickName;
   @override
   final String? email;
   @override
-  final String phoneNumber;
-  @override
-  final int age;
-  @override
-  final String gender;
+  final String? phoneNumber;
   @override
   final String? profileImage;
 
   @override
   String toString() {
-    return 'EditUserDTO(name: $name, nickName: $nickName, email: $email, phoneNumber: $phoneNumber, age: $age, gender: $gender, profileImage: $profileImage)';
+    return 'EditUserDTO(name: $name, nickName: $nickName, email: $email, phoneNumber: $phoneNumber, profileImage: $profileImage)';
   }
 
   @override
@@ -220,16 +188,14 @@ class _$EditUserDTOImpl implements _EditUserDTO {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.phoneNumber, phoneNumber) ||
                 other.phoneNumber == phoneNumber) &&
-            (identical(other.age, age) || other.age == age) &&
-            (identical(other.gender, gender) || other.gender == gender) &&
             (identical(other.profileImage, profileImage) ||
                 other.profileImage == profileImage));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, name, nickName, email,
-      phoneNumber, age, gender, profileImage);
+  int get hashCode => Object.hash(
+      runtimeType, name, nickName, email, phoneNumber, profileImage);
 
   @JsonKey(ignore: true)
   @override
@@ -247,29 +213,23 @@ class _$EditUserDTOImpl implements _EditUserDTO {
 
 abstract class _EditUserDTO implements EditUserDTO {
   factory _EditUserDTO(
-      {required final String name,
+      {final String? name,
       final String? nickName,
       final String? email,
-      required final String phoneNumber,
-      required final int age,
-      required final String gender,
+      final String? phoneNumber,
       final String? profileImage}) = _$EditUserDTOImpl;
 
   factory _EditUserDTO.fromJson(Map<String, dynamic> json) =
       _$EditUserDTOImpl.fromJson;
 
   @override
-  String get name;
+  String? get name;
   @override
   String? get nickName;
   @override
   String? get email;
   @override
-  String get phoneNumber;
-  @override
-  int get age;
-  @override
-  String get gender;
+  String? get phoneNumber;
   @override
   String? get profileImage;
   @override

@@ -16,6 +16,7 @@ import '../data/dtos/recommend_dto.dart';
 import '../data/dtos/post_get_dto.dart';
 import '../data/dtos/onePostdetail_dto.dart';
 import '../data/dtos/send_data_dto.dart';
+import '../data/dtos/edit_user_dto.dart';
 
 class RestAPI {
   static const String baseUrl = 'http://52.79.103.61:8080';
@@ -198,9 +199,9 @@ class RestAPI {
     }
   }
 
-  static Future<void> updateUserData(Map<String, dynamic> updatedUser) async {
+  static Future<void> updateUserData(EditUserDTO updatedUser) async {
     final token = await storage.read(key: 'access_token');
-    final requestBody = jsonEncode(updatedUser);
+    final requestBody = jsonEncode(updatedUser.toJson());
     print('Request body: $requestBody');
 
     try {
@@ -361,11 +362,56 @@ class RestAPI {
     }
   }
 
-  static Future<SendDataDTO> SendDataToServer(SendAiDTO aidto) async {
+  static Future<SendDataDTO?> SendDataToServer(SendAiDTO aidto) async {
+    final token = await storage.read(key: 'access_token');
+    dio.Response? response;
+
+    try {
+      response = await dioClient.post(
+        '/members/mypage',
+        data: aidto.toJson(),
+        options: dio.Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      print('SendAiDTO Response: $response');
+
+      // Check if the response is successful
+      if (response.statusCode == 200) {
+        if (response.data is Map<String, dynamic>) {
+          final data = response.data['results'];
+          if (data is List && data.isNotEmpty) {
+            // Ensure the response contains the expected structure
+            final sendData = SendDataDTO.fromJson(data[0]);
+            print(sendData);
+            return sendData;
+          } else {
+            throw Exception('No valid data returned in the response.');
+          }
+        } else {
+          throw Exception('Unexpected response format.');
+        }
+      } else {
+        throw Exception(
+            'Failed to load SendDataDTO data: ${response.statusMessage}');
+      }
+    } catch (e) {
+      // Provide detailed error information
+      print('Data fetching failed: $e');
+      if (response != null) {
+        print('SendAiDTO Response Data: ${response.data}');
+      } else {
+        print('No response received from server.');
+      }
+      throw Exception('Data fetching failed: $e');
+    }
+  }
+
+  static Future<SendDataDTO> fetchMypageData() async {
     final token = await storage.read(key: 'access_token');
     try {
-      final response = await dioClient.post('/members/mypage',
-          data: aidto.toJson(),
+      final response = await dioClient.get('/members/mypage',
           options: dio.Options(
             headers: {'Authorization': 'Bearer $token'},
           ));
@@ -374,19 +420,17 @@ class RestAPI {
             response.data['results'] is List) {
           List<dynamic> jsonData = response.data['results'];
           if (jsonData.isNotEmpty) {
-            return SendDataDTO.fromJson(jsonData[0]);
-          } else {
-            throw Exception('No data returned in response');
+            final sendData = SendDataDTO.fromJson(jsonData[0]);
+            print(sendData);
+            return sendData;
           }
-        } else {
-          throw Exception('Unexpected response format');
         }
-      } else {
-        throw Exception(
-            'Failed to load RecommendDTO data: ${response.statusMessage}');
       }
+      // Handle unexpected response structure or empty data
+      throw Exception('Unexpected response format or no data available');
     } catch (e) {
       print('Data fetching failed: $e');
+      // Rethrow the error or throw a specific exception to handle it upstream
       throw Exception('Data fetching failed: $e');
     }
   }
@@ -404,7 +448,7 @@ class RestAPI {
         if (response.data is Map<String, dynamic> &&
             response.data['results'] is List) {
           List<dynamic> jsonData = response.data['results'];
-          if (jsonData.isNotEmpty) {
+          if (jsonData.isNotEmpty && jsonData[0] != null) {
             return RecommendDTO.fromJson(jsonData[0]);
           } else {
             throw Exception('No data returned in response');

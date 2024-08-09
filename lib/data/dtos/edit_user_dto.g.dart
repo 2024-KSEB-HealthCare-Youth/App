@@ -8,12 +8,10 @@ part of 'edit_user_dto.dart';
 
 _$EditUserDTOImpl _$$EditUserDTOImplFromJson(Map<String, dynamic> json) =>
     _$EditUserDTOImpl(
-      name: json['name'] as String,
+      name: json['name'] as String?,
       nickName: json['nickName'] as String?,
       email: json['email'] as String?,
-      phoneNumber: json['phoneNumber'] as String,
-      age: (json['age'] as num).toInt(),
-      gender: json['gender'] as String,
+      phoneNumber: json['phoneNumber'] as String?,
       profileImage: json['profileImage'] as String?,
     );
 
@@ -23,7 +21,5 @@ Map<String, dynamic> _$$EditUserDTOImplToJson(_$EditUserDTOImpl instance) =>
       'nickName': instance.nickName,
       'email': instance.email,
       'phoneNumber': instance.phoneNumber,
-      'age': instance.age,
-      'gender': instance.gender,
       'profileImage': instance.profileImage,
     };

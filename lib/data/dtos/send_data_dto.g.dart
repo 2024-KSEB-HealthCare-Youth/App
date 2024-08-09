@@ -8,8 +8,8 @@ part of 'send_data_dto.dart';
 
 _$SendDataDTOImpl _$$SendDataDTOImplFromJson(Map<String, dynamic> json) =>
     _$SendDataDTOImpl(
-      name: json['name'] as String,
-      nickname: json['nickname'] as String,
+      name: json['name'] as String?,
+      nickname: json['nickname'] as String?,
       gender: json['gender'] as String,
       age: (json['age'] as num).toInt(),
       email: json['email'] as String?,
@@ -41,7 +41,7 @@ Map<String, dynamic> _$$SendDataDTOImplToJson(_$SendDataDTOImpl instance) =>
 
 const _$skinTypeEnumMap = {
   skinType.ACNE: 'ACNE',
-  skinType.WRINKLE: 'WRINKLE',
+  skinType.WRINKLES: 'WRINKLES',
 };
 
 const _$TypeEnumMap = {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/user_service.dart';
 import '../../data/dtos/my_page_dto.dart';
+import '../screens/my_page.dart';
 
 class LoadingScreen extends StatefulWidget {
   final String imagePath;
@@ -28,10 +29,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
       if (myPageData == null) {
         throw Exception('MyPageDTO is null');
       }
+      print(myPageData);
       // Navigate to MyPage with the received AI data
-      Navigator.of(context).pushReplacementNamed(
-        '/my_page',
-        arguments: myPageData,
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => MyPage(myPageData: myPageData),
+        ),
       );
     } catch (e) {
       // Handle error

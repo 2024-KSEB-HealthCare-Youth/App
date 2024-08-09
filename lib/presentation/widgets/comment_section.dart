@@ -64,7 +64,7 @@ class CommentSection extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    comment.nickName,
+                    comment.nickName ?? 'dummy',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,

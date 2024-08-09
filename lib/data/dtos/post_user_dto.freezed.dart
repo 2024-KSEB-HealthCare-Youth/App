@@ -20,7 +20,6 @@ PostUserDTO _$PostUserDTOFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PostUserDTO {
-  String get loginId => throw _privateConstructorUsedError;
   String? get profileImage => throw _privateConstructorUsedError;
   String? get nickName => throw _privateConstructorUsedError;
 
@@ -36,7 +35,7 @@ abstract class $PostUserDTOCopyWith<$Res> {
           PostUserDTO value, $Res Function(PostUserDTO) then) =
       _$PostUserDTOCopyWithImpl<$Res, PostUserDTO>;
   @useResult
-  $Res call({String loginId, String? profileImage, String? nickName});
+  $Res call({String? profileImage, String? nickName});
 }
 
 /// @nodoc
@@ -52,15 +51,10 @@ class _$PostUserDTOCopyWithImpl<$Res, $Val extends PostUserDTO>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? loginId = null,
     Object? profileImage = freezed,
     Object? nickName = freezed,
   }) {
     return _then(_value.copyWith(
-      loginId: null == loginId
-          ? _value.loginId
-          : loginId // ignore: cast_nullable_to_non_nullable
-              as String,
       profileImage: freezed == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
@@ -81,7 +75,7 @@ abstract class _$$PostUserDTOImplCopyWith<$Res>
       __$$PostUserDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String loginId, String? profileImage, String? nickName});
+  $Res call({String? profileImage, String? nickName});
 }
 
 /// @nodoc
@@ -95,15 +89,10 @@ class __$$PostUserDTOImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? loginId = null,
     Object? profileImage = freezed,
     Object? nickName = freezed,
   }) {
     return _then(_$PostUserDTOImpl(
-      loginId: null == loginId
-          ? _value.loginId
-          : loginId // ignore: cast_nullable_to_non_nullable
-              as String,
       profileImage: freezed == profileImage
           ? _value.profileImage
           : profileImage // ignore: cast_nullable_to_non_nullable
@@ -119,13 +108,11 @@ class __$$PostUserDTOImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$PostUserDTOImpl implements _PostUserDTO {
-  _$PostUserDTOImpl({required this.loginId, this.profileImage, this.nickName});
+  _$PostUserDTOImpl({this.profileImage, this.nickName});
 
   factory _$PostUserDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$PostUserDTOImplFromJson(json);
 
-  @override
-  final String loginId;
   @override
   final String? profileImage;
   @override
@@ -133,7 +120,7 @@ class _$PostUserDTOImpl implements _PostUserDTO {
 
   @override
   String toString() {
-    return 'PostUserDTO(loginId: $loginId, profileImage: $profileImage, nickName: $nickName)';
+    return 'PostUserDTO(profileImage: $profileImage, nickName: $nickName)';
   }
 
   @override
@@ -141,7 +128,6 @@ class _$PostUserDTOImpl implements _PostUserDTO {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$PostUserDTOImpl &&
-            (identical(other.loginId, loginId) || other.loginId == loginId) &&
             (identical(other.profileImage, profileImage) ||
                 other.profileImage == profileImage) &&
             (identical(other.nickName, nickName) ||
@@ -150,7 +136,7 @@ class _$PostUserDTOImpl implements _PostUserDTO {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, loginId, profileImage, nickName);
+  int get hashCode => Object.hash(runtimeType, profileImage, nickName);
 
   @JsonKey(ignore: true)
   @override
@@ -167,16 +153,12 @@ class _$PostUserDTOImpl implements _PostUserDTO {
 }
 
 abstract class _PostUserDTO implements PostUserDTO {
-  factory _PostUserDTO(
-      {required final String loginId,
-      final String? profileImage,
-      final String? nickName}) = _$PostUserDTOImpl;
+  factory _PostUserDTO({final String? profileImage, final String? nickName}) =
+      _$PostUserDTOImpl;
 
   factory _PostUserDTO.fromJson(Map<String, dynamic> json) =
       _$PostUserDTOImpl.fromJson;
 
-  @override
-  String get loginId;
   @override
   String? get profileImage;
   @override
