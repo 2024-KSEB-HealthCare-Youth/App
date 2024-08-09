@@ -95,7 +95,7 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
                     height: 183,
                     decoration: ShapeDecoration(
                       color: const Color(0xFFD9D9D9),
-                      shape: StarBorder.polygon(sides: 6),
+                      shape: StarBorder.polygon(sides: 5),
                     ),
                     child: PolygonPentagon(
                       values: polygonValues,
