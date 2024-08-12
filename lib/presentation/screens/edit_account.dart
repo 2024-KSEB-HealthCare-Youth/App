@@ -77,57 +77,58 @@ class _EditAccountPageState extends State<EditAccountPage> {
     }
   }
 
-Future<void> _saveAccountInfo() async {
-  if (_userData == null) {
-    return;
-  }
+  Future<void> _saveAccountInfo() async {
+    if (_userData == null) {
+      return;
+    }
 
-  try {
-    // Create a new EditUserDTO with the same values if no changes were made
-    EditUserDTO updatedUserData = EditUserDTO(
-      name: _nameController.text.isNotEmpty
-          ? _nameController.text
-          : _userData!.name,
-      nickName: _nickNameController.text.isNotEmpty
-          ? _nickNameController.text
-          : _userData!.nickName,
-      phoneNumber: _phoneController.text.isNotEmpty
-          ? _phoneController.text
-          : _userData!.phoneNumber,
-      email: _emailController.text.isNotEmpty
-          ? _emailController.text
-          : _userData!.email,
-      profileImage: _profileImage != null
-          ? _profileImage!.path
-          : _userData!.profileImage, // Use existing profile image if not changed
-    );
+    try {
+      // Create a new EditUserDTO with the same values if no changes were made
+      EditUserDTO updatedUserData = EditUserDTO(
+        name: _nameController.text.isNotEmpty
+            ? _nameController.text
+            : _userData!.name,
+        nickName: _nickNameController.text.isNotEmpty
+            ? _nickNameController.text
+            : _userData!.nickName,
+        phoneNumber: _phoneController.text.isNotEmpty
+            ? _phoneController.text
+            : _userData!.phoneNumber,
+        email: _emailController.text.isNotEmpty
+            ? _emailController.text
+            : _userData!.email,
+        profileImage: _profileImage != null
+            ? _profileImage!.path
+            : _userData!
+                .profileImage, // Use existing profile image if not changed
+      );
 
-    // Send the updated data to the server
-    await UserService().updateUserData(updatedUserData);
+      // Send the updated data to the server
+      await UserService().updateUserData(updatedUserData);
 
-    // Update _userData with the new values
-    setState(() {
-      _userData = _userData!.copyWith(
-        name: updatedUserData.name ?? _userData!.name,
-        nickName: updatedUserData.nickName ?? _userData!.nickName,
-        phoneNumber: updatedUserData.phoneNumber ?? _userData!.phoneNumber,
-        email: updatedUserData.email ?? _userData!.email,
-        profileImage: updatedUserData.profileImage ?? _userData!.profileImage,
+      // Update _userData with the new values
+      setState(() {
+        _userData = _userData!.copyWith(
+          name: updatedUserData.name ?? _userData!.name,
+          nickName: updatedUserData.nickName ?? _userData!.nickName,
+          phoneNumber: updatedUserData.phoneNumber ?? _userData!.phoneNumber,
+          email: updatedUserData.email ?? _userData!.email,
+          profileImage: updatedUserData.profileImage ?? _userData!.profileImage,
+        );
       });
-    });
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('User data updated successfully.')),
-    );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('User data updated successfully.')),
+      );
 
-    // Return the updated user data back to the previous screen
-    Navigator.pop(context, _userData);
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Failed to save account info: $e')),
-    );
+      // Return the updated user data back to the previous screen
+      Navigator.pushReplacementNamed(context, '/main_page');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save account info: $e')),
+      );
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {

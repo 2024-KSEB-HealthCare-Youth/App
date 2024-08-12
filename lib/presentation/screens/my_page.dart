@@ -23,35 +23,10 @@ class _MyPageState extends State<MyPage> {
   }
 
   Future<void> _navigateToEditAccountPage() async {
-    final updatedData = await Navigator.pushNamed(
+    await Navigator.pushNamed(
       context,
       '/edit_account',
     );
-
-    if (updatedData != null && updatedData is MyPageDTO) {
-      await _reloadUserData();
-    }
-  }
-
-  Future<void> _reloadUserData() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final updatedData = await RestAPI.fetchMypageData();
-      setState(() {
-        _currentData = updatedData;
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to reload user data: $e')),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
   }
 
   @override
