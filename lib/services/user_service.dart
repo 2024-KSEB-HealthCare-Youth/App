@@ -52,7 +52,7 @@ class UserService {
 
   dto.SendAiDTO dataForm(model.AiData aiData, String imagePath) {
     return dto.SendAiDTO(
-      resultDetails: 'your skintype is $aiData.simpleSkin',
+      resultDetails: 'your skintype is ${aiData.simpleSkin}',
       faceImage: imagePath,
       basicSkinType: _convertBasicType(aiData.simpleSkin),
       advancedSkinType: _convertSkinTypeList(aiData.expertSkin),

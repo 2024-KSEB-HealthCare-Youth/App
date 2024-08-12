@@ -365,11 +365,13 @@ class RestAPI {
   static Future<SendDataDTO?> SendDataToServer(SendAiDTO aidto) async {
     final token = await storage.read(key: 'access_token');
     dio.Response? response;
+    final aidtoJson = aidto.toJson();
+    print('Sending SendAiDTO Data: $aidtoJson');
 
     try {
       response = await dioClient.post(
         '/members/mypage',
-        data: aidto.toJson(),
+        data: aidtoJson,
         options: dio.Options(
           headers: {'Authorization': 'Bearer $token'},
         ),
