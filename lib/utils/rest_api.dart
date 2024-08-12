@@ -20,7 +20,7 @@ import '../data/dtos/edit_user_dto.dart';
 
 class RestAPI {
   static const String baseUrl = 'http://52.79.103.61:8080';
-  static const String flaskUrl = 'http://172.16.182.82:8000';
+  static const String flaskUrl = 'http://172.16.203.85:8000';
   static const Map<String, String> headers = {
     'Content-Type': 'application/json'
   };

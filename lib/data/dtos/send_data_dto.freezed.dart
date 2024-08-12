@@ -28,7 +28,7 @@ mixin _$SendDataDTO {
   String get phoneNumber => throw _privateConstructorUsedError;
   String? get resultDetails => throw _privateConstructorUsedError;
   List<skinType>? get advancedSkinType => throw _privateConstructorUsedError;
-  Type get basicSkinType => throw _privateConstructorUsedError;
+  Basic get basicSkinType => throw _privateConstructorUsedError;
   Map<String, double> get probabilities => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -52,7 +52,7 @@ abstract class $SendDataDTOCopyWith<$Res> {
       String phoneNumber,
       String? resultDetails,
       List<skinType>? advancedSkinType,
-      Type basicSkinType,
+      Basic basicSkinType,
       Map<String, double> probabilities});
 }
 
@@ -116,7 +116,7 @@ class _$SendDataDTOCopyWithImpl<$Res, $Val extends SendDataDTO>
       basicSkinType: null == basicSkinType
           ? _value.basicSkinType
           : basicSkinType // ignore: cast_nullable_to_non_nullable
-              as Type,
+              as Basic,
       probabilities: null == probabilities
           ? _value.probabilities
           : probabilities // ignore: cast_nullable_to_non_nullable
@@ -142,7 +142,7 @@ abstract class _$$SendDataDTOImplCopyWith<$Res>
       String phoneNumber,
       String? resultDetails,
       List<skinType>? advancedSkinType,
-      Type basicSkinType,
+      Basic basicSkinType,
       Map<String, double> probabilities});
 }
 
@@ -204,7 +204,7 @@ class __$$SendDataDTOImplCopyWithImpl<$Res>
       basicSkinType: null == basicSkinType
           ? _value.basicSkinType
           : basicSkinType // ignore: cast_nullable_to_non_nullable
-              as Type,
+              as Basic,
       probabilities: null == probabilities
           ? _value._probabilities
           : probabilities // ignore: cast_nullable_to_non_nullable
@@ -259,7 +259,7 @@ class _$SendDataDTOImpl implements _SendDataDTO {
   }
 
   @override
-  final Type basicSkinType;
+  final Basic basicSkinType;
   final Map<String, double> _probabilities;
   @override
   Map<String, double> get probabilities {
@@ -335,7 +335,7 @@ abstract class _SendDataDTO implements SendDataDTO {
       required final String phoneNumber,
       final String? resultDetails,
       final List<skinType>? advancedSkinType,
-      required final Type basicSkinType,
+      required final Basic basicSkinType,
       required final Map<String, double> probabilities}) = _$SendDataDTOImpl;
 
   factory _SendDataDTO.fromJson(Map<String, dynamic> json) =
@@ -358,7 +358,7 @@ abstract class _SendDataDTO implements SendDataDTO {
   @override
   List<skinType>? get advancedSkinType;
   @override
-  Type get basicSkinType;
+  Basic get basicSkinType;
   @override
   Map<String, double> get probabilities;
   @override
