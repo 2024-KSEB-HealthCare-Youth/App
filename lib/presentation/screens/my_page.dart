@@ -166,15 +166,16 @@ class _MyPageState extends State<MyPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 16),
               Container(
-                padding: const EdgeInsets.all(100.0),
+                alignment: Alignment.bottomLeft,
+                padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Text(
-                  'Explanation: ${_currentData.resultDetails}',
+                  '${_currentData.resultDetails}',
                   style: const TextStyle(
                     fontSize: 16,
                   ),

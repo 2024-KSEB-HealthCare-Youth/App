@@ -1,3 +1,5 @@
+import 'package:myapp/data/dtos/send_data_dto.dart';
+
 import '../../data/models/past_data.dart';
 import '../data/models/ai_data.dart' as model;
 import '../utils/rest_api.dart';
@@ -41,7 +43,7 @@ class UserService {
       email: data.email ?? 'No email provided', // 기본값 설정
       phoneNumber: data.phoneNumber ?? 'No phone number provided', // 기본값 설정
       resultDetails: data.resultDetails ?? 'error',
-      simpleSkin: data.basicSkinType?.toString() ?? 'Unknown', // 기본값 설정
+      simpleSkin: convertTypeToString(data.basicSkinType), // 기본값 설정
       profileImage: userData.profileImage ?? 'No image', // 기본값 설정
       loginId: userData.loginId ?? 'No ID', // 기본값 설정
       probabilities: data.probabilities ?? [], // 기본값 설정
@@ -50,7 +52,7 @@ class UserService {
 
   dto.SendAiDTO dataForm(model.AiData aiData, String imagePath) {
     return dto.SendAiDTO(
-      resultDetails: 'hi',
+      resultDetails: 'your skintype is $aiData.simpleSkin',
       faceImage: imagePath,
       basicSkinType: _convertBasicType(aiData.simpleSkin),
       advancedSkinType: _convertSkinTypeList(aiData.expertSkin),
@@ -87,6 +89,19 @@ class UserService {
         return dto.skintype.WRINKLES;
       default:
         throw Exception('Unknown SkinType: $skinType');
+    }
+  }
+
+  String convertTypeToString(Basic type) {
+    switch (type) {
+      case Basic.DRY:
+        return 'DRY';
+      case Basic.OILY:
+        return 'OILY';
+      case Basic.COMBINATION:
+        return 'COMBINATION';
+      default:
+        throw Exception('Unknown Type: $type');
     }
   }
 

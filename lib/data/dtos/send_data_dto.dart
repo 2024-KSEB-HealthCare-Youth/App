@@ -5,7 +5,7 @@ part 'send_data_dto.g.dart';
 
 enum skinType { ACNE, WRINKLES }
 
-enum Type { DRY, OILY, COMBINATION }
+enum Basic { DRY, OILY, COMBINATION }
 
 @freezed
 class SendDataDTO with _$SendDataDTO {
@@ -18,7 +18,7 @@ class SendDataDTO with _$SendDataDTO {
     required String phoneNumber,
     String? resultDetails,
     List<skinType>? advancedSkinType,
-    required Type basicSkinType,
+    required Basic basicSkinType,
     required Map<String, double> probabilities,
   }) = _SendDataDTO;
 

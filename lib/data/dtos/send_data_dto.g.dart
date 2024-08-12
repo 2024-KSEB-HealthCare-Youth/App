@@ -18,7 +18,7 @@ _$SendDataDTOImpl _$$SendDataDTOImplFromJson(Map<String, dynamic> json) =>
       advancedSkinType: (json['advancedSkinType'] as List<dynamic>?)
           ?.map((e) => $enumDecode(_$skinTypeEnumMap, e))
           .toList(),
-      basicSkinType: $enumDecode(_$TypeEnumMap, json['basicSkinType']),
+      basicSkinType: $enumDecode(_$BasicEnumMap, json['basicSkinType']),
       probabilities: (json['probabilities'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(k, (e as num).toDouble()),
       ),
@@ -35,7 +35,7 @@ Map<String, dynamic> _$$SendDataDTOImplToJson(_$SendDataDTOImpl instance) =>
       'resultDetails': instance.resultDetails,
       'advancedSkinType':
           instance.advancedSkinType?.map((e) => _$skinTypeEnumMap[e]!).toList(),
-      'basicSkinType': _$TypeEnumMap[instance.basicSkinType]!,
+      'basicSkinType': _$BasicEnumMap[instance.basicSkinType]!,
       'probabilities': instance.probabilities,
     };
 
@@ -44,8 +44,8 @@ const _$skinTypeEnumMap = {
   skinType.WRINKLES: 'WRINKLES',
 };
 
-const _$TypeEnumMap = {
-  Type.DRY: 'DRY',
-  Type.OILY: 'OILY',
-  Type.COMBINATION: 'COMBINATION',
+const _$BasicEnumMap = {
+  Basic.DRY: 'DRY',
+  Basic.OILY: 'OILY',
+  Basic.COMBINATION: 'COMBINATION',
 };
