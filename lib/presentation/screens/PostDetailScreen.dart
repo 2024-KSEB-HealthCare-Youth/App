@@ -56,7 +56,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
 
   void _toggleLikePost(OnepostdetailDTO post) async {
     try {
-      await Provider.of<LikeService>(context, listen: false).toggleLike(post.postId, post.likeCount);
+      await Provider.of<LikeService>(context, listen: false)
+          .toggleLike(post.postId, post.likeCount);
       setState(() {
         _postFuture = _fetchPostData();
       });
@@ -82,7 +83,8 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
         elevation: 0,
         foregroundColor: Colors.black,
       ),
-      resizeToAvoidBottomInset: true, // Ensures the keyboard does not cause overflow
+      resizeToAvoidBottomInset:
+          true, // Ensures the keyboard does not cause overflow
       body: FutureBuilder<OnepostdetailDTO>(
         future: _postFuture,
         builder: (context, snapshot) {
