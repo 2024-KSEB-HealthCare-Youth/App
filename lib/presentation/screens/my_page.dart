@@ -87,7 +87,7 @@ class _MyPageState extends State<MyPage> {
                       ),
                       const SizedBox(height: 16),
                       CustomButton(
-                        text: '수정',
+                        text: 'Edit',
                         onPressed: _navigateToEditAccountPage,
                       ),
                     ],

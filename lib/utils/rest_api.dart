@@ -20,7 +20,7 @@ import '../data/dtos/edit_user_dto.dart';
 
 class RestAPI {
   static const String baseUrl = 'http://52.79.103.61:8080';
-  static const String flaskUrl = 'http://172.16.203.85:8000';
+  static const String flaskUrl = 'http://172.16.214.142:8000';
   static const Map<String, String> headers = {
     'Content-Type': 'application/json'
   };
@@ -417,6 +417,7 @@ class RestAPI {
           options: dio.Options(
             headers: {'Authorization': 'Bearer $token'},
           ));
+
       if (response.statusCode == 200) {
         if (response.data is Map<String, dynamic> &&
             response.data['results'] is List) {
@@ -446,6 +447,7 @@ class RestAPI {
           headers: {'Authorization': 'Bearer $token'},
         ),
       );
+      print('RecommendDTO Response: $response');
       if (response.statusCode == 200) {
         if (response.data is Map<String, dynamic> &&
             response.data['results'] is List) {

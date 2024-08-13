@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:io'; // File 클래스 사용을 위해 추가
 import '../../services/result_service.dart';
 import '../../data/dtos/result_detail_dto.dart';
 import '../widgets/polygon_pentagon_widgets.dart';
@@ -65,58 +66,67 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
           } else {
             final resultDetail = snapshot.data!;
             final polygonValues = getPolygonValues(resultDetail.probabilities);
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: NetworkImage(resultDetail.faceImage),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    widget.resultDate.toLocal().toString().split(' ')[0],
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Diagnostic Results',
-                    style: TextStyle(
-                      color: Color(0xFFE26169),
-                      fontSize: 20,
-                      fontFamily: 'Nobile',
-                      fontWeight: FontWeight.w700,
+
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // 이미지 로드 부분
+                    CircleAvatar(
+                      radius: 100, // 크기를 50에서 100으로 증가
+                      backgroundImage: resultDetail.faceImage.isNotEmpty
+                          ? FileImage(File(resultDetail.faceImage))
+                          : null,
+                      child: resultDetail.faceImage.isEmpty
+                          ? const Text('이미지 없음')
+                          : null,
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    width: 183,
-                    height: 183,
-                    decoration: ShapeDecoration(
-                      color: const Color(0xFFD9D9D9),
-                      shape: StarBorder.polygon(sides: 5),
-                    ),
-                    child: PolygonPentagon(
-                      values: polygonValues,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    width: double.infinity,
-                    decoration: ShapeDecoration(
-                      color: const Color(0x7FE8E8E8),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    child: Text(
-                      resultDetail.details ?? '',
+                    const SizedBox(height: 16),
+                    Text(
+                      widget.resultDate.toLocal().toString().split(' ')[0],
                       style: const TextStyle(fontSize: 16),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Diagnostic Results',
+                      style: TextStyle(
+                        color: Color(0xFFE26169),
+                        fontSize: 20,
+                        fontFamily: 'Nobile',
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Container(
+                      width: 183,
+                      height: 183,
+                      decoration: ShapeDecoration(
+                        color: const Color(0xFFD9D9D9),
+                        shape: StarBorder.polygon(sides: 5),
+                      ),
+                      child: PolygonPentagon(
+                        values: polygonValues,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Container(
+                      padding: const EdgeInsets.all(16.0),
+                      width: double.infinity,
+                      decoration: ShapeDecoration(
+                        color: const Color(0x7FE8E8E8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: Text(
+                        resultDetail.details ?? '',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           }
