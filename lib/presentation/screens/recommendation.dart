@@ -171,7 +171,7 @@ class Recommendation extends StatelessWidget {
               image: DecorationImage(
                 image: isValidUrl
                     ? NetworkImage(imagePath)
-                    : AssetImage('assets/images/default_profile_image.png')
+                    : AssetImage('assets/images/default_profile.png')
                         as ImageProvider,
                 fit: BoxFit.cover,
               ),
