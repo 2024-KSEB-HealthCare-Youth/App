@@ -90,7 +90,7 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
                     ),
                     const SizedBox(height: 16),
                     const Text(
-                      'Diagnostic Results',
+                      '진단 결과',
                       style: TextStyle(
                         color: Color(0xFFE26169),
                         fontSize: 20,

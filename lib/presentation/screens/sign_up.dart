@@ -97,12 +97,12 @@ class _SignUpState extends State<SignUp> {
             children: [
               const SizedBox(height: 20),
               Text(
-                'Create an account',
+                '계정 생성',
                 style: Theme.of(context).textTheme.headlineLarge,
               ),
               const SizedBox(height: 10),
               const Text(
-                'Manage Your Skin For Your Bright Future',
+                '당신의 아름다운 내일을 위해 피부를 관리해보세요',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Color(0xFF343434),
@@ -113,7 +113,7 @@ class _SignUpState extends State<SignUp> {
               ),
               const SizedBox(height: 25),
               _buildTextFormField(
-                labelText: 'Enter Your Login ID',
+                labelText: 'Enter Your ID',
                 controller: _loginIdController,
               ),
               const SizedBox(height: 25),
@@ -124,12 +124,12 @@ class _SignUpState extends State<SignUp> {
               ),
               const SizedBox(height: 25),
               _buildTextFormField(
-                labelText: 'Enter Your Username',
+                labelText: '이름을 입력해주세요',
                 controller: _nameController,
               ),
               const SizedBox(height: 25),
               _buildTextFormField(
-                labelText: 'Enter Your Nickname',
+                labelText: 'Nickname을 입력해주세요',
                 controller: _nickNameController,
               ),
               const SizedBox(height: 25),
@@ -158,12 +158,12 @@ class _SignUpState extends State<SignUp> {
               _buildBirthDateFields(),
               const SizedBox(height: 25),
               _buildTextFormField(
-                labelText: 'Enter Your Email',
+                labelText: 'Email을 입력해주세요',
                 controller: _emailController,
               ),
               const SizedBox(height: 25),
               _buildTextFormField(
-                labelText: 'Enter Your Phone Number',
+                labelText: '전화번호를 입력해주세요',
                 controller: _phoneController,
               ),
               const SizedBox(height: 25),

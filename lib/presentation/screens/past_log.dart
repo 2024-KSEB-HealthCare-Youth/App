@@ -89,6 +89,12 @@ class _PastResultsScreenState extends State<PastResultsScreen> {
 
   Widget _buildDateItem(BuildContext context, int index) {
     final resultItem = _pastData!.results[index];
+    // Check if advancedSkinTypeList is not null or empty, and convert to a displayable string
+    String experts = resultItem.advancedSkinTypeList != null &&
+            resultItem.advancedSkinTypeList!.isNotEmpty
+        ? resultItem.advancedSkinTypeList!.map((e) => e.name).join(', ')
+        : '';
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 16.0),
       child: Container(
@@ -109,9 +115,21 @@ class _PastResultsScreenState extends State<PastResultsScreen> {
               },
             ),
             const SizedBox(width: 8),
-            Text(
-              '${resultItem.resultDate.toLocal().toString().split(' ')[0]} (${resultItem.resultDate.toLocal().toString().split(' ')[1].substring(0, 5)})',
-              style: TextStyle(fontSize: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${resultItem.resultDate.toLocal().toString().split(' ')[0]} (${resultItem.resultDate.toLocal().toString().split(' ')[1].substring(0, 5)})',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  if (experts.isNotEmpty)
+                    Text(
+                      experts,
+                      style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                    ),
+                ],
+              ),
             ),
           ],
         ),

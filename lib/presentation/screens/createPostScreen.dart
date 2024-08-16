@@ -116,7 +116,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             TextField(
               controller: _titleController,
               decoration: InputDecoration(
-                labelText: 'Title',
+                labelText: '제목',
                 labelStyle: const TextStyle(color: Colors.black),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12.0),
@@ -136,7 +136,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 maxLines: null,
                 expands: true,
                 decoration: InputDecoration(
-                  labelText: 'Content',
+                  labelText: '내용',
                   labelStyle: const TextStyle(color: Colors.black),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
@@ -154,7 +154,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             Center(
               child: ElevatedButton(
                 onPressed: _submitPost,
-                child: const Text('SUBMIT'),
+                child: const Text('작성하기'),
               ),
             ),
           ],

@@ -67,12 +67,12 @@ class Recommendation extends StatelessWidget {
                     _buildSkinTypeDescription(
                         recommendDTO.name ?? 'dummy', skinTypeDescription),
                     const SizedBox(height: 33),
-                    _buildSectionTitle('Youth’s recommended cosmetics'),
+                    _buildSectionTitle('Youth가 추천하는 화장품들'),
                     const SizedBox(height: 33),
                     _buildProductRow(
                         context, recommendDTO.cosNames, recommendDTO.cosPaths),
                     const SizedBox(height: 33),
-                    _buildSectionTitle('Youth’s recommended supplements'),
+                    _buildSectionTitle('Youth가 추천하는 영양제들'),
                     const SizedBox(height: 33),
                     _buildProductRow(context, recommendDTO.nutrNames,
                         recommendDTO.nutrPaths),

@@ -158,7 +158,7 @@ class _MainPageState extends State<MainPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            '피부 점수, 나이, 6가지 피부 항목 분석',
+            '피부 점수, 나이, 5가지 피부 항목 분석',
             style: TextStyle(
               color: Colors.red,
               fontSize: 14,

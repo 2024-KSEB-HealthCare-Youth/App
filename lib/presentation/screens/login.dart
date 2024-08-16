@@ -53,7 +53,7 @@ class _LogInState extends State<LogIn> {
             children: [
               const SizedBox(height: 20),
               Text(
-                'Welcome Back!',
+                '어서 오세요!',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 10),

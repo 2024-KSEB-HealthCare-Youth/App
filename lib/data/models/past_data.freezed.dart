@@ -22,6 +22,7 @@ ResultItem _$ResultItemFromJson(Map<String, dynamic> json) {
 mixin _$ResultItem {
   int get resultId => throw _privateConstructorUsedError;
   DateTime get resultDate => throw _privateConstructorUsedError;
+  List<Expert>? get advancedSkinTypeList => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,8 @@ abstract class $ResultItemCopyWith<$Res> {
           ResultItem value, $Res Function(ResultItem) then) =
       _$ResultItemCopyWithImpl<$Res, ResultItem>;
   @useResult
-  $Res call({int resultId, DateTime resultDate});
+  $Res call(
+      {int resultId, DateTime resultDate, List<Expert>? advancedSkinTypeList});
 }
 
 /// @nodoc
@@ -53,6 +55,7 @@ class _$ResultItemCopyWithImpl<$Res, $Val extends ResultItem>
   $Res call({
     Object? resultId = null,
     Object? resultDate = null,
+    Object? advancedSkinTypeList = freezed,
   }) {
     return _then(_value.copyWith(
       resultId: null == resultId
@@ -63,6 +66,10 @@ class _$ResultItemCopyWithImpl<$Res, $Val extends ResultItem>
           ? _value.resultDate
           : resultDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      advancedSkinTypeList: freezed == advancedSkinTypeList
+          ? _value.advancedSkinTypeList
+          : advancedSkinTypeList // ignore: cast_nullable_to_non_nullable
+              as List<Expert>?,
     ) as $Val);
   }
 }
@@ -75,7 +82,8 @@ abstract class _$$ResultItemImplCopyWith<$Res>
       __$$ResultItemImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int resultId, DateTime resultDate});
+  $Res call(
+      {int resultId, DateTime resultDate, List<Expert>? advancedSkinTypeList});
 }
 
 /// @nodoc
@@ -91,6 +99,7 @@ class __$$ResultItemImplCopyWithImpl<$Res>
   $Res call({
     Object? resultId = null,
     Object? resultDate = null,
+    Object? advancedSkinTypeList = freezed,
   }) {
     return _then(_$ResultItemImpl(
       resultId: null == resultId
@@ -101,6 +110,10 @@ class __$$ResultItemImplCopyWithImpl<$Res>
           ? _value.resultDate
           : resultDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      advancedSkinTypeList: freezed == advancedSkinTypeList
+          ? _value._advancedSkinTypeList
+          : advancedSkinTypeList // ignore: cast_nullable_to_non_nullable
+              as List<Expert>?,
     ));
   }
 }
@@ -108,7 +121,11 @@ class __$$ResultItemImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ResultItemImpl implements _ResultItem {
-  const _$ResultItemImpl({required this.resultId, required this.resultDate});
+  const _$ResultItemImpl(
+      {required this.resultId,
+      required this.resultDate,
+      required final List<Expert>? advancedSkinTypeList})
+      : _advancedSkinTypeList = advancedSkinTypeList;
 
   factory _$ResultItemImpl.fromJson(Map<String, dynamic> json) =>
       _$$ResultItemImplFromJson(json);
@@ -117,10 +134,20 @@ class _$ResultItemImpl implements _ResultItem {
   final int resultId;
   @override
   final DateTime resultDate;
+  final List<Expert>? _advancedSkinTypeList;
+  @override
+  List<Expert>? get advancedSkinTypeList {
+    final value = _advancedSkinTypeList;
+    if (value == null) return null;
+    if (_advancedSkinTypeList is EqualUnmodifiableListView)
+      return _advancedSkinTypeList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'ResultItem(resultId: $resultId, resultDate: $resultDate)';
+    return 'ResultItem(resultId: $resultId, resultDate: $resultDate, advancedSkinTypeList: $advancedSkinTypeList)';
   }
 
   @override
@@ -131,12 +158,15 @@ class _$ResultItemImpl implements _ResultItem {
             (identical(other.resultId, resultId) ||
                 other.resultId == resultId) &&
             (identical(other.resultDate, resultDate) ||
-                other.resultDate == resultDate));
+                other.resultDate == resultDate) &&
+            const DeepCollectionEquality()
+                .equals(other._advancedSkinTypeList, _advancedSkinTypeList));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, resultId, resultDate);
+  int get hashCode => Object.hash(runtimeType, resultId, resultDate,
+      const DeepCollectionEquality().hash(_advancedSkinTypeList));
 
   @JsonKey(ignore: true)
   @override
@@ -155,7 +185,8 @@ class _$ResultItemImpl implements _ResultItem {
 abstract class _ResultItem implements ResultItem {
   const factory _ResultItem(
       {required final int resultId,
-      required final DateTime resultDate}) = _$ResultItemImpl;
+      required final DateTime resultDate,
+      required final List<Expert>? advancedSkinTypeList}) = _$ResultItemImpl;
 
   factory _ResultItem.fromJson(Map<String, dynamic> json) =
       _$ResultItemImpl.fromJson;
@@ -164,6 +195,8 @@ abstract class _ResultItem implements ResultItem {
   int get resultId;
   @override
   DateTime get resultDate;
+  @override
+  List<Expert>? get advancedSkinTypeList;
   @override
   @JsonKey(ignore: true)
   _$$ResultItemImplCopyWith<_$ResultItemImpl> get copyWith =>

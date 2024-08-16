@@ -65,10 +65,9 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                     const Padding(
                       padding: EdgeInsets.all(16.0),
                       child: Text(
-                        'keep your face inside the circle',
+                        '얼굴이 원 안에 들어오게 해주세요',
                         style: TextStyle(
-                            fontFamily: 'Pacifico',
-                            color: Colors.white, // 텍스트를 흰색으로 설정
+                            color: Color.fromARGB(255, 0, 0, 0), // 텍스트를 흰색으로 설정
                             fontSize: 18),
                       ),
                     ),
