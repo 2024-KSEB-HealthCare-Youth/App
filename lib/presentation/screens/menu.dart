@@ -38,8 +38,8 @@ class Menu extends StatelessWidget {
                 );
               }),
           _buildMenuItem(
-            key: const Key('My Page'),
-            title: 'My Page',
+            key: const Key('내 정보'),
+            title: '내 정보',
             onTap: () async {
               final userService = UserService();
               try {

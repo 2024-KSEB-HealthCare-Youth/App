@@ -215,7 +215,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                       Expanded(
                         child: CustomTextFormField(
                           controller: _nameController,
-                          labelText: 'Name',
+                          labelText: '이름',
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -238,7 +238,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                       Expanded(
                         child: CustomTextFormField(
                           controller: _genderController,
-                          labelText: 'Gender',
+                          labelText: '성별',
                           enabled: false,
                         ),
                       ),
@@ -246,7 +246,7 @@ class _EditAccountPageState extends State<EditAccountPage> {
                       Expanded(
                         child: CustomTextFormField(
                           controller: _ageController,
-                          labelText: 'Age',
+                          labelText: '나이',
                           enabled: false,
                         ),
                       ),
@@ -255,13 +255,13 @@ class _EditAccountPageState extends State<EditAccountPage> {
                   const SizedBox(height: 10),
                   CustomTextFormField(
                     controller: _phoneController,
-                    labelText: 'Phone',
+                    labelText: '번호',
                   ),
                   const SizedBox(height: 30),
                   Center(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.pink,
+                        backgroundColor: const Color(0xFFE26169),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
                         ),
@@ -270,11 +270,11 @@ class _EditAccountPageState extends State<EditAccountPage> {
                       ),
                       onPressed: _saveAccountInfo,
                       child: const Text(
-                        'Save',
+                        '저장하기',
                         style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontFamily: 'Pacifico'),
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),

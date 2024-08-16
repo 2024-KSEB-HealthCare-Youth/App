@@ -87,7 +87,7 @@ class _MyPageState extends State<MyPage> {
                       ),
                       const SizedBox(height: 16),
                       CustomButton(
-                        text: 'Edit',
+                        text: '수정',
                         onPressed: _navigateToEditAccountPage,
                       ),
                     ],
@@ -102,13 +102,13 @@ class _MyPageState extends State<MyPage> {
                           children: [
                             Expanded(
                               child: ProfileDetail(
-                                label: 'Name',
+                                label: '이름',
                                 value: _currentData.name ?? 'dummy',
                               ),
                             ),
                             Expanded(
                               child: ProfileDetail(
-                                label: 'Gender',
+                                label: '성별',
                                 value: _currentData.gender ?? 'N/A',
                                 textAlign: TextAlign.end, // Align to the right
                               ),
@@ -117,7 +117,7 @@ class _MyPageState extends State<MyPage> {
                         ),
                         const SizedBox(height: 8),
                         ProfileDetail(
-                          label: 'Age',
+                          label: '나이',
                           value: _currentData.age.toString(),
                         ),
                         const SizedBox(height: 8),
@@ -127,12 +127,12 @@ class _MyPageState extends State<MyPage> {
                         ),
                         const SizedBox(height: 8),
                         ProfileDetail(
-                          label: 'Skin Type',
+                          label: '피부 타입',
                           value: _currentData.simpleSkin ?? 'N/A',
                         ),
                         const SizedBox(height: 8),
                         ProfileDetail(
-                          label: 'Phone',
+                          label: '번호',
                           value: _currentData.phoneNumber ?? 'N/A',
                         ),
                       ],
@@ -144,7 +144,7 @@ class _MyPageState extends State<MyPage> {
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Diagnostic Results',
+                  '진단 결과',
                   style: TextStyle(
                     color: Colors.redAccent,
                     fontSize: 20,
@@ -183,7 +183,7 @@ class _MyPageState extends State<MyPage> {
               ),
               const SizedBox(height: 32),
               CustomButton(
-                text: 'Find My Suitable Cosmetics & Nutrition',
+                text: '나에게 알맞은 제품 추천받기',
                 onPressed: () {
                   Navigator.pushNamed(context, '/recommendation_page');
                 },

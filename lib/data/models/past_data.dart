@@ -3,11 +3,14 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'past_data.freezed.dart';
 part 'past_data.g.dart';
 
+enum Expert { ACNE, WRINKLES }
+
 @freezed
 class ResultItem with _$ResultItem {
   const factory ResultItem({
     required int resultId,
     required DateTime resultDate,
+    required List<Expert>? advancedSkinTypeList,
   }) = _ResultItem;
 
   factory ResultItem.fromJson(Map<String, dynamic> json) =>
